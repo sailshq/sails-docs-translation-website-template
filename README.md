@@ -12,7 +12,7 @@ The two pages _not_ compiled from markdown that are still included in this app a
 + Get Started
 
 
-## Compiling the documentation from a translation repo
+### Compiling the documentation from a translation repo
 
 ##### Compiling docs locally
 
@@ -56,7 +56,7 @@ you can set up a webhook in GitHub. In your translation repo, go to **Settings >
 
 Then, in your production app's config vars, set 'GITHUB_HOOK_SECRET' to be the super secret password you provided to GitHub. 
 
-##### Typography
+### Typography
 
 The original Sails website uses Proxima Nova Soft for the header font, and [Lato](https://fonts.google.com/specimen/Lato) for the body.
 Since Proxima Nova Soft is hosted on Typekit and is not available for free, this app uses a similar Google Font, [Mallanna](https://fonts.google.com/specimen/Mallanna?selection.family=Mallanna), instead. The fonts are included in a link in `layout.ejs`, but if you'd rather, you can download them from Google Fonts and host them yourself. ([Font Squirrel's webfont generator](https://www.fontsquirrel.com/tools/webfont-generator) is handy for setting that up.)
