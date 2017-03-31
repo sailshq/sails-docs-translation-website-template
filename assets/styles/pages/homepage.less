@@ -8,14 +8,16 @@
  * Homepage
  */
 .homepage() {
-  padding-top: @header-height;
-
   .stretch-page();
+  padding-top: @header-height;
+  position: relative;
+
   .homepage-container {
     .container();
   }
   .page-header {
     .informational-page-heading();
+    margin-bottom: 75px;
     .hero-image {
       .border-box();
       width: 100%;
@@ -24,49 +26,10 @@
     }
   }
 
-  hr {
-    .divider();
-    margin-bottom: 50px;
-  }
-
-
-  .sails-about {
-    font-family: @main-font;
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    margin-bottom: 100px;
-
-    .about-container {
-      .container();
-      .clearfix();
-      position: relative;
-      padding-top: 100px;
-      padding-bottom: 50px;
-      h2 {
-        .sm-page-header(@text-dark);
-        font-weight: @light;
-        margin-bottom: 20px;
-      }
-
-      p {
-        .paragraph(@text-normal);
-        max-width: 825px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-  }
-
-  @media screen and (max-width: 500px) {
-    .sails-about {
-      .about-container {
-        padding-top: 50px;
-        padding-bottom: 0px;
-        br {
-          display: none;
-        }
-      }
-    }
+  #footer {
+    position: absolute!important;
+    width: 100%!important;
+    bottom: 0px;
+    left: 0px;
   }
 }

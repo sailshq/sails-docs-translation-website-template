@@ -6,7 +6,8 @@
     'getDropdownValue',
     'appendDropdown',
     'showDropdownChoices',
-    function (docPage, appendStdDropdown, getDropdownValue, appendDropdown, showDropdownChoices) {
+    'setHomepageBottomPadding',
+    function (docPage, appendStdDropdown, getDropdownValue, appendDropdown, showDropdownChoices, setHomepageBottomPadding) {
 
     /**
      * sailsWebsiteActions()
@@ -27,6 +28,15 @@
         case 'documentation':
           docPage();
           break;
+
+        case 'home': {
+          // Since this is a short page, set the bottom padding based on the footer height
+          // so we can have the footer absolutely positioned at the bottom.
+          setHomepageBottomPadding();
+
+          // Reset it if the window is resized.
+          $(window).on('resize', _.throttle(function() {setHomepageBottomPadding();}, 100));
+        }
       }
 
 
