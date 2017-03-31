@@ -2,6 +2,8 @@
 
 This is a trimmed-down version of the Sails website that can be used to host documentation in other languages.
 
+> You can read more about the various translation efforts [here](https://github.com/balderdashy/sails-docs#in-other-languages).
+
 ### Pages included
 
 Since the original website has a lot of hard-coded content which can quickly get out-of-date, this app mostly just includes the pages that are dynamically compiled from GitHub. Any pages from the original website that aren't included here are already set up to redirect to the applicable page on sailsjs.com.
