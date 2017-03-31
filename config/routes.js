@@ -67,6 +67,10 @@ module.exports.routes = {
   'get /documentation': {
     'target': 'DocumentationController.find'
   },
+  
+  'get /resources': function(req, res) {
+    return res.status(301).redirect('http://sailsjs.com/logos');
+  },
 
   'get /logos': function(req, res) {
     return res.status(301).redirect('http://sailsjs.com/logos');
