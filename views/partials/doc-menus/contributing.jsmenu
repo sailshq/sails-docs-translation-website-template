@@ -1,0 +1,151 @@
+[
+  {
+    "templateTitle": "README.ejs",
+    "fullPathAndFileName": "contributing/README.ejs",
+    "data": {
+      "notShownOnWebsite": "true",
+      "lastModified": 1482347093000
+    }
+  },
+  {
+    "templateTitle": "adapter-specification.ejs",
+    "fullPathAndFileName": "contributing/adapter-specification.ejs",
+    "data": {
+      "notShownOnWebsite": "true",
+      "lastModified": 1482175906000
+    }
+  },
+  {
+    "templateTitle": "code-of-conduct.ejs",
+    "fullPathAndFileName": "contributing/code-of-conduct.ejs",
+    "data": {
+      "displayName": "Code of Conduct",
+      "lastModified": 1483241674000
+    }
+  },
+  {
+    "templateTitle": "best-practices.ejs",
+    "fullPathAndFileName": "contributing/code-submission-guidelines/best-practices.ejs",
+    "data": {
+      "displayName": "Best Practices",
+      "lastModified": 1482176541000
+    },
+    "parent": "contributing/code-submission-guidelines/code-submission-guidelines.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "code-submission-guidelines.ejs",
+    "fullPathAndFileName": "contributing/code-submission-guidelines/code-submission-guidelines.ejs",
+    "realPath": "contributing/code-submission-guidelines/",
+    "data": {
+      "displayName": "Code Submission Guidelines",
+      "lastModified": 1482176541000
+    },
+    "children": [
+      "contributing/code-submission-guidelines/sending-pull-requests.ejs",
+      "contributing/code-submission-guidelines/best-practices.ejs",
+      "contributing/code-submission-guidelines/writing-tests.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "sending-pull-requests.ejs",
+    "fullPathAndFileName": "contributing/code-submission-guidelines/sending-pull-requests.ejs",
+    "data": {
+      "displayName": "Sending Pull Requests",
+      "lastModified": 1483486486000
+    },
+    "parent": "contributing/code-submission-guidelines/code-submission-guidelines.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "writing-tests.ejs",
+    "fullPathAndFileName": "contributing/code-submission-guidelines/writing-tests.ejs",
+    "data": {
+      "displayName": "Writing Tests",
+      "lastModified": 1482176541000
+    },
+    "parent": "contributing/code-submission-guidelines/code-submission-guidelines.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "contributing-to-the-documentation.ejs",
+    "fullPathAndFileName": "contributing/contributing-to-the-documentation.ejs",
+    "data": {
+      "displayName": "Contributing to the Docs",
+      "lastModified": 1486347186000
+    }
+  },
+  {
+    "templateTitle": "contributors-pledge.ejs",
+    "fullPathAndFileName": "contributing/contributors-pledge.ejs",
+    "data": {
+      "displayName": "Contributor's Pledge",
+      "lastModified": 1482176541000
+    }
+  },
+  {
+    "templateTitle": "core-maintainers.ejs",
+    "fullPathAndFileName": "contributing/core-maintainers.ejs",
+    "data": {
+      "displayName": "Core Maintainers",
+      "lastModified": 1484353043000
+    }
+  },
+  {
+    "templateTitle": "intro-to-custom-adapters.ejs",
+    "fullPathAndFileName": "contributing/intro-to-custom-adapters.ejs",
+    "data": {
+      "notShownOnWebsite": "true",
+      "lastModified": 1482175906000
+    }
+  },
+  {
+    "templateTitle": "issue-contributions.ejs",
+    "fullPathAndFileName": "contributing/issue-contributions.ejs",
+    "data": {
+      "displayName": "Issue Contributions",
+      "lastModified": 1483241674000
+    }
+  },
+  {
+    "templateTitle": "preface.ejs",
+    "fullPathAndFileName": "contributing/preface.ejs",
+    "data": {
+      "displayName": "Contributing to Sails",
+      "isOverviewPage": "true",
+      "lastModified": 1482176541000
+    }
+  },
+  {
+    "templateTitle": "proposing-features.ejs",
+    "fullPathAndFileName": "contributing/proposing-features/proposing-features.ejs",
+    "realPath": "contributing/proposing-features/",
+    "data": {
+      "displayName": "Proposing Features/Enhancements",
+      "lastModified": 1483241674000
+    },
+    "children": [
+      "contributing/proposing-features/submitting-a-proposal.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "submitting-a-proposal.ejs",
+    "fullPathAndFileName": "contributing/proposing-features/submitting-a-proposal.ejs",
+    "data": {
+      "displayName": "Submitting a Proposal",
+      "lastModified": 1482176541000
+    },
+    "parent": "contributing/proposing-features/proposing-features.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "stability-index.ejs",
+    "fullPathAndFileName": "contributing/stability-index.ejs",
+    "data": {
+      "notShownOnWebsite": "true",
+      "lastModified": 1482175906000
+    }
+  }
+]

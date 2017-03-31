@@ -1,0 +1,37 @@
+[
+  {
+    "templateTitle": "coffeeScript.ejs",
+    "fullPathAndFileName": "tutorials/coffeeScript.ejs",
+    "data": {
+      "displayName": "Using CoffeeScript",
+      "lastModified": 1482176541000
+    },
+    "parent": "tutorials/tutorials.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "tutorials.ejs",
+    "fullPathAndFileName": "tutorials/tutorials.ejs",
+    "realPath": "tutorials/",
+    "data": {
+      "displayName": "Tutorials",
+      "isOverviewPage": "true",
+      "lastModified": 1483481343000
+    },
+    "children": [
+      "tutorials/coffeeScript.ejs",
+      "tutorials/typeScript.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "typeScript.ejs",
+    "fullPathAndFileName": "tutorials/typeScript.ejs",
+    "data": {
+      "displayName": "Using TypeScript",
+      "lastModified": 1487013284000
+    },
+    "parent": "tutorials/tutorials.ejs",
+    "isChild": true
+  }
+]

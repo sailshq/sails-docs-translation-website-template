@@ -1,0 +1,37 @@
+<h1 id="res-negotiate-">res.negotiate()</h1>
+<p>Given an error (<code>err</code>), attempt to guess which error response should be called (<code>badRequest</code>, <code>forbidden</code>, <code>notFound</code>, or <code>serverError</code>) by inspecting the <code>status</code> property.  If <code>err</code> is not a dictionary, or the <code>status</code> property does not match a known HTTP status code, then default to <code>serverError</code>.</p>
+<p>Especially handy for handling potential validation errors from <a href="/documentation/reference/waterline/models/create.html">Model.create()</a> or <a href="/documentation/reference/waterline/models/update.html">Model.update()</a>.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">return res.negotiate(err);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="details" permalink="details">Details</h3>
+<p>Like the other built-in custom response modules, the behavior of this method is customizable.</p>
+<p><code>res.negotiate()</code> examines the provided error (<code>err</code>) and determines the appropriate error-handling behavior from one of the following methods:</p>
+<ul>
+<li><a href="/documentation/anatomy/myApp/api/responses/badRequest.js.html"><code>res.badRequest()</code></a>   (400)</li>
+<li><a href="/documentation/anatomy/myApp/api/responses/forbidden.js.html"><code>res.forbidden()</code></a>    (403)</li>
+<li><a href="/documentation/anatomy/myApp/api/responses/notFound.js.html"><code>res.notFound()</code></a>     (404)</li>
+<li><a href="/documentation/anatomy/myApp/api/responses/serverError.js.html"><code>res.serverError()</code></a>  (500)</li>
+</ul>
+<p>The determination is made based on <code>err</code>&apos;s &quot;status&quot; property.  If a more specific diagnosis cannot be determined (e.g. <code>err</code> doesn&apos;t have a &quot;status&quot; property, or it&apos;s a string), Sails will default to <code>res.serverError()</code>.</p>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">// Add Fido&apos;s birthday to the database:
+Pet.update({name: &apos;fido&apos;})
+  .set({birthday: new Date(&apos;01/01/2010&apos;)})
+  .exec(function (err, fido) {
+    if (err) return res.negotiate(err);
+    return res.ok(fido);
+   });
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method is <strong>terminal</strong>, meaning it is generally the last line of code your app should run for a given request (hence the advisory usage of <code>return</code> throughout these docs).</li>
+<li><code>res.negotiate()</code> (like other userland response methods) can be overridden - just define a response module (<code>/responses/negotiate.js</code>) and export a function definition.</li>
+<li>This method is used as the default handler for uncaught errors in Sails.  That means it is called automatically if an error is thrown in <em>any</em> request handling code, <em>but only within the initial step of the event loop</em>.  You should always specifically handle errors that might arise in callbacks/promises from asynchronous code.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="res.negotiate()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

@@ -1,0 +1,12 @@
+<h1 id="globals">Globals</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>For convenience, Sails exposes a handful of global variables.  By default, your app&apos;s <a href="/documentation/reference/Models">models</a>, <a href="/documentation/reference/Services">services</a>, and the global <code>sails</code> object are all available on the global scope; meaning you can refer to them by name anywhere in your backend code (as long as Sails <a href="https://github.com/balderdashy/sails/tree/master/lib/app" target="_blank">has been loaded</a>).</p>
+<p>Nothing in Sails core relies on these global variables - each and every global exposed in Sails may be disabled in <code>sails.config.globals</code> (conventionally configured in <code>config/globals.js</code>.)</p>
+<h3 id="the-app-object-sails-" permalink="the-app-object-(sails)">The App Object (<code>sails</code>)</h3>
+<p>In most cases, you will want to keep the <code>sails</code> object globally accessible- it makes your app code much cleaner.  However, if you <em>do</em> need to disable <em>all</em> globals, including <code>sails</code>, you can get access to <code>sails</code> on the request object (<code>req</code>).</p>
+<h3 id="models-and-services" permalink="models-and-services">Models and Services</h3>
+<p>Your app&apos;s <a href="/documentation/reference/Models">models</a> and <a href="/documentation/reference/Services">services</a> are exposed as global variables using their <code>globalId</code>.  For instance, the model defined in the file <code>api/models/Foo.js</code> will be globally accessible as <code>Foo</code>, and the service defined in <code>api/services/Baz.js</code> will be available as <code>Baz</code>.</p>
+<h3 id="async-async-and-lodash-_-" permalink="async-(async)-and-lodash-()">Async (<code>async</code>) and Lodash (<code>_</code>)</h3>
+<p>Sails also exposes an instance of <a href="http://lodash.com" target="_blank">lodash</a> as <code>_</code>, and an instance of <a href="https://github.com/caolan/async" target="_blank">async</a> as <code>async</code>.  These commonly-used utilities are provided by default so that you don&apos;t have to <code>npm install</code> them in every new project.  Like any of the other globals in sails, they can be disabled.</p>
+<docmeta name="displayName" value="Globals">
+</docmeta>

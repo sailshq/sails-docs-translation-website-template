@@ -1,0 +1,19 @@
+<h1 id="-configure-"><code>.configure()</code></h1>
+<p>The <code>configure</code> feature provides a way to configure a hook after the <a href="/documentation/concepts/extending-sails/Hooks/hookspec/defaults.html"><code>defaults</code> objects</a> have been applied to all hooks.  By the time a custom hook&#x2019;s <code>configure()</code> function runs, all user-level configuration and core hook settings will have been merged into <code>sails.config</code>.  However, you should <em>not</em> depend on other custom hooks&#x2019; configuration at this point, as the load order of custom hooks is not guaranteed.</p>
+<p><code>configure</code> should be implemented as a function with no arguments, and should not return any value.  For example, the following <code>configure</code> function could be used for a hook that communicates with a remote API, to change the API endpoint based on whether the user set the hook&#x2019;s <code>ssl</code> property to <code>true</code>.  Note that the hook&#x2019;s configuration key is available in <code>configure</code> as <code>this.configKey</code>:</p>
+<pre><code class="nohighlight">configure: function() {
+
+   // If SSL is on, use the HTTPS endpoint
+   if (sails.config[this.configKey].ssl == true) {
+      sails.config[this.configKey].url = &quot;https://&quot; + sails.config[this.configKey].domain;
+   }
+   // Otherwise use HTTP
+   else {
+      sails.config[this.configKey].url = &quot;http://&quot; + sails.config[this.configKey].domain;
+   }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>The main benefit of <code>configure</code> is that all hook <code>configure</code> functions are guaranteed to run before any <a href="/documentation/concepts/extending-sails/Hooks/hookspec/initialize.html"><code>initialize</code> functions</a> run; therefore a hook&#x2019;s <code>initialize</code> function can examine the configuration settings of other hooks.</p>
+<p><docmeta name="displayName" value=".configure()"></docmeta></p>
+<docmeta name="stabilityIndex" value="3">
+</docmeta>

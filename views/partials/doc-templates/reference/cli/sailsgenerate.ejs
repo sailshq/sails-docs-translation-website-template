@@ -1,0 +1,36 @@
+<h1 id="sails-generate">sails generate</h1>
+<p>Sails ships with several <em>generators</em> to help you scaffold new projects.  You can also <a href="/documentation/concepts/extending-sails/Generators/customGenerators.html">create your own generators</a> to handle frequent tasks, or extend functionality (for example, by creating a generator that outputs view files for your <a href="https://github.com/balderdashy/sails-generate-views-jade" target="_blank">favorite templating language</a>).</p>
+<p>The following generators are bundled with Sails:</p>
+<h4 id="-sails-generate-new-appname-" permalink="sails-generate-new-&lt;appname&gt;"><code>sails generate new &lt;appName&gt;</code></h4>
+<p>Create a new Sails project in a folder called <strong>appName</strong>.  See <a href="/documentation/reference/cli/sailsnew.html"><code>sails new</code></a> for usage options.</p>
+<h4 id="-sails-generate-api-foo-" permalink="sails-generate-api-&lt;foo&gt;"><code>sails generate api &lt;foo&gt;</code></h4>
+<p>Generate <strong>api/models/Foo.js</strong> and <strong>api/controllers/FooController.js</strong></p>
+<h4 id="-sails-generate-model-foo-attribute1-type1-attribute2-type2-" permalink="sails-generate-model-&lt;foo&gt;-[attribute1type1,-attribute2type2--]"><code>sails generate model &lt;foo&gt; [attribute1:type1, attribute2:type2 ... ]</code></h4>
+<p>Generate <strong>api/models/Foo.js</strong>, optionally include attributes with the specified types.</p>
+<h4 id="-sails-generate-controller-foo-action1-action2-" permalink="sails-generate-controller-&lt;foo&gt;-[action1,-action2,-]"><code>sails generate controller &lt;foo&gt; [action1, action2, ...]</code></h4>
+<p>Generate <strong>api/controllers/FooController.js</strong>, optionally include actions with the specified names.</p>
+<h4 id="-sails-generate-adapter-foo-" permalink="sails-generate-adapter-&lt;foo&gt;"><code>sails generate adapter &lt;foo&gt;</code></h4>
+<p>Generate a <strong>api/adapters/foo</strong> folder containing the files necessary for building a new adapter.</p>
+<h4 id="-sails-generate-generator-foo-" permalink="sails-generate-generator-&lt;foo&gt;"><code>sails generate generator &lt;foo&gt;</code></h4>
+<p>Generate a <strong>foo</strong> folder containing the files necessary for building a new generator.</p>
+<h4 id="coffeescript-support" permalink="coffeescript-support">Coffeescript support</h4>
+<p>If you want to use Coffeescript for write your controllers or models even config files; just follow these steps:</p>
+<ol>
+<li>Install Coffeescript locally and save it in your <code>package.json</code> file:<pre><code class="bash">npm install --save coffee-script
+</code></pre><!-- __LANG=%%__ --></li>
+<li>Install the generators for Coffeescript (optional):<pre><code class="bash">npm install --save-dev sails-generate-controller-coffee sails-generate-model-coffee
+</code></pre><!-- __LANG=%%__ --></li>
+<li>To generate scaffold code, add <code>--coffee</code>:<pre><code class="bash">sails generate api &lt;foo&gt; --coffee
+# Generate api/models/Foo.coffee and api/controllers/FooController.coffee
+sails generate model &lt;foo&gt; --coffee
+# Generate api/models/Foo.coffee
+sails generate controller &lt;foo&gt; --coffee
+# Generate api/controllers/FooController.coffee
+</code></pre><!-- __LANG=%%__ -->
+</li>
+</ol>
+<p>Thats it, now you can write your code using Coffeescript!</p>
+<p><docmeta name="displayName" value="sails generate"></docmeta></p>
+<docmeta name="pageType" value="command">
+
+</docmeta>

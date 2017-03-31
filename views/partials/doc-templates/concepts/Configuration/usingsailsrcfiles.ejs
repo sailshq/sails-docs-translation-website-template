@@ -1,0 +1,9 @@
+<h1 id="using-sailsrc-files">Using .sailsrc Files</h1>
+<p>In addition to the other methods of configuring your app, as of version 0.10, you can now specify configuration for one or more apps in <code>.sailsrc</code> file(s) (thanks to Dominic Tarr&apos;s excellent <a href="https://github.com/dominictarr/rc" target="_blank"><code>rc</code> module</a>).  <code>rc</code> files are most useful for configuring the command-line and/or applying configuration settings to ALL of the Sails apps you run on your computer.</p>
+<p>When the Sails CLI runs a command, it first looks for  <code>.sailsrc</code> files (in either JSON or <a href="http://en.wikipedia.org/wiki/INI_file" target="_blank">.ini</a> format) in the current directory and in your home folder (i.e. <code>~/.sailsrc</code>) (every newly generated Sails app comes with a boilerplate <code>.sailsrc</code> file).  Then it merges them in to its existing configuration.</p>
+<blockquote>
+<p>Actually, Sails looks for <code>.sailsrc</code> files in a few other places (following <a href="https://github.com/dominictarr/rc#standards" target="_blank">rc conventions</a>).  You can put a <code>.sailsrc</code> file at any of those paths.  That said, stick to convention when you can- the best place to put a global <code>.sailsrc</code> file is in your home directory (i.e. <code>~/.sailsrc</code>).</p>
+</blockquote>
+<docmeta name="displayName" value="Using `.sailsrc` Files">
+
+</docmeta>

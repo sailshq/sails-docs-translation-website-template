@@ -1,0 +1,211 @@
+<h1 id="waterline-query-language">Waterline Query Language</h1>
+<p>The Waterline Query language is an object-based syntax used to retrieve the records from any supported database.  Under the covers, Waterline uses the database adapter(s) installed in your project to translates this language into native queries, and then to send those queries to the appropriate database.  This means that you can use the same query with MySQL as you do with Redis, or MongoDb. And it allows you to change your database with minimal (if any) changes to your application code.</p>
+<blockquote>
+<p>All queries inside of Waterline are case-insensitive. While this allows for more consistent querying across databases, depending on the database you&apos;re using, it can make indexing strings tough.  This is something to be aware of if you plan to create indexes in your database to optimize the performance of searching on string fields.</p>
+</blockquote>
+<h3 id="query-language-basics" permalink="query-language-basics">Query Language Basics</h3>
+<p>The criteria objects are formed using one of four types of object keys. These are the top level
+keys used in a query object. It is loosely based on the criteria used in MongoDB with a few slight variations.</p>
+<p>Queries can be built using either a <code>where</code> key to specify attributes, which will allow you to also use query options such as <code>limit</code> and <code>skip</code> or, if <code>where</code> is excluded, the entire object will be treated as a <code>where</code> criteria.</p>
+<pre><code class="javascript">Model.find({
+  name: &apos;mary&apos;
+}).exec(function (err, peopleNamedMary){
+
+});
+
+
+// OR
+
+
+Model.find({
+  where: { name: &apos;mary&apos; },
+  skip: 20,
+  limit: 10,
+  sort: &apos;createdAt DESC&apos;
+}).exec(function(err, thirdPageOfRecentPeopleNamedMary){
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="key-pairs" permalink="key-pairs">Key Pairs</h4>
+<p>A key pair can be used to search records for values matching exactly what is specified. This is the base of a criteria object where the key represents an attribute on a model and the value is a strict equality check of the records for matching values.</p>
+<pre><code class="javascript">Model.find({
+  name: &apos;lyra&apos;
+}).exec(function (err, peopleNamedLyra) {
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>They can be used together to search multiple attributes.</p>
+<pre><code class="javascript">Model.find({
+  name: &apos;walter&apos;,
+  state: &apos;new mexico&apos;
+}).exec(function (err, waltersFromNewMexico) {
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="modified-pairs" permalink="modified-pairs">Modified Pairs</h4>
+<p>Modified pairs also have model attributes for keys but they also use any of the supported criteria modifiers to perform queries where a strict equality check wouldn&apos;t work.</p>
+<pre><code class="javascript">Model.find({
+  name : {
+    &apos;contains&apos; : &apos;yra&apos;
+  }
+})
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="in-pairs" permalink="in-pairs">In Pairs</h4>
+<p>Provide an array to find records whose value for this attribute exactly matches (case-insensitive) <em>any</em> of the specified search terms.</p>
+<blockquote>
+<p>This is more or less equivalent to &quot;IN&quot; queries in SQL, and the <code>$in</code> operator in MongoDB.</p>
+</blockquote>
+<pre><code class="javascript">Model.find({
+  name : [&apos;walter&apos;, &apos;skyler&apos;]
+}).exec(function (err, waltersAndSkylers){
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="not-in-pairs" permalink="notin-pairs">Not-In Pairs</h4>
+<p>Provide an array wrapped in a dictionary under a <code>!</code> key (like <code>{ &apos;!&apos;: [...] }</code>) to find records whose value for this attribute <em>ARE NOT</em> exact matches (case-insensitive) for any of the specified search terms.</p>
+<blockquote>
+<p>This is more or less equivalent to &quot;NOT IN&quot; queries in SQL, and the <code>$nin</code> operator in MongoDB.</p>
+</blockquote>
+<pre><code class="javascript">Model.find({
+  name: { &apos;!&apos; : [&apos;walter&apos;, &apos;skyler&apos;] }
+}).exec(function (err, everyoneExceptWaltersAndSkylers){
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="or-pairs" permalink="or-pairs">Or Pairs</h4>
+<p>Use the <code>or</code> modifier to match <em>any</em> of the nested rulesets you specify as an array of query pairs.  For records to match an <code>or</code> query, they must match at least one of the specified query pairs in the <code>or</code> array.</p>
+<pre><code class="javascript">Model.find({
+  or : [
+    { name: &apos;walter&apos; },
+    { occupation: &apos;teacher&apos; }
+  ]
+}).exec(function(err, waltersAndTeachers){
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="criteria-modifiers" permalink="criteria-modifiers">Criteria Modifiers</h3>
+<p>The following modifiers are available to use when building queries.</p>
+<ul>
+<li><code>&apos;&lt;&apos;</code> / <code>&apos;lessThan&apos;</code></li>
+<li><code>&apos;&lt;=&apos;</code> / <code>&apos;lessThanOrEqual&apos;</code></li>
+<li><code>&apos;&gt;&apos;</code> / <code>&apos;greaterThan&apos;</code></li>
+<li><code>&apos;&gt;=&apos;</code> / <code>&apos;greaterThanOrEqual&apos;</code></li>
+<li><code>&apos;!&apos;</code> / <code>&apos;not&apos;</code></li>
+<li><code>&apos;like&apos;</code></li>
+<li><code>&apos;contains&apos;</code></li>
+<li><code>&apos;startsWith&apos;</code></li>
+<li><code>&apos;endsWith&apos;</code></li>
+</ul>
+<h4 id="-lessthan-" permalink="&lt;-/-lessthan">&apos;&lt;&apos; / &apos;lessThan&apos;</h4>
+<p>Searches for records where the value is less than the value specified.</p>
+<pre><code class="javascript">Model.find({ age: { &apos;&lt;&apos;: 30 }})
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-lessthanorequal-" permalink="&lt;=-/-lessthanorequal">&apos;&lt;=&apos; / &apos;lessThanOrEqual&apos;</h4>
+<p>Searches for records where the value is less or equal to the value specified.</p>
+<pre><code class="javascript">Model.find({ age: { &apos;&lt;=&apos;: 21 }})
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-greaterthan-" permalink="&gt;-/-greaterthan">&apos;&gt;&apos; / &apos;greaterThan&apos;</h4>
+<p>Searches for records where the value is more than the value specified.</p>
+<pre><code class="javascript">Model.find({ age: { &apos;&gt;&apos;: 18 }})
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-greaterthanorequal-" permalink="&gt;=-/-greaterthanorequal">&apos;&gt;=&apos; / &apos;greaterThanOrEqual&apos;</h4>
+<p>Searches for records where the value is more or equal to the value specified.</p>
+<pre><code class="javascript">Model.find({ age: { &apos;&gt;=&apos;: 21 }})
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-not-" permalink="-/-not">&apos;!&apos; / &apos;not&apos;</h4>
+<p>Searches for records where the value is not equal to the value specified.</p>
+<pre><code class="javascript">Model.find({
+  name: { &apos;!&apos;: &apos;foo&apos; }
+})
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-contains-" permalink="contains">&apos;contains&apos;</h4>
+<p>Searches for records where the value for this attribute <em>contains</em> the given string. (Case insensitive.)</p>
+<pre><code class="javascript">Model.find({
+  subject: { contains: &apos;music&apos; }
+}).exec(function (err, musicCourses){
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-startswith-" permalink="startswith">&apos;startsWith&apos;</h4>
+<p>Searches for records where the value for this attribute <em>starts with</em> the given string. (Case insensitive.)</p>
+<pre><code class="javascript">Model.find({
+  subject: { startsWith: &apos;american&apos; }
+}).exec(function (err, coursesAboutAmerica){
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-endswith-" permalink="endswith">&apos;endsWith&apos;</h4>
+<p>Searches for records where the value for this attribute <em>ends with</em> the given string. (Case insensitive.)</p>
+<pre><code class="javascript">Model.find({
+  subject: { endsWith: &apos;history&apos; }
+}).exec(function (err, historyCourses) {
+
+})
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-like-" permalink="like">&apos;like&apos;</h4>
+<p>Searches for records using pattern matching with the <code>%</code> sign. (Case insensitive.)</p>
+<pre><code class="javascript">Model.find({ food: { &apos;like&apos;: &apos;%beans&apos; }})
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-date-ranges-" permalink="date-ranges">&apos;Date Ranges&apos;</h4>
+<p>You can do date range queries using the comparison operators.</p>
+<pre><code class="javascript">Model.find({ date: { &apos;&gt;&apos;: new Date(&apos;2/4/2014&apos;), &apos;&lt;&apos;: new Date(&apos;2/7/2014&apos;) } })
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="query-options" permalink="query-options">Query Options</h3>
+<p>Query options allow you refine the results that are returned from a query. The current options
+available are:</p>
+<ul>
+<li><code>limit</code></li>
+<li><code>skip</code></li>
+<li><code>sort</code></li>
+</ul>
+<h4 id="limit" permalink="limit">Limit</h4>
+<p>Limits the number of results returned from a query.</p>
+<pre><code class="javascript">Model.find({ where: { name: &apos;foo&apos; }, limit: 20 })
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="skip" permalink="skip">Skip</h4>
+<p>Returns all the results excluding the number of items to skip.</p>
+<pre><code class="javascript">Model.find({ where: { name: &apos;foo&apos; }, skip: 10 });
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="pagination" permalink="pagination">Pagination</h5>
+<p><code>skip</code> and <code>limit</code> can be used together to build up a pagination system.</p>
+<pre><code class="javascript">Model.find({ where: { name: &apos;foo&apos; }, limit: 10, skip: 10 });
+</code></pre><!-- __LANG=%%__ -->
+<p><code>paginate</code> is a  Waterline helper method which can accomplish the same as <code>skip</code> and <code>limit</code>.</p>
+<pre><code class="lang-javascript">Model.find().paginate({page: 2, limit: 10});
+</code></pre>
+<!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>Waterline</strong></p>
+<p>You can find out more about the Waterline API below:</p>
+<ul>
+<li><a href="/documentation/reference/waterline/queries">Sails.js Documentation</a></li>
+<li><a href="https://github.com/balderdashy/waterline/blob/master/README.md" target="_blank">Waterline README</a></li>
+<li><a href="https://github.com/balderdashy/waterline-docs" target="_blank">Waterline Documentation</a></li>
+<li><a href="https://github.com/balderdashy/waterline" target="_blank">Waterline Github Repository</a></li>
+</ul>
+</blockquote>
+<h4 id="sort" permalink="sort">Sort</h4>
+<p>Results can be sorted by attribute name. Simply specify an attribute name for natural (ascending)
+sort, or specify an <code>asc</code> or <code>desc</code> flag for ascending or descending orders respectively.</p>
+<pre><code class="javascript">// Sort by name in ascending order
+Model.find({ where: { name: &apos;foo&apos; }, sort: &apos;name&apos; });
+
+// Sort by name in descending order
+Model.find({ where: { name: &apos;foo&apos; }, sort: &apos;name DESC&apos; });
+
+// Sort by name in ascending order
+Model.find({ where: { name: &apos;foo&apos; }, sort: &apos;name ASC&apos; });
+
+// Sort by binary notation
+Model.find({ where: { name: &apos;foo&apos; }, sort: { &apos;name&apos;: 1 }});
+
+// Sort by multiple attributes
+Model.find({ where: { name: &apos;foo&apos; }, sort: { name:  1, age: 0 });
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>Case-sensitivity</strong></p>
+<p>All queries inside of Waterline are <strong>case-insensitive</strong>. This allows for easier querying but makes indexing strings tough. This is something to be aware of if you are indexing and searching on string fields.</p>
+<p>Currently, the best way to execute <strong>case-sensitive</strong> queries is using the <a href="/documentation/reference/waterline/models/native.html"><code>.native()</code></a> or <a href="/documentation/reference/waterline/models/query.html"><code>.query()</code></a> method.</p>
+</blockquote>
+<docmeta name="displayName" value="Query Language">
+</docmeta>

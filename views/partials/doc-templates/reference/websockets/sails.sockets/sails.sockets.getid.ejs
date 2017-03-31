@@ -1,0 +1,49 @@
+<h1 id="-getid-">.getId()</h1>
+<p>Parse the socket ID from an incoming socket request (<code>req</code>).</p>
+<pre><code class="javascript">sails.sockets.getId(req);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th>Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>req</code></td>
+<td><bubble type="req" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>A socket request (<code>req</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>Once acquired, the socket object&apos;s ID can be used to send direct messages to that socket (see <a href="/documentation/reference/websockets/sails.sockets/sails.sockets.broadcast.html">sails.sockets.broadcast</a>).</p>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">// Controller action
+getSocketID: function(req, res) {
+  if (!req.isSocket) {
+    return res.badRequest();
+  }
+
+  var socketId = sails.sockets.getId(req);
+  // =&gt; &quot;BetX2G-2889Bg22xi-jy&quot;
+
+  sails.log(&apos;My socket ID is: &apos; + socketId);
+
+  return res.json(socketId);
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code>. This method does not work for HTTP requests!</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".getId()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

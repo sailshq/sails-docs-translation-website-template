@@ -1,0 +1,48 @@
+<h1 id="custom-log-messages">Custom log messages</h1>
+<p>It is often useful to emit custom log messages or events from your application code; whether you are tracking the status of outbound emails sent in the background, or just looking for a configurable alternative to calling <a href="https://nodejs.org/api/console.html#console_console_log_data" target="_blank"><code>console.log()</code></a> in your application code.</p>
+<p>For convenience, Sails exposes its internal logging interface as <code>sails.log</code>.  Its usage is purposely very similar to Node&apos;s <code>console.log()</code>, but with a handful of extra features; namely support for multiple log levels with colorized, prefixed console output.</p>
+<p>See <a href="/documentation/reference/application/sails-log">sails.log()</a> for more information and examples, or  <a href="/documentation/reference/configuration/sails-config-log">sails.config.log</a> for configuration options.</p>
+<h2 id="available-methods" permalink="available-methods">Available methods</h2>
+<p>Each of the log methods below accepts an infinite number of arguments of any data type, seperated by commas.  Like <code>console.log</code>, data passed as arguments to the Sails logger are automatically prettified for readability using Node&apos;s <a href="http://nodejs.org/api/util.html#util_util_inspect_object_options" target="_blank"><code>util.inspect()</code></a>. Consequently, standard Node.js conventions apply; <em>any</em> dictionaries, errors, dates, arrays, or other data types are pretty-printed using the built-in logic in <a href="https://nodejs.org/api/util.html#util_util_inspect_object_options" target="_blank"><code>util.inspect()</code></a> (e.g. you see <code>{ pet: { name: &apos;Hamlet&apos; } }</code> instead of <code>[object Object]</code>.)  Also, if you log an object that has a custom <code>inspect()</code> method, the logger will run that method automatically and write the string it returns to the console.</p>
+<h3 id="sails-log-error-" permalink="sailslogerror()">sails.log.error()</h3>
+<p>Writes log output to <code>stderr</code> at the &quot;error&quot; log level.
+Useful for tracking major errors.</p>
+<pre><code class="javascript">sails.log.error(&apos;Sending 500 (&quot;Server Error&quot;) response.&apos;);
+// -&gt; error: Sending 500 (&quot;Server Error&quot;) response.
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="sails-log-warn-" permalink="sailslogwarn()">sails.log.warn()</h3>
+<p>Writes log output to <code>stderr</code> at the &quot;warn&quot; log level.
+Useful for tracking information about operations that failed silently.</p>
+<pre><code class="javascript">sails.log.warn(&apos;File upload quota exceeded for user #%d.  Request aborted.&apos;, user.id);
+// -&gt; warn: File upload quota exceeded for user #94271.  Request aborted.
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="sails-log-" permalink="sailslog()">sails.log()</h3>
+<p><em>aka sails.log.debug()</em></p>
+<p>The default log function, which writes console output to <code>stderr</code> at the &quot;debug&quot; log level.
+Useful for passing around important technical information amongst your team; or as a general alternative to <code>console.log()</code>.</p>
+<pre><code class="javascript">sails.log(&apos;This endpoint (`POST /accounts`) will be deprecated in the next few days.  Please use `POST /signup` instead. &apos;);
+// -&gt; debug: This endpoint (`POST /accounts`) will be deprecated in the next few days.  Please use `POST /signup` instead.
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="sails-log-info-" permalink="sailsloginfo()">sails.log.info()</h3>
+<p>Writes log output to <code>stdout</code> at the &quot;info&quot; log level.
+Useful for capturing information about your app&apos;s business logic.</p>
+<pre><code class="javascript">sails.log.info(&apos;A new user (&apos;, newUser.emailAddress, &apos;) just signed up!&apos;);
+// -&gt; info: A new user ( irl@foobar.com ) just signed up!
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="sails-log-verbose-" permalink="sailslogverbose()">sails.log.verbose()</h3>
+<p>Writes log output to <code>stdout</code> at the &quot;verbose&quot; log level.
+Useful for capturing detailed information about your app that you only need on rare occasions.</p>
+<pre><code class="javascript">sails.log.verbose(&apos;A user (IP adddress: `%s`) initiated an account transfer...&apos;, req.ip);
+// -&gt; verbose: A user (IP adddress: `10.48.1.191`) initiated an account transfer...
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="sails-log-silly-" permalink="sailslogsilly()">sails.log.silly()</h3>
+<p>Writes log output to <code>stdout</code> at the &quot;silly&quot; log level.
+Useful for capturing technical details about your app that are only useful for diagnostics and/or troubleshooting.</p>
+<pre><code class="javascript">sails.log.silly(
+&apos;Successfully fetched Account record for requesting authenticated user (`%d`).&apos;,
+&apos;Took %dms.&apos;, req.param(&apos;id&apos;), msElapsed);
+// -&gt; silly: Successfully fetched Account record for authenticated user (`49722`). Took 41ms.
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="Custom log messages">
+
+</docmeta>

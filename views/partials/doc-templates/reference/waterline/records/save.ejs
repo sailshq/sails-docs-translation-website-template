@@ -1,0 +1,69 @@
+<h1 id="-save-callback-">* .save(<code>callback</code>)</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>The <code>save()</code> method updates your record in the database using the current attributes.</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<h4 id="parameters" permalink="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Accepted Data Types</th>
+<th>Required ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Callback</td>
+<td><code>function</code></td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h4 id="callback-parameters" permalink="callback-parameters">Callback Parameters</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Possible Data Types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Error</td>
+<td><code>Error</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<pre><code class="javascript">User.find().exec(
+  function(err,myRecords){
+
+    // Grab a record off the top of the returned array and save a new attribute to it
+    var getOneRecord = myRecords.pop();
+    getOneRecord.name = &apos;Hank&apos;;
+    getOneRecord.save(
+      function(err){
+        console.log(&apos;User with ID &apos;+getOneRecord.id+&apos; now has name &apos;+getOneRecord.name);
+      });
+  });
+
+// User with ID 1 now has name Hank
+
+// Don&apos;t forget to handle your errors.
+// Don&apos;t forget to abide by the rules you set in your model
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This is an instance method.  Currently, instance methods ARE NOT TRANSACTIONAL.  Because of this, it is recommended that you use the equivalent model method instead.</li>
+<li>If you have any associations on the model they will currently be populated when you call <code>.save()</code>. This could cause issues with memory so to prevent this, you can take advantage of an experimental feature: passing in an options argument with <code>populate: false</code> set. Example: <code>.save({ populate: false }, function() {})</code>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".save()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

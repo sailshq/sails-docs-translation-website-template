@@ -1,0 +1,20 @@
+<h1 id="realtime-communication-in-a-multi-server-aka-clustered-environment">Realtime communication in a multi-server (aka &quot;clustered&quot;) environment</h1>
+<p>With the default configuration, Sails allows realtime communication between a single server and all of its connected clients.  When <a href="/documentation/concepts/deployment/scaling">scaling your Sails app to multiple servers</a>, some extra setup is necessary in order for realtime messages to be reliably delivered to clients regardless of which server they&#x2019;re connected to.  This setup typically involves:</p>
+<ol>
+<li>Setting up a <a href="https://www.google.com/search?q=hosted+redis" target="_blank">hosted</a> instance of <a href="http://redis.io/" target="_blank">Redis</a>.</li>
+<li>Installing <a href="https://github.com/socketio/socket.io-redis" target="_blank">socket.io-redis</a> as a dependency of your Sails app.</li>
+<li>Updating your <a href="/documentation/reference/configuration/sails-config-sockets#?commonlyused-options">sails.config.sockets.adapter</a> setting to <code>socket.io-redis</code> and setting the appropriate <code>host</code>, <code>password</code>, etc. fields to point to your hosted Redis instance.</li>
+</ol>
+<p>No special setup is necessary in your hosted Redis install; just plug the appropriate host address and credentials into your <code>/config/sockets.js</code> file and the <code>socket.io-redis</code> adapter will take care of everything for you.</p>
+<blockquote>
+<p>Note: When operating in a multi-server environment, some socket methods without callbacks are <em>volatile</em>, meaning that they take an indeterminate amount of time to complete, even if the code appears to execute immediately.  It&apos;s good to keep this in mind when considering code that would, for example, follow a call to <a href="/documentation/reference/web-sockets/sails-sockets/add-room-members-to-room"><code>.addRoomMembersToRoom()</code></a> immediately with a call to <a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-broadcast"><code>.broadcast()</code></a>.  In such cases, the new room member probably won&apos;t receive the newly broadcasted message, since it is unlikely that the updated room membership had already been propagated to the other servers in the cluster when <code>.broadcast()</code> was called.</p>
+</blockquote>
+<h3 id="reference" permalink="reference">Reference</h3>
+<ul>
+<li>See the full reference for the <a href="/documentation/reference/web-sockets/socket-client">sails.io.js library</a> to learn how to use sockets on the client side to communicate with your Sails app.</li>
+<li>See the <a href="/documentation/reference/web-sockets/sails-sockets">sails.sockets</a> reference to learn how to send messages from the server to connected sockets</li>
+<li>See the <a href="/documentation/reference/web-sockets/resourceful-pub-sub">resourceful pub-sub</a> reference to learn how to use Sails blueprints to automatically send realtime messages about changes to your <a href="/documentation/concepts/models-and-orm/models">models</a>.</li>
+<li>Visit the <a href="http://socket.io" target="_blank">Socket.io</a> website to learn more about the underlying library Sails uses for realtime communication</li>
+</ul>
+<docmeta name="displayName" value="Multi-server environments">
+</docmeta>

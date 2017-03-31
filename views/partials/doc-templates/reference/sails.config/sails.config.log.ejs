@@ -1,0 +1,70 @@
+<h1 id="sails-config-log">sails.config.log</h1>
+<p>Configuration for the <a href="/documentation/concepts/logging">logger</a> in your Sails app.  These settings apply whenever you call functions like <code>sails.log.debug()</code> or <code>sails.log.error()</code> in your app code, as well as when Sails logs a message to the console automatically.  The options here are conventionally specified in the <a href="/documentation/anatomy/myApp/config/log.js.html">config/log.js</a> configuration file.</p>
+<h3 id="properties" permalink="properties">Properties</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Property</th>
+<th>Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>level</code></td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>&apos;info&apos;</code></td>
+<td style="text-align:left">Set the level of detail to be shown in your app&apos;s log</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>inspect</code></td>
+<td><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">Set to false to disable captain&apos;s log&apos;s handling of logging, logs will instead be passed to the configured custom logger</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>custom</code></td>
+<td><bubble type="ref" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>undefined</code></td>
+<td style="text-align:left">Specify a reference to an instance of a custom logger (such as <a href="https://github.com/winstonjs/winston" target="_blank">winston</a>).  If provided, instead of logging directly to the console, the functions exposed by the custom logger will be called, and log messages from Sails will be passed through.  For more information, see <a href="https://github.com/balderdashy/captains-log/blob/master/README.md#why-use-a-custom-logger" target="_blank">captains-log</a>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="using-a-custom-logger" permalink="using-a-custom-logger">Using a Custom Logger</h3>
+<p>It can sometimes be useful to configure a custom logger-- particularly for regulatory compliance and organizational requirements (i.e. if your company is using a particular logger in other apps.)  In the context of Sails, configuring a custom logger also allows you to intercept all log messages automatically created by the framework, which is handy for setting up email notifications about errors and warnings.</p>
+<blockquote>
+<p>But don&apos;t feel like you <em>have</em> to use a custom logger if you want these sorts of notifications!  In fact, there are usually more straightforward ways to implement features like automated Slack, SMS, or email notifications whenever errors occur.  For example, one approach is to customize your app&apos;s default server error response (<a href="/documentation/anatomy/my-app/api/responses/server-error-js"><code>responses/serverError.js</code></a>).  Another popular option is using a monitoring service like <a href="https://www.appdynamics.com/nodejs/sails/" target="_blank">AppDynamics</a> or <a href="https://discuss.newrelic.com/t/using-newrelic-with-sails-js/3338/8" target="_blank">NewRelic</a>.</p>
+</blockquote>
+<p>Here&apos;s an example of configuring <a href="https://github.com/winstonjs/winston" target="_blank">winston</a> as a custom logger, defining both a console transport and file transport:</p>
+<pre><code class="javascript">// config/log.js
+
+var winston = require(&apos;winston&apos;);
+var customLogger = new winston.Logger();
+
+// A console transport logging debug and above.
+customLogger.add(winston.transports.Console, {
+  level: &apos;debug&apos;,
+  colorize: true
+});
+
+// A file based transport logging only errors formatted as json.
+customLogger.add(winston.transports.File, {
+  level: &apos;error&apos;,
+  filename: &apos;filename.log&apos;,
+  json: true
+});
+
+module.exports.log = {
+  // Pass in our custom logger, and pass all log levels through.
+  custom: customLogger,
+  level: &apos;silly&apos;,
+
+  // Disable captain&apos;s log so it doesn&apos;t prefix or stringify our meta data.
+  inspect: false
+};
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="sails.config.log"></docmeta></p>
+<docmeta name="pageType" value="property">
+
+</docmeta>

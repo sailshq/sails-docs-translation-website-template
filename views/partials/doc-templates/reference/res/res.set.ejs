@@ -1,0 +1,21 @@
+<h1 id="res-set-">res.set()</h1>
+<p>Sets specified response header (<code>header</code>) to the specified value (<code>value</code>).</p>
+<p>Alternatively, you can pass in a single object argument (<code>headers</code>) to set multiple header fields at once, where the keys are the header field names, and the corresponding values are the desired values.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">res.set(header, value);
+</code></pre><!-- __LANG=%%__ -->
+<p>-or-</p>
+<pre><code class="javascript">res.set(headers);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">res.set(&apos;Content-Type&apos;, &apos;text/plain&apos;);
+
+res.set({
+  &apos;Content-Type&apos;: &apos;text/plain&apos;,
+  &apos;Content-Length&apos;: &apos;123&apos;,
+  &apos;ETag&apos;: &apos;12345&apos;
+})
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="res.set()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

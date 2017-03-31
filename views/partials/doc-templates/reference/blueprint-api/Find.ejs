@@ -1,0 +1,130 @@
+<h1 id="find-blueprint-">Find (Blueprint)</h1>
+<p>Find a list of records that match the specified criteria and (if possible) subscribe to each of them.</p>
+<pre><code class="nohighlight">GET /:model
+</code></pre><!-- __LANG=%%__ -->
+<p>Results may be filtered, paginated, and sorted based on the blueprint configuration and/or parameters sent in the request.</p>
+<p>If the action was triggered via a socket request, the requesting socket will be &quot;subscribed&quot; to all records returned. If any of the returned records are subsequently updated or deleted, a message will be sent to that socket&apos;s client informing them of the change. See the <a href="https://github.com/balderdashy/sails-docs/blob/master/reference/ModelMethods.md#subscriberequestrecordscontexts" target="_blank">docs for Model.subscribe()</a> for details.</p>
+<h3 id="parameters" permalink="parameters">Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> model</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> of the containing model.<br><br>e.g. <code>&apos;purchase&apos;</code> (in <code>GET /purchase</code>)</td>
+</tr>
+<tr>
+<td> <em>*</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">To filter results based on a particular attribute, specify a query parameter with the same name as the attribute defined on your model. <br> <br> For instance, if our <code>Purchase</code> model has an <strong>amount</strong> attribute, we could send <code>GET /purchase?amount=99.99</code> to return a list of $99.99 purchases.</td>
+</tr>
+<tr>
+<td> <em>where</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Instead of filtering based on a specific attribute, you may instead choose to provide a <code>where</code> parameter with the WHERE piece of a <a href="https://github.com/balderdashy/waterline-docs/blob/master/queries/query-language.md" target="_blank">Waterline criteria</a>, <em>encoded as a JSON string</em>.  This allows you to take advantage of <code>contains</code>, <code>startsWith</code>, and other sub-attribute criteria modifiers for more powerful <code>find()</code> queries. <br> <br> e.g. <code>?where={&quot;name&quot;:{&quot;contains&quot;:&quot;theodore&quot;}}</code></td>
+</tr>
+<tr>
+<td> <em>limit</em></td>
+<td><bubble type="number?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The maximum number of records to send back (useful for pagination). Defaults to 30. <br> <br> e.g. <code>?limit=100</code></td>
+</tr>
+<tr>
+<td> <em>skip</em></td>
+<td><bubble type="number?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The number of records to skip (useful for pagination). <br> <br> e.g. <code>?skip=30</code></td>
+</tr>
+<tr>
+<td> <em>sort</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The sort order. By default, returned records are sorted by primary key value in ascending order. <br> <br> e.g. <code>?sort=lastName%20ASC</code></td>
+</tr>
+<tr>
+<td> <em>populate</em></td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If specified, overide the default automatic population process. Accepts a comma separated list of attributes names for which to populate record values. See <a href="/documentation/reference/waterline-orm/populated-values">here</a> for more information on how the population process fills out attributes in the returned list of records according to the model&apos;s defined associations.</td>
+</tr>
+<tr>
+<td> <em>callback</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If specified, a JSONP response will be sent (instead of JSON).  This is the name of a client-side javascript function to call, to which results will be passed as the first (and only) argument <br> <br> e.g. ?callback=my_JSONP_data_receiver_fn</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>Find up to 30 of the newest purchases in our database:</p>
+<pre><code class="nohighlight">GET /purchase?sort=createdAt DESC&amp;limit=30
+</code></pre><!-- __LANG=%%__ -->
+<p><a href="https://www.getpostman.com/run-collection/96217d0d747e536e49a4" target="_blank"><img src="https://s3.amazonaws.com/postman-static/run-button.png" alt="Run in Postman"></a></p>
+<h5 id="expected-response" permalink="expected-response">Expected Response</h5>
+<p>e.g.</p>
+<pre><code class="json">[
+ {
+   &quot;amount&quot;: 49.99,
+   &quot;id&quot;: 1,
+   &quot;createdAt&quot;: &quot;2013-10-18T01:22:56.000Z&quot;,
+   &quot;updatedAt&quot;: &quot;2013-10-18T01:22:56.000Z&quot;
+ },
+ {
+   &quot;amount&quot;: 99.99,
+   &quot;id&quot;: 47,
+   &quot;createdAt&quot;: &quot;2013-10-14T01:22:00.000Z&quot;,
+   &quot;updatedAt&quot;: &quot;2013-10-15T01:20:54.000Z&quot;
+ }
+]
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="using-jquery" permalink="using-jquery">Using jQuery</h5>
+<blockquote>
+<p>See <a href="http://jquery.com/" target="_blank">jquery.com</a> for more documentation.</p>
+</blockquote>
+<pre><code class="javascript">$.get(&apos;/purchase?sort=createdAt DESC&apos;, function (purchases) {
+  console.log(purchases);
+});
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="using-sails-io-js" permalink="using-sailsiojs">Using sails.io.js</h5>
+<blockquote>
+<p>See <a href="/documentation/reference/websockets/sails.io.js">sails.io.js</a> for more documentation.</p>
+</blockquote>
+<pre><code class="javascript">io.socket.get(&apos;/purchase?sort=createdAt DESC&apos;, function (purchases) {
+  console.log(purchases);
+});
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="using-angular" permalink="using-angular">Using Angular</h5>
+<blockquote>
+<p>See <a href="https://angularjs.org/" target="_blank">Angular</a> for more documentation.</p>
+</blockquote>
+<pre><code class="javascript">$http.get(&apos;/purchase?sort=createdAt DESC&apos;)
+.then(function (res) {
+  var purchases = res.data;
+  console.log(purchases);
+});
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="using-curl" permalink="using-curl">Using cURL</h5>
+<blockquote>
+<p>You can read more about <a href="http://en.wikipedia.org/wiki/CURL" target="_blank">cURL on Wikipedia</a>.</p>
+</blockquote>
+<pre><code class="bash">curl http://localhost:1337/purchase?sort=createdAt%20DESC
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li><p>The example above assumes &quot;rest&quot; blueprints are enabled, and that your project contains a <code>Purchase</code> model and an empty <code>PurchaseController</code>.  You can quickly achieve this by running:</p>
+<pre><code class="bash">$ sails new foo
+$ cd foo
+$ sails generate api purchase
+$ sails lift
+  # You will see a prompt about database auto-migration settings.
+  # Just choose 2 (alter) and press &lt;ENTER&gt;.
+</code></pre><!-- __LANG=%%__ -->
+</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="find where"></docmeta></p>
+<docmeta name="pageType" value="endpoint">
+
+</docmeta>

@@ -1,0 +1,63 @@
+[
+  {
+    "templateTitle": "To0.10.ejs",
+    "fullPathAndFileName": "upgrading/To0.10.ejs",
+    "data": {
+      "displayName": "To v.0.10",
+      "version": "0.10.0",
+      "lastModified": 1482871889000
+    },
+    "parent": "upgrading/upgrading.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "To0.11.ejs",
+    "fullPathAndFileName": "upgrading/To0.11.ejs",
+    "data": {
+      "displayName": "To v0.11",
+      "version": "0.11.0",
+      "lastModified": 1483231589000
+    },
+    "parent": "upgrading/upgrading.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "To0.12.ejs",
+    "fullPathAndFileName": "upgrading/To0.12.ejs",
+    "data": {
+      "displayName": "To v0.12",
+      "version": "0.12.0",
+      "lastModified": 1483231589000
+    },
+    "parent": "upgrading/upgrading.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "To1.0.ejs",
+    "fullPathAndFileName": "upgrading/To1.0.ejs",
+    "data": {
+      "displayName": "To v.1.0",
+      "version": "1.0.0",
+      "lastModified": 1490036110000
+    },
+    "parent": "upgrading/upgrading.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "upgrading.ejs",
+    "fullPathAndFileName": "upgrading/upgrading.ejs",
+    "realPath": "upgrading/",
+    "data": {
+      "displayName": "Upgrading",
+      "isOverviewPage": "true",
+      "lastModified": 1484092457000
+    },
+    "children": [
+      "upgrading/To0.11.ejs",
+      "upgrading/To0.10.ejs",
+      "upgrading/To1.0.ejs",
+      "upgrading/To0.12.ejs"
+    ],
+    "isParent": true
+  }
+]

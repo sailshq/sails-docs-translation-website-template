@@ -1,0 +1,104 @@
+<h1 id="testing-your-code">Testing your code</h1>
+<h2 id="preparation" permalink="preparation">Preparation</h2>
+<p>For our test suite, we use <a href="http://mochajs.org/" target="_blank">mocha</a>.
+Before you start building your test cases, you should first organise your <code>test/</code> directory structure, for example in the following way:</p>
+<pre><code class="batch">./myApp
+&#x251C;&#x2500;&#x2500; api/
+&#x251C;&#x2500;&#x2500; assets/
+&#x251C;&#x2500;&#x2500; ...
+&#x251C;&#x2500;&#x2500; test/
+&#x2502;  &#x251C;&#x2500;&#x2500; integration/
+&#x2502;  &#x2502;  &#x251C;&#x2500;&#x2500; controllers/
+&#x2502;  &#x2502;  &#x2502;  &#x2514;&#x2500;&#x2500; UserController.test.js
+&#x2502;  &#x2502;  &#x251C;&#x2500;&#x2500; models/
+&#x2502;  &#x2502;  &#x2502;  &#x2514;&#x2500;&#x2500; User.test.js
+&#x2502;  &#x2502;  &#x2514;&#x2500;&#x2500; ...
+&#x2502;  &#x251C;&#x2500;&#x2500; fixtures/
+|  &#x251C;&#x2500;&#x2500; ...
+&#x2502;  &#x251C;&#x2500;&#x2500; bootstrap.test.js
+&#x2502;  &#x2514;&#x2500;&#x2500; mocha.opts
+&#x2514;&#x2500;&#x2500; views/
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="bootstrap-test-js" permalink="bootstraptestjs">bootstrap.test.js</h3>
+<p>This file is useful when you want to execute some code before and after running your tests(e.g. lifting and lowering your sails application). Since your models are converted to waterline collections on lift, it is necessary to lift your sailsApp before trying to test them (This applies similarly to controllers and other parts of your app, so be sure to call this file first).</p>
+<pre><code class="javascript">var sails = require(&apos;sails&apos;);
+
+before(function(done) {
+
+  // Increase the Mocha timeout so that Sails has enough time to lift.
+  this.timeout(5000);
+
+  sails.lift({
+    // configuration for testing purposes
+  }, function(err) {
+    if (err) return done(err);
+    // here you can load fixtures, etc.
+    done(err, sails);
+  });
+});
+
+after(function(done) {
+  // here you can clear fixtures, etc.
+  sails.lower(done);
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="mocha-opts" permalink="mochaopts">mocha.opts</h3>
+<p>This file should contain mocha configuration as described here: <a href="https://mochajs.org/#mochaopts" target="_blank">mocha.opts</a></p>
+<p><strong>Note</strong>: If you are writing your test in CoffeeScript be sure to add these lines to your <code>mocha.opts</code>.</p>
+<pre><code class="nohighlight">--require coffee-script/register
+--compilers coffee:coffee-script/register
+</code></pre><!-- __LANG=%%__ -->
+<p><strong>Note</strong>: The default test-case timeout in Mocha is 2 seconds. Increase the timeout value in mocha.opts to make sure the sails lifting completes before any of the test-cases can be started. For example:</p>
+<pre><code class="nohighlight">--timeout 5s
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="writing-tests" permalink="writing-tests">Writing tests</h2>
+<p>Once you have prepared your directory you can start writing your integration tests.</p>
+<p>./test/integration/models/User.test.js</p>
+<pre><code class="javascript">describe(&apos;UserModel&apos;, function() {
+
+  describe(&apos;#find()&apos;, function() {
+    it(&apos;should check find function&apos;, function (done) {
+      User.find()
+      .then(function(results) {
+        // some tests
+        done();
+      })
+      .catch(done);
+    });
+  });
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="testing-controllers" permalink="testing-controllers">Testing controllers</h4>
+<p>To test controller responses you can use <a href="https://github.com/visionmedia/supertest" target="_blank">Supertest</a> library which provides several useful methods for testing HTTP requests.</p>
+<p>./test/integration/controllers/UserController.test.js</p>
+<pre><code class="javascript">var request = require(&apos;supertest&apos;);
+
+describe(&apos;UserController&apos;, function() {
+
+  describe(&apos;#login()&apos;, function() {
+    it(&apos;should redirect to /mypage&apos;, function (done) {
+      request(sails.hooks.http.app)
+        .post(&apos;/users/login&apos;)
+        .send({ name: &apos;test&apos;, password: &apos;test&apos; })
+        .expect(302)
+        .expect(&apos;location&apos;,&apos;/mypage&apos;, done);
+    });
+  });
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="running-tests" permalink="running-tests">Running tests</h2>
+<p>In order to run your test using mocha, you&apos;ll have to use <code>mocha</code> in the command line and then pass as arguments any test you want to run, be sure to call bootstrap.test.js before the rest of your tests like this <code>mocha test/bootstrap.test.js test/integration/**/*.test.js</code></p>
+<h4 id="using-npm-test-to-run-your-test" permalink="using-npm-test-to-run-your-test">Using <code>npm test</code> to run your test</h4>
+<p>To avoid typing the mocha command, like stated before (specially when calling bootstrap.test.js) and using <code>npm test</code> instead, you&apos;ll need to modify your package.json. On the scripts dictionary, add a <code>test</code> key and type this as its value <code>mocha test/bootstrap.test.js test/integration/**/*.test.js</code> like this:</p>
+<pre><code class="javascript">// package.json
+  &quot;scripts&quot;: {
+    &quot;start&quot;: &quot;node app.js&quot;,
+    &quot;debug&quot;: &quot;node debug app.js&quot;,
+    &quot;test&quot;: &quot;node ./node_modules/mocha/bin/mocha test/bootstrap.test.js test/integration/**/*.test.js&quot;
+  }
+</code></pre><!-- __LANG=%%__ -->
+<p>The <code>*</code> is a wildcard used to match any file inside the <code>integration/</code> folder that ends in <code>.test.js</code> so if it suits you, you can perfectly modify it to search for <code>*.spec.js</code> instead. In the same way you can use wildcards for your folders by using two <code>*</code> instead of one.</p>
+<docmeta name="displayName" value="Testing">
+</docmeta>

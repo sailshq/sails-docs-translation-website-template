@@ -1,0 +1,57 @@
+<h1 id="create-blueprint-">Create (Blueprint)</h1>
+<p>Create a new record in your database.</p>
+<pre><code class="nohighlight">POST /:model
+</code></pre><!-- __LANG=%%__ -->
+<p>Responds with a JSON dictionary representing the newly created instance.  If a validation error occurred, a JSON response with the invalid attributes and a <code>400</code> status code will be returned instead.</p>
+<p>Additionally, a <code>create</code> event will be published to all sockets which are <em>watching</em> this model, and those sockets will also be subscribed to hear about subsequent changes to the new record (see the docs for <a href="https://github.com/balderdashy/sails-docs/blob/master/reference/websockets/resourceful-pubsub/watch.md" target="_blank"><code>.watch()</code></a> for more info).</p>
+<p>If the action is triggered via a socket request, the requesting socket will ALSO be subscribed to the newly created model instance. If the record is subsequently updated or deleted, a message will be sent to that socket&apos;s client informing them of the change. See the docs for <a href="/documentation/reference/web-sockets/resourceful-pub-sub/subscribe"><code>.subscribe()</code></a> for more info.</p>
+<h3 id="parameters" permalink="parameters">Parameters</h3>
+<p>Parameters should be sent in the <a href="https://www.getpostman.com/docs/requests#body" target="_blank">request body</a>.  By default, Sails understands most common types of encodings for body parameters, including url-encoding, form-encoding, and JSON.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> model</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> of the model in which the new record should be created.<br><br>e.g. <code>&apos;purchase&apos;</code> (in <code>POST /purchase</code>)</td>
+</tr>
+<tr>
+<td> <em>*</em></td>
+<td><bubble type="json?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Send <a href="https://www.getpostman.com/docs/requests#body" target="_blank">body parameters</a> with the same names as the attribute defined on your model to set those values on your new record.  <br> <br>These values are handled the same way as if they were passed into the model&apos;s <a href="/documentation/reference/waterline-orm/models/create">.create()</a> method.</td>
+</tr>
+<tr>
+<td> <em>callback</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If specified, a JSONP response will be sent (instead of JSON).  This is the name of the client-side javascript function to call, passing results as the first (and only) argument<br> <br> e.g. <code>?callback=myJSONPHandlerFn</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>Create a new pony named &quot;AppleJack&quot; with a hobby of &quot;pickin&quot;:</p>
+<p><code>POST /pony</code></p>
+<pre><code class="json">{
+  &quot;name&quot;: &quot;AppleJack&quot;,
+  &quot;hobby&quot;: &quot;pickin&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p><a href="https://www.getpostman.com/run-collection/96217d0d747e536e49a4" target="_blank"><img src="https://s3.amazonaws.com/postman-static/run-button.png" alt="Run in Postman"></a></p>
+<h5 id="example-response" permalink="example-response">Example Response</h5>
+<pre><code class="json">{
+  &quot;name&quot;: &quot;AppleJack&quot;,
+  &quot;hobby&quot;: &quot;pickin&quot;,
+  &quot;id&quot;: 47,
+  &quot;createdAt&quot;: &quot;2013-10-18T01:23:56.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2013-11-26T22:55:19.951Z&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="create"></docmeta></p>
+<docmeta name="pageType" value="endpoint">
+
+</docmeta>

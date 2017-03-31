@@ -1,0 +1,24 @@
+<h1 id="sails-sockets-rooms-">sails.sockets.rooms()</h1>
+<blockquote>
+<p><em><strong>This method is deprecated</strong>.  Please keep track of your rooms in app-level code.</em></p>
+</blockquote>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>Get the list of all current socket rooms</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<h4 id="parameters" permalink="parameters">Parameters</h4>
+<p>None.</p>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<pre><code class="javascript">// Controller action
+
+getRoomsList: function(req, res) {
+    var roomNames = JSON.stringify(sails.sockets.rooms());
+    res.json({
+      message: &apos;A list of all the rooms: &apos;+roomNames
+    });
+}
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Note: In Socket.io, all sockets are automatically subscribed to a global room with an empty name (&apos;&apos;).  This room is not returned as part of the array in <code>sails.sockets.rooms</code></em></p>
+<p><docmeta name="displayName" value="sails.sockets.rooms()"></docmeta></p>
+<docmeta name="isDeprecated" value="true">
+
+</docmeta>

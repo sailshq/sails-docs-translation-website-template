@@ -1,0 +1,34 @@
+<h1 id="req-options">req.options</h1>
+<p><code>req.options</code> is a dictionary of additional information that allows your action to access its configured route options, if there are any.</p>
+<h3 id="route-options" permalink="route-options">Route options</h3>
+<p>Any additional properties provided in a <a href="/docs/concepts/routes/custom-routes#?route-target">route target</a> are made available as properties of <code>req.options</code>.  For example, given the following in <a href="/anatomy/config/routes-js"><code>config/routes.js</code></a>:</p>
+<pre><code class="javascript">&apos;GET /foo&apos;: {
+  controller: &apos;UserController&apos;,
+  action: &apos;login&apos;,
+  owl: &apos;hoot&apos;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>In this example, <code>req.options.owl</code> will be available in our <code>UserController.login</code> action.</p>
+<h3 id="with-the-blueprint-api" permalink="with-the-blueprint-api">With the blueprint API</h3>
+<p>Several special route options are always provided to <a href="/docs/reference/blueprint-api">blueprint actions</a>.  This provides a way to programatically modify the criteria and/or values that a blueprint action uses when accessing models.  These options can be configured in a route, or set dynamically in a policy.</p>
+<p>For example, <code>req.options</code> can be modified in a <a href="/docs/concepts/policies">policy</a> to filter requested records based on the logged-in user:</p>
+<pre><code class="javascript">// `config/policies/filterByUser.js`
+module.exports = function filterByUser (req, res, next) {
+
+  if (req.session.me) {  
+
+    req.options.where = {
+      userId: req.session.me
+    }
+
+  }
+
+  return next();
+
+}
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>Making the transition between the blueprint API and writing custom actions?  Check out <a href="/docs/concepts/controllers">Concepts &gt; Controllers</a>.</p>
+</blockquote>
+<docmeta name="displayName" value="req.options">
+</docmeta>

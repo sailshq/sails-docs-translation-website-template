@@ -1,0 +1,45 @@
+<h1 id="sails-config-csrf">sails.config.csrf</h1>
+<p>Configuration for Sails&apos; built-in <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery" target="_blank">CSRF</a> protection middleware.  These options are conventionally set in the <a href="/documentation/anatomy/myApp/config/csrf.js.html"><code>config/csrf.js</code></a> configuration file.  See the docs on <a href="/documentation/concepts/security/csrf">Cross-Site Request Forgery</a> in the security section for detailed usage instructions.</p>
+<p>This option protects your Sails app against cross-site request forgery (or CSRF) attacks. A would-be attacker needs not only a user&apos;s session cookie, but also this timestamped, secret CSRF token, which is refreshed/granted when the user visits a URL on your app&apos;s domain.</p>
+<p>This allows you to have certainty that your users&apos; requests haven&apos;t been hijacked, and that the requests they&apos;re making are intentional and legitimate.</p>
+<h3 id="properties" permalink="properties">Properties</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Property</th>
+<th style="text-align:center">Type</th>
+<th>Default</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>csrf</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble> or <bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>false</td>
+<td style="text-align:left">CSRF protection is disabled by default to facilitate development.  To turn it on, just set <code>sails.config.csrf</code> to true, or for more flexibility, specify a dictionary with any of the properties described below.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>csrf.grantTokenViaAjax</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>true</td>
+<td style="text-align:left">Whether to activate the <strong>/csrfToken</strong> route, which will return the current CSRF token value which can then be used in AJAX requests.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>csrf.origin</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>&apos;&apos;</td>
+<td style="text-align:left">Comma-delimited list of origins that are allowed to access the CSRF token via the <strong>/csrfToken</strong> shadow route.  This is separate from the other <a href="/documentation/reference/sails.config/sails.config.cors.html">CORS settings</a>, which <em>do not apply</em> to the <strong>/csrfToken</strong> route.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>csrf.routesDisabled</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble> or <bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>&apos;&apos;</td>
+<td style="text-align:left">Array or comma-delimited list of routes where CSRF protection is disabled.  Routes with Express-style wildcards (e.g. <code>&apos;/foo/:id&apos;</code>) and regular expressions (e.g.  <code>/user\/\d+/</code>) can both be used.  Do <em>not</em> include HTTP verbs (e.g. <code>POST</code> or <code>PUT</code>) with the routes -- disabling CSRF for a route always applies to all verbs for that route&apos;s address.</td>
+</tr>
+</tbody>
+</table>
+<p><docmeta name="displayName" value="sails.config.csrf"></docmeta></p>
+<docmeta name="pageType" value="property">
+
+</docmeta>

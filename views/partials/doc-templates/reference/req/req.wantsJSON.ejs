@@ -1,0 +1,40 @@
+<h1 id="req-wantsjson">req.wantsJSON</h1>
+<p>A flag indicating whether the requesting client would prefer a JSON response (as opposed to some other format, like XML or HTML.)</p>
+<p><code>req.wantsJSON</code> is used by all of the <a href="/documentation/anatomy/myApp/api/responses">built-in custom responses</a> in Sails.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.wantsJSON;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="details" permalink="details">Details</h3>
+<p>The intended purpose of <code>req.wantsJSON</code> is to provide a clean, reusable indication of whether the server should respond with JSON, or send back something else (like an HTML page or a 302 redirect.) It is not the right answer for <em>every</em> content negotiation problem, but it is a simple, go-to solution for most use cases.</p>
+<p>For instance, for requests typed into the URL bar, all major browsers set an &quot;Accept: text/plain;&quot; request header.  In that case, <code>req.wantsJSON</code> is false.  But for many other cases, the distinction is not quite as clear.  In those scenarios, Sails uses heuristics to determine the best value for <code>req.wantsJSON</code>.</p>
+<p>Technically, <code>req.wantsJSON</code> inspects the request&apos;s <code>&quot;Content-type&quot;</code>, <code>&quot;Accepts&quot;</code>, and <code>&quot;X-Requested-With&quot;</code> headers to make an inference as to whether the request is expecting a JSON response.  If the request did not provide enough information to know for sure, Sails errs on the side of JSON (i.e. <code>req.wantsJSON</code> will be set to <code>true</code>.)</p>
+<p>This all makes your app more future-proof and less brittle: as best-practices for content negotiation change over time (e.g. a new type of consumer device or enterprise user-agent introduces a new header) Sails can patch <code>req.wantsJSON</code> at the framework level and modify the heuristics accordingly. Not to mention that it reduces code duplication and saves you the annoyance of manually inspecting headers in each of your routes.</p>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">if (req.wantsJSON) {
+  return res.json(data);
+}
+else {
+  return res.view(data);
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="details" permalink="details">Details</h3>
+<p>Here is the specific order in which <code>req.wantsJSON</code> inspects the request.  <strong>If any of the following match, subsequent checks are ignored.</strong></p>
+<p>A request &quot;wantsJSON&quot; if:</p>
+<ul>
+<li>if this looks like an AJAX request</li>
+<li>if this is a virtual request from a socket</li>
+<li>if this request DOESN&apos;T explicitly want HTML</li>
+<li>if this request has a &quot;json&quot; content-type AND ALSO has its &quot;Accept&quot; header set</li>
+<li>if <code>req.options.wantsJSON</code> is truthy</li>
+</ul>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Lower-level content negotiation is, of course, still possible using <code>req.is()</code>, <code>req.accepts()</code>, <code>req.xhr</code>, and <code>req.get()</code>.</li>
+<li>As of Sails v0.10, requests originating from a WebSocket client always &quot;want JSON&quot;.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.wantsJSON"></docmeta></p>
+<docmeta name="pageType" value="property">
+
+</docmeta>

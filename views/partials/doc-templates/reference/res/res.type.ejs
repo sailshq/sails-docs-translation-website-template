@@ -1,0 +1,16 @@
+<h1 id="res-type-">res.type()</h1>
+<p>Sets the &quot;Content-Type&quot; response header to the specified <code>type</code>.</p>
+<p>This method is pretty forgiving (see examples below), but note that if <code>type</code> contains a <code>&quot;/&quot;</code>, <code>res.type()</code> assumes it is a MIME type and interprets it literally.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">res.type(type);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">res.type(&apos;.html&apos;);
+res.type(&apos;html&apos;);
+res.type(&apos;json&apos;);
+res.type(&apos;application/json&apos;);
+res.type(&apos;png&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="res.type()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

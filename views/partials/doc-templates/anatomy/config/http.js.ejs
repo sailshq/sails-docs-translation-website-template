@@ -1,0 +1,97 @@
+<h1 id="config-http-js">config/http.js</h1>
+<p>This file is conventionally used for configuring the underlying HTTP server (see <a href="/documentation/reference/configuration/sails-config-http"><code>sails.config.http</code></a> for all available options).</p>
+<pre><code class="javascript">/**
+ * HTTP Server Settings
+ * (sails.config.http)
+ *
+ * Configuration for the underlying HTTP server in Sails.
+ * Only applies to HTTP requests (not WebSockets).
+ *
+ * For more information on configuration, check out:
+ * http://sailsjs.com/documentation/reference/configuration/sails-config-http
+ */
+
+module.exports.http = {
+
+  /****************************************************************************
+  *                                                                           *
+  * Sails/Express/Connect-compatible middleware to run for every incoming     *
+  * HTTP request.  To add additional, 3rd party HTTP middleware to the mix,   *
+  * add a function as a new key in the `middleware` config dictionary, then   *
+  * add the name of its key to the &quot;order&quot; array.                             *
+  *                                                                           *
+  ****************************************************************************/
+
+  middleware: {
+
+  /***************************************************************************
+  *                                                                          *
+  * The order in which middleware should be run for HTTP request. (the Sails *
+  * router is invoked by the &quot;router&quot; middleware below.)                     *
+  *                                                                          *
+  ***************************************************************************/
+
+    // order: [
+    //   &apos;startRequestTimer&apos;,
+    //   &apos;cookieParser&apos;,
+    //   &apos;session&apos;,
+    //   &apos;myRequestLogger&apos;,
+    //   &apos;bodyParser&apos;,
+    //   &apos;handleBodyParserError&apos;,
+    //   &apos;compress&apos;,
+    //   &apos;methodOverride&apos;,
+    //   &apos;poweredBy&apos;,
+    //   &apos;$custom&apos;,
+    //   &apos;router&apos;,
+    //   &apos;www&apos;,
+    //   &apos;favicon&apos;,
+    //   &apos;404&apos;,
+    //   &apos;500&apos;
+    // ],
+
+  /****************************************************************************
+  *                                                                           *
+  * Example custom middleware; logs each request to the console.              *
+  *                                                                           *
+  ****************************************************************************/
+
+    // myRequestLogger: function (req, res, next) {
+    //     console.log(&quot;Requested :: &quot;, req.method, req.url);
+    //     return next();
+    // }
+
+
+  /***************************************************************************
+  *                                                                          *
+  * The body parser that will handle incoming multipart HTTP requests.       *
+  * By default,Sails uses [skipper](http://github.com/balderdashy/skipper).  *
+  * See https://github.com/expressjs/body-parser for other options.          *
+  *                                                                          *
+  * Note that Sails uses an internal instance of Skipper by default; to      *
+  * override it and specify more options, make sure to &quot;npm install skipper&quot; *
+  * in your project first.  You can also specify a different body parser or  *
+  * a custom function with req, res and next parameters (just like any other *
+  * middleware function).                                                    *
+  *                                                                          *
+  ***************************************************************************/
+
+    // bodyParser: require(&apos;skipper&apos;)({strict: true})
+
+  },
+
+
+  /***************************************************************************
+  *                                                                          *
+  * The number of milliseconds to cache static assets in production.         *
+  * These are any flat files like images, scripts, styleshseets, etc.        *
+  * that are served by the static middleware.  By default, these files       *
+  * are served from `.tmp/public`, a hidden folder compiled by Grunt.        *
+  *                                                                          *
+  ***************************************************************************/
+
+  // cache: 31557600000
+};
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="http.js">
+
+</docmeta>

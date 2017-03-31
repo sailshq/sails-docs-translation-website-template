@@ -1,0 +1,21 @@
+<h1 id="stability-index">Stability Index</h1>
+<p>Throughout the documentation and in README files in Sails, you will see indications of a section&apos;s stability. The Sails framework is still somewhat changing, and as it matures, certain parts are more reliable than others. Some are so proven, and so relied upon, that they are unlikely to ever change at all. Others are brand new and experimental, or known to be hazardous and in the process of being redesigned.</p>
+<p>Stability indices are used to describe individual methods, events, and configuration settings <em>as well</em> as sub-modules of Sails core such as core hooks.  The latter affordance is a soft science-- the core team labels hooks with stability indices in order to provide a better experience for developers building plugins for Sails and/or contributing to Sails core.</p>
+<p>When a stability index refers to a module like a core hook, note that that index refers to the <strong>features of that hook which are <em>explicitly public</em></strong>.  For example, if the documentation for a hook mentions that it &quot;exposes&quot; a property called <code>foo</code> on the <code>sails</code> app object, then you can <em>only rely on that property</em> to respect the hook&apos;s the stability level if it is also clearly marked as &quot;public&quot; elsewhere in the hook documentation.  If in doubt, submit a pull request to the relevant hook&apos;s README file in the <a href="https://github.com/balderdashy/sails" target="_blank">GitHub repository for Sails core</a> and add a question to the FAQ section.</p>
+<p>The stability indices are as follows:</p>
+<h5 id="stability-0-deprecated" permalink="stability-0--deprecated">Stability: 0 - Deprecated</h5>
+<p>This feature is known to be problematic, and changes are planned.  Do not rely on it in new code, and be sure to change existing code before upgrading.  Use of the feature may cause warnings.  Backwards compatibility should not be expected.</p>
+<h5 id="stability-1-experimental" permalink="stability-1--experimental">Stability: 1 - Experimental</h5>
+<p>This feature is subject to change or removal in future major releases of Sails.</p>
+<h5 id="stability-2-stable" permalink="stability-2--stable">Stability: 2 - Stable</h5>
+<p>This feature has proven satisfactory. Compatibility with existing Sails apps and the plugin ecosystem is a high priority, and so stable hooks/features/etc. will not be broken or removed in future major releases unless absolutely necessary.</p>
+<h5 id="stability-3-locked" permalink="stability-3--locked">Stability: 3 - Locked</h5>
+<p>This hook/feature/etc. will not undergo any future API changes, except as demanded by critical fixes related to security or performance.  Please do not propose usage/philosophical changes for features/hooks/etc. at this stability index; they will be refused.</p>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Sails&apos; stability index, and much of the verbiage of this file, is based on <a href="https://nodejs.org/api/documentation.html#documentation_stability_index" target="_blank">the Stability Index used by Node.js core</a>.</li>
+</ul>
+</blockquote>
+<docmeta name="notShownOnWebsite" value="true">
+</docmeta>

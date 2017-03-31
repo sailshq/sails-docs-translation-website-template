@@ -1,0 +1,10 @@
+<h1 id="using-typescript-in-a-sails-app">Using TypeScript in a Sails App</h1>
+<p>Sails supports using TypeScript to write your custom app code (like <a href="http://www.sailsjs.com/documentation/concepts/actions-and-controllers">actions</a> and <a href="http://www.sailsjs.com/documentation/concepts/core-concepts-table-of-contents/models-and-orm">models</a>).  You can enable this support in three steps:</p>
+<ol>
+<li>Run <code>npm install ts-node</code> in your app folder.</li>
+<li>Add the following line at the top of your app&apos;s <code>app.js</code> file:<pre><code class="javascript">require(&apos;ts-node&apos;).register({ /* options */ }); // See options in https://www.npmjs.com/package/ts-node
+</code></pre><!-- __LANG=%%__ --></li>
+<li>Start your app with <code>node app.js</code> instead of <code>sails lift</code>.</li>
+</ol>
+<docmeta name="displayName" value="Using TypeScript">
+</docmeta>

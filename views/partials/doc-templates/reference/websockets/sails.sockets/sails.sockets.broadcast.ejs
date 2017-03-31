@@ -1,0 +1,71 @@
+<h1 id="-broadcast-">.broadcast()</h1>
+<p>Broadcast a message to all sockets in a room (or to a particular socket).</p>
+<pre><code class="javascript">sails.sockets.broadcast(roomNames, data);
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>sails.sockets.broadcast(roomNames, eventName, data);</code></li>
+<li><code>sails.sockets.broadcast(roomNames, data, socketToOmit);</code></li>
+<li><code>sails.sockets.broadcast(roomNames, eventName, data, socketToOmit);</code></li>
+</ul>
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">roomNames</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="Array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The name of one or more rooms to broadcast a message in (see <a href="/documentation/reference/websockets/sails.sockets/sails.sockets.join.html">sails.sockets.join</a>).  To broadcast to individual sockets, use their IDs as room names.</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left"><em>eventName</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Optional. The unique name of the event used by the client to identify this message.  Defaults to <code>&apos;message&apos;</code>.</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:left">data</td>
+<td><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The data to send in the message.</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:left"><em>socketToOmit</em></td>
+<td><bubble type="req?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Optional. If provided, the socket belonging to the specified socket request will <em>not</em> receive the message.  This is useful if you trigger the broadcast from a client, but don&apos;t want that client to receive the message itself (for example, sending a message to everybody else in a chat room).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>In an action, service, or arbitrary script on the server:</p>
+<pre><code class="javascript">sails.sockets.broadcast(&apos;artsAndEntertainment&apos;, { greeting: &apos;Hola!&apos; });
+</code></pre><!-- __LANG=%%__ -->
+<p>On the client:</p>
+<pre><code class="javascript">io.socket.on(&apos;message&apos;, function (data){
+  console.log(data.greeting);
+});
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="additional-examples" permalink="additional-examples">Additional Examples</h5>
+<p>More examples of <code>sails.sockets.brodcast()</code> usage are <a href="https://gist.github.com/mikermcneil/0a4d05750768a99b4fcb" target="_blank">available here</a>, including broadcasting to multiple rooms, using a custom event name, and omitting the requesting socket.</p>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li><code>sails.sockets.broadcast()</code> is more or less equivalent to the functionality of <code>.emit()</code> and <code>.broadcast()</code> in Socket.io.</li>
+<li>Every socket is automatically subscribed to a room with its ID as the name, allowing direct messaging to a socket via <a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-broadcast"><code>sails.sockets.broadcast()</code></a></li>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code> as <code>socketToOmit</code>. For the requesting socket to be omitted, the request (<code>req</code>) must be from a socket request, not just any old HTTP request.</li>
+<li><code>data</code> must be JSON-serializable; i.e. it&apos;s best to use plain dictionaries/arrays, and make sure your data does not contain any circular references. If you aren&apos;t sure, build your broadcast <code>data</code> manually, or call something like <a href="https://github.com/node-machine/rttc/blob/master/README.md#dehydratevalue-allownullfalse-dontstringifyfunctionsfalse" target="_blank"><code>rttc.dehydrate(data,true,true)</code></a> on it first.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".broadcast()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

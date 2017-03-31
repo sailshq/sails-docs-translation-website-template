@@ -1,0 +1,70 @@
+<h1 id="-subscribe-">.subscribe()</h1>
+<p>Subscribe the requesting client socket to changes/deletions of one or more database records.</p>
+<pre><code class="javascript">Something.subscribe(req, ids);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th style="text-align:center">Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left"><code>req</code></td>
+<td style="text-align:center"><bubble type="req" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>The incoming socket request (<code>req</code>) containing the socket to subscribe.</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left"><code>ids</code></td>
+<td style="text-align:center"><bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>An array of record ids (primary key values).</td>
+</tr>
+</tbody>
+</table>
+<p>When a client socket is subscribed to a record, it is a member of its &quot;record room&quot; aka &quot;instance room&quot;.  That means it will receive all messages about that record which are broadcasted by <code>.publishUpdate()</code>, <code>.publishDestroy()</code>, <code>.publishAdd()</code>, <code>.publishRemove()</code>, and <code>.message()</code>.</p>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">subscribeToLouies: function (req, res) {
+    if (!req.isSocket) {
+      return res.badRequest(&apos;Only a client socket can subscribe to Louies.  You, sir or madame, appear to be an HTTP request.&apos;);
+    }
+
+    // Let&apos;s say our client socket has a problem with people named &quot;louie&quot;.
+
+    // First we&apos;ll find all users named &quot;louie&quot; (or &quot;louis&quot; even-- we should be thorough)
+    User.find({ or: [{name: &apos;louie&apos;},{name: &apos;louis&apos;}] }).exec(function(err, usersNamedLouie){
+      if (err) {
+        return res.serverError(err);
+      }
+
+      // Now we&apos;ll use the ids we found to subscribe our client socket to each of these records.
+      User.subscribe(req, _.pluck(usersNamedLouie, &apos;id&apos;));
+
+      // Now any time a user named &quot;louie&quot; or &quot;louis&quot; is modified or destroyed, our client socket
+      // will receive a notification (as long as it stays connected anyways).
+
+      // All done!  We could send down some data, but instead we send an empty response.
+      // (although we&apos;re ok telling this vengeful client socket when our users get
+      //  destroyed, it seems ill-advised to send him our Louies&apos; sensitive user data.
+      //  We don&apos;t want to help this guy to hunt them down in real life.)
+      return res.ok();
+    });
+  }
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code> to refer to the requesting socket.  The provided <code>req</code> must be from a socket request, not just any old HTTP request.</li>
+<li><code>.subscribe()</code> will only work with requests made over a socket.io connection (e.g. using <code>io.socket.get()</code>), <em>not</em> over an http connection (e.g. using <code>jQuery.get()</code>).  See the <a href="/documentation/reference/web-sockets/socket-client">sails.io.js socket client documentation</a> for information on using client sockets to send WebSockets/Socket.io messages with Sails.</li>
+<li>This function does <em>not actually talk to the database</em>!  In fact, none of the resourceful pubsub methods do.  Remember: these are just a simplified abstraction layer built on top of the lower-level <code>sails.sockets</code> methods, designed to make your app cleaner and easier to debug by using conventional names for events/rooms/namespaces etc.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".subscribe()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

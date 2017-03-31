@@ -1,0 +1,176 @@
+<h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+<h3 id="table-of-contents" permalink="table-of-contents">Table of Contents</h3>
+<ol>
+<li><a href="/faq#?im-having-trouble-installing-sails-what-should-i-do">I&apos;m having trouble installing Sails. What should I do?</a></li>
+<li><a href="/faq#?what-are-the-dependencies-of-sails">What are the dependencies of Sails?</a></li>
+<li><a href="/faq#?who-else-is-using-sailsjs">Who else is using Sails.js?</a></li>
+<li><a href="/faq#?are-there-professional-support-options">Are there professional support options?</a></li>
+<li><a href="/faq#?where-do-i-get-help">Where do I get help?</a></li>
+<li><a href="/faq#?what-are-some-good-community-tutorials">What are some good community tutorials?</a></li>
+<li><a href="/faq#?how-can-i-convince-the-other-girls-guys-on-my-team">How can I convince the other girls/guys on my team?</a></li>
+<li><a href="/faq#?where-do-i-submit-ideas-report-bugs">Where do I submit ideas?  Report bugs?</a></li>
+<li><a href="/faq#?what-version-of-sails-should-i-use">What version of Sails should I use?</a></li>
+<li><a href="/faq#?how-do-i-get-involved">How do I get involved?</a></li>
+<li><a href="/faq#?how-does-the-documentation-end-up-on-the-sails-website">How does the documentation end up on the Sails website?</a></li>
+<li><a href="/faq#?where-is-the-documentation-for-the-different-releases-of-sails">Where is the documentation for the different releases of Sails?</a></li>
+</ol>
+<hr>
+
+<h3 id="i-m-having-trouble-installing-sails-what-should-i-do-" permalink="im-having-trouble-installing-sails-what-should-i-do">I&apos;m having trouble installing Sails. What should I do?</h3>
+<p>Start with NPM&apos;s helpful <a href="https://github.com/npm/npm/wiki/Troubleshooting" target="_blank">troubleshooting guide</a>.  If you continue to have problems, and you&apos;ve tried Google searching but you&apos;re still stumped, please carefully review the updated Sails <a href="/documentation/contributing">contribution guide</a> and then create a GitHub issue in the Sails repo.</p>
+<h3 id="what-are-the-dependencies-of-sails-" permalink="what-are-the-dependencies-of-sails">What are the dependencies of Sails?</h3>
+<p><a href="https://david-dm.org/balderdashy/sails" target="_blank"><img src="https://david-dm.org/balderdashy/sails.png" alt="Dependency Status"></a></p>
+<p>We have learned again and again over the years to take versioning of dependencies very seriously.  We lock Sails&apos;s dependency versions and only bump those versions if the associated updates fix a security issue or present other substantive advantages to Sails users (improved compatibility, performance, etc.)  In addition, the core maintainers of Sails are committed to fixing any major security, performance, or stability bugs that arise in any of our core dependencies-- regardless of whether those modules are <a href="https://github.com/balderdashy/sails/pull/3235#issuecomment-170417122" target="_blank">officially maintained by another entity or not</a>.</p>
+<p>Sails is tested with <a href="http://nodejs.org/" target="_blank">node</a> versions 0.10.x and up, though we recommend using at least Node v4.0.0.  The framework is built on the rock-solid foundations of <a href="https://github.com/expressjs/" target="_blank">Express</a> and <a href="http://socket.io/" target="_blank">Socket.io</a>.  Out of the box, it also depends on other great modules, like <code>grunt</code>, <code>waterline</code>, and <code>fs-extra</code>.  Click the badge above for the full list of dependencies in the latest stable release of Sails core.</p>
+<blockquote>
+<p><strong>Sails Flagship users:</strong> We manually verify every dependency of Sails and other officially-maintained modules by hand, every single week.  This includes core hooks, adapters, generators, client SDKs, and Flagship packages.   We regularly send security/compatibility reports about dependencies to the primary email address associated with your account.  If you&apos;d like additional people on your team to receive these reports, no problem!  Just <a href="https://flagship.sailsjs.com/ask">let us know</a> their email addresses and we&apos;ll get them set up.  <em>(These email addresses will also receive communications about patches, shrinkwrap updates, and compatibility notices.)</em></p>
+</blockquote>
+<p>If you have questions or concerns about our dependencies, <a href="/contact">talk to a core team member</a>.  <em>Please do not submit a pull request changing the version of a dependency without first (1) checking that dependency&apos;s changelog, (2) verifying compatibility, and (3) <a href="https://github.com/treelinehq/roadstead/edit/master/constants/verified-releases.type.js" target="_blank">submitting an accompanying PR to update <strong>roadstead</strong></a>, our dependency wallah.</em></p>
+<h3 id="who-else-is-using-sails-js-" permalink="who-else-is-using-sailsjs">Who else is using Sails.js?</h3>
+<p>Sails is used in production by individuals and companies, non-profits, and government entities all over the world, for all sorts of projects (greenfield and mature).  You can see some examples <a href="/#?using-sails">here</a> of companies that have used Sails for their projects. (This small list is definitely not authoritative, so if you&apos;re using Sails in your app/product/service, <a href="/contact">we&apos;d love to hear about it</a>!</p>
+<h3 id="are-there-professional-support-options-" permalink="are-there-professional-support-options">Are there professional support options?</h3>
+<p><a href="/about">The Sails Company</a> offers custom development, services, training, enterprise-class products, and support for teams building applications on Sails.</p>
+<h5 id="partner-with-us" permalink="partner-with-us">Partner with us</h5>
+<p>Our studio provides development services for startups, SMBs, and the Fortune 500. As you might expect, the Sails core team has done a lot of custom Sails/Node.js development, but we also have experience across the full stack, including: advanced interaction design, practical/scalable JavaScript development practices for huge applications, and building rich user experiences across many different devices and screen resolutions.</p>
+<p>We can build your app and API from scratch, modernize your legacy web platform, or catalyze the development efforts of your established team.  If you&apos;re interested in working with us on your next project, <a href="/studio#?contact">drop us a line</a>.</p>
+<h5 id="sails-flagship-for-enterprise" permalink="sails-flagship-for-enterprise">Sails Flagship for Enterprise</h5>
+<p>Sails Flagship is a platform on top of Sails which provides a suite of additional services, production-quality accoutrements, and support for enterprise use cases.  This includes early access to new features and enhancements, a license for our internal tools, as well as exclusive reports and best-practice guides created by core maintainers.  To learn more, <a href="/contact">set up a call</a> <em>(or <a href="/flagship/plans">purchase online now</a>)</em>.</p>
+<blockquote>
+<p>In 2017, we are actively expanding this product offering with new additions and official re-releases of some formerly-experimental modules.  If you have specific suggestions/requests for new Flagship packages, please <a href="http://flagship.sailsjs.com/contact">let us know</a>.</p>
+</blockquote>
+<h5 id="professional-support-slas" permalink="professional-support-/-slas">Professional support / SLAs</h5>
+<p>The Sails Company also provides a lifeline for organizations using Sails to build their products. If you need guaranteed support in the event of a critical production issue, or just want an extra pair of eyes looking out for your code base during development, take a look at our <a href="/flagship/plans">basic subscriptions</a>, or <a href="https://flagship.sailsjs.com/contact">contact us</a> and we&apos;ll give you a call.</p>
+<h3 id="where-do-i-get-help-" permalink="where-do-i-get-help">Where do I get help?</h3>
+<p>Aside from the <a href="/documentation">official documentation</a>, be sure and check out the <a href="/support">recommended support options on the Sails website</a>, and pop in to our <a href="https://gitter.im/balderdashy/sails" target="_blank">Gitter chat room</a>.  If you&apos;re stumped, make sure and <a href="http://stackoverflow.com/questions/ask" target="_blank">ask a question on StackOverflow</a>, where there&apos;s an <a href="http://stackoverflow.com/questions/tagged/sailsjs?sort=newest&amp;days=30" target="_blank">active Sails community</a>.  Members of our core team recently taught a <a href="https://courses.platzi.com/courses/develop-apps-sails-js/" target="_blank">free video course</a> on <a href="http://platzi.com" target="_blank">Platzi</a> and wrote <a href="https://www.manning.com/books/sails-js-in-action" target="_blank">a book</a>.</p>
+<blockquote>
+<p>If you&apos;re using <a href="/faq#?are-there-professional-support-options">Sails Flagship</a>, you can contact the core team <a href="http://flagship.sailsjs.com/ask">here</a>.</p>
+</blockquote>
+<h3 id="what-are-some-good-community-tutorials-" permalink="what-are-some-good-community-tutorials">What are some good community tutorials?</h3>
+<blockquote>
+<p>If you are the author of a tutorial or guide about Sails, please send us a pull request <a href="https://github.com/balderdashy/sails-docs/edit/1.0/FAQ.md" target="_blank">here</a> and we&apos;ll check it out. (Be sure to add your tutorial to the top of the applicable list, as we try to order these from newest to oldest.)</p>
+</blockquote>
+<!--
+A quick note for anyone contributing to this file:
+
+First of all, thanks for making a tutorial! That was pretty cool of you.
+
+Secondly, when you add the tutorial to one of the lists below, please follow it with a comment that has the date your tutorial was last updated. (We try to keep the most recent ones toward the top of the list.) If you are linking to an ongoing series that you continually update, just add the date of your most recent post + the phrase '(ongoing series)' so we know to keep checking back.
+
+Thanks!
+-@rachaelshaw
+-->
+<h5 id="multi-part-guides-" permalink="multipart-guides">Multi-part guides:</h5>
+<ul>
+<li><a href="https://www.ibm.com/developerworks/library/wa-build-deploy-web-app-sailsjs-1-bluemix/index.html" target="_blank">The busy JavaScript developer&apos;s guide to Sails.js</a> -- 4-part series from IBM developerWorks. (Also available in <a href="http://www.ibm.com/developerworks/cn/web/wa-build-deploy-web-app-sailsjs-1-bluemix/" target="_blank">Chinese</a> and <a href="http://www.ibm.com/developerworks/jp/web/library/wa-build-deploy-web-app-sailsjs-1-bluemix/" target="_blank">Japanese</a>.)<!-- 7-12-2016 --></li>
+<li><a href="http://irlnathan.github.io/sailscasts/" target="_blank">SailsCasts</a> - Short screencasts that take you through the basics of building traditional websites, single-page/mobile apps, and APIs using Sails.  Perfect for both novice and tenured developers, but does assume some background on MVC.<!-- 4-4-2015 --></li>
+<li><a href="https://medium.com/sails-js-development/" target="_blank">Sails.js Development channel on Medium</a><!-- 3-19-2015 --></li>
+<li><a href="https://www.pluralsight.com/courses/two-tier-enterprise-app-api-development-angular-sails" target="_blank">Sails.js Course on Plurasight</a><!-- 2-10-2015 --></li>
+<li>Sails API Development<ul>
+<li><a href="http://www.codeproject.com/Articles/898221/Sails-API-development-Datalayer-models-connections" target="_blank">Datalayer -models, connections, waterline</a></li>
+<li><a href="http://www.codeproject.com/Articles/985730/Sails-API-development-2-2-Custom-methods-overriding-default" target="_blank">Custom methods, overriding default actions, and related</a><!-- 5-5-2015 --></li>
+</ul>
+</li>
+<li>Desarrollar Webapps Realtime:<ul>
+<li><a href="http://jorgecasar.github.io/blog/desarrollar-webapps-realtime-creacion/" target="_blank">Creaci&#xF3;n</a></li>
+<li><a href="http://jorgecasar.github.io/blog/desarrollar-webapps-realtime-usuarios/" target="_blank">Usuarios</a></li>
+<li><a href="http://jorgecasar.github.io/blog/desarrollar-webapps-realtime-auth/" target="_blank">Auth</a></li>
+<li><a href="http://jorgecasar.github.io/blog/desarrollar-webapps-realtime-auth-con-passport/" target="_blank">Auth con Passport</a><!-- 1-19-2014 -->
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="articles-blog-posts-" permalink="articles-&amp;-blog-posts">Articles &amp; blog posts:</h5>
+<ul>
+<li><a href="https://blog.twitter.com/2015/guest-post-twitter-sign-in-with-treelineio" target="_blank">Twitter Dev Blog: Guest Post: Twitter Sign-In with Sails.js</a><!-- 3-25-2015 --></li>
+<li><a href="https://segment.com/blog/segment-webhooks-slack/" target="_blank">Guest Post on Segment.io Blog: Webhooks with Slack, Segment, and Sails.js/Treeline</a><!-- 3-15-2015 --></li>
+<li><a href="http://blog.getpostman.com/2015/08/28/manage-your-sailsjs-server-bootstrap-code/" target="_blank">Postman Blog: Manage your Sails.js server bootstrap code</a><!-- 8-28-2015 --></li>
+<li><a href="https://vort3x.me/sailsjs-heroku/" target="_blank">Sails.js on Heroku</a><!-- 5-19-2015 --></li>
+<li><a href="https://github.com/maartendb/angular-sails-scrum-tutorial/blob/master/README.md" target="_blank">Angular + Sails.js (0.10.0-rc5) with angular-sails socket.io</a><!-- 4-14-2014 --></li>
+<li><a href="https://github.com/xdissent/spinnaker" target="_blank">Angular + Sails!  Help!</a> - Sails Resources Service for AngularJS<!-- 8-19-2013 --></li>
+<li><a href="https://www.digitalocean.com/community/articles/how-to-create-an-node-js-app-using-sails-js-on-an-ubuntu-vps" target="_blank">How to Create a Node.js App using Sails.js on an Ubuntu VPS</a><!-- 7-16-2013 --></li>
+<li><a href="http://net.tutsplus.com/tutorials/javascript-ajax/working-with-data-in-sails-js/" target="_blank">Working With Data in Sails.js</a> tutorial on NetTuts<!-- 6-12-2013 -->
+</li>
+</ul>
+<h5 id="video-tutorials-" permalink="video-tutorials">Video tutorials:</h5>
+<ul>
+<li><a href="https://courses.platzi.com/courses/develop-apps-sails-js/" target="_blank">Develop Web Apps in Node.js and Sails.js</a></li>
+<li><a href="https://www.youtube.com/watch?v=7_zUNTtXtcg" target="_blank">Jorge Casar: Introduccion a Sails.js</a><!-- 12-17-2014 --></li>
+<li><a href="http://www.youtube.com/watch?v=Di50_eHqI7I&amp;feature=youtu.be" target="_blank">Sails.js - How to render node views via Ajax, single page application, SPA</a><!-- 8-29-2013 --></li>
+<li><a href="https://www.youtube.com/watch?v=GK-tFvpIR7c" target="_blank">Intro to Sails.js</a> <a href="https://github.com/mikermcneil" target="_blank">@mikermcneil</a>&apos;s original screencast<!-- 2-25-2013 -->
+</li>
+</ul>
+<h3 id="how-can-i-convince-the-other-girls-guys-on-my-team-" permalink="how-can-i-convince-the-other-girls/guys-on-my-team">How can I convince the other girls/guys on my team?</h3>
+<h5 id="articles-interviews-press-releases-whitepapers-talks" permalink="articles-/-interviews-/-press-releases-/-whitepapers-/-talks">Articles / interviews / press releases / whitepapers / talks</h5>
+<blockquote>
+<ul>
+<li>If you are the author of an article about Sails, please send us a pull request <a href="https://github.com/balderdashy/sails-docs/edit/1.0/FAQ.md" target="_blank">here</a>.  We&apos;ll check it out!</li>
+<li>If you are a company interested in doing a press release about Sails, please contact <a href="https://twitter.com/mikermcneil" target="_blank">@mikermcneil</a> on Twitter.  We&apos;ll do what we can to help.</li>
+</ul>
+</blockquote>
+<ul>
+<li><a href="https://blogs.msdn.microsoft.com/partnercatalystteam/2015/07/16/y-combinator-collaboration-deploying-sailsjs-to-azure-web-apps/" target="_blank">Microsoft Case Study: Deploying Sails.js to Azure Web Apps</a></li>
+<li><a href="http://www.infoworld.com/article/2975233/javascript/why-node-js-beats-java-net-for-web-mobile-iot-apps.html" target="_blank">InfoWorld: Why Node.js beats Java and .Net for web, mobile, and IoT apps</a> <em>(Speed, scalability, productivity, and developer politics all played a role in <a href="http://anypresence.com" target="_blank">AnyPresence</a>&#x2019;s selection of Sails.js/Node.js for its enterprise development platform)</em></li>
+<li><a href="http://www.anypresence.com/blog/2015/03/06/anypresence-nodejs/" target="_blank">Anypresence &amp; Node.js</a></li>
+<li><a href="http://techcrunch.com/2015/03/11/treeline-wants-to-take-the-coding-out-of-building-a-backend/" target="_blank">TechCrunch: Sails.js Funded by Y-Combinator</a></li>
+<li><a href="http://www.techrepublic.com/article/build-robust-node-applications-with-the-sails-js-mvc-framework/" target="_blank">TechRepublic: Build Robust Applications with the Node.js MVC framework</a></li>
+<li><a href="https://www.youtube.com/watch?v=WN0YgPdPbRE" target="_blank">Mike&apos;s interview w/ @freddier and @cvander from Platzi</a></li>
+<li><a href="https://www.smashingmagazine.com/2015/11/sailing-sails-js-mvc-style-framework-node-js/" target="_blank">Smashing Magazine: Sailing with Sails.js</a></li>
+<li><a href="http://www.goodxense.com/blog/post/our-presentation-at-smart-city-conference-expo-2015/" target="_blank">Presentation at Smart City Conference &amp; Expo 2015</a> (George Lu &amp; YJ Yang)</li>
+<li>Sails.js, Treeline and the future of programming  (<a href="https://courses.platzi.com/blog/sails-js-creator-mike-mcneil-on-treeline-and-frameworks/" target="_blank">Article</a> | <a href="https://www.youtube.com/watch?v=nZKG7hLhbRs" target="_blank">Video</a> | <a href="https://speakerdeck.com/mikermcneil/what-even-is-software" target="_blank">Deck</a>)</li>
+<li><a href="https://www.youtube.com/watch?v=ERIvf2iUj5U&amp;feature=youtu.be" target="_blank">Radio interview with Mike McNeil w/ ComputerAmerica&apos;s Craig Crossman</a></li>
+<li><a href="https://speakerdeck.com/mikermcneil/i-love-apis" target="_blank">UI-First API Design &amp; Development: Apigee&apos;s I &#x2665; APIs, San Francisco, 2015</a></li>
+<li><a href="https://jaxenter.com/choosing-the-right-framework-for-node-js-development-126432.html" target="_blank">Choosing the right framework for Node.js development</a></li>
+<li><a href="https://techcrunch.com/gallery/our-10-favorite-companies-from-y-combinator-demo-day-day-1/slide/11/" target="_blank">TechCrunch: Our 10 Favorite Companies From Y Combinator Demo Day</a></li>
+<li><a href="https://twitter.com/parisnumerique/status/617999231182176256" target="_blank">Sails.js used on the website for the city of Paris</a></li>
+<li><a href="http://www.thedotpost.com/2014/11/mike-mcneil-pulling-the-plug" target="_blank">Pulling the Plug: dotJS (Paris, 2014)</a></li>
+<li><a href="https://speakerdeck.com/mikermcneil/all-things-open" target="_blank">From Rags to Open Source</a> (All Things Open, Raleigh, 2014)</li>
+<li>SxSW Conference, Austin, TX: (<a href="https://speakerdeck.com/mikermcneil/2014-intro-to-sails-v0-dot-10-dot-x" target="_blank">2014</a> | <a href="https://speakerdeck.com/mikermcneil/sxsw-2015" target="_blank">2015</a>)</li>
+<li><a href="http://lanyrd.com/profile/mikermcneil/" target="_blank">More talks by Mike and the Sails.js core team</a></li>
+<li><a href="https://www.youtube.com/watch?v=XMpf44oV2Og" target="_blank">Dessarolo Web: Interview w/ Mike McNeil</a> (Spanish &amp; English--English starts at 1:30)</li>
+<li><a href="http://www.capitalone.io/blog/contrasting-enterprise-nodejs-frameworks/" target="_blank">CapitalOne blog: Contrasting Enterprise Node.js Frameworks</a> (by <a href="https://www.linkedin.com/in/azatm" target="_blank">Azat Mardan</a>, author of the book &quot;Pro Express.js&quot;)</li>
+<li><a href="http://www.infoq.com/cn/news/2015/07/never-ever-mongodb" target="_blank">Alternatives to MongoDB (Chinese article)</a></li>
+<li><a href="https://abalozz.es/introduccion-a-sails-js-un-framework-para-crear-aplicaciones-realtime/" target="_blank">Introducci&#xF3;n a Sails.js, un framework para crear aplicaciones realtime</a></li>
+<li><a href="http://www.bizjournals.com/sanantonio/blog/socialmadness/2013/03/sxsw-2013-Balderdash-startup-web-app.html?ana=twt" target="_blank">Austin startup finds success in responsive design</a></li>
+<li><a href="http://www.siliconhillsnews.com/2013/03/10/flying-high-with-interact-atx-adventures-in-austin-part-3-2-1/" target="_blank">Interact ATX</a></li>
+<li><a href="http://2014.nodejsconf.it/" target="_blank">Intro to Sails.js :: Node.js Conf: Italy, 2014</a></li>
+<li><a href="http://www.prlog.org/12038372-engine-pitches-startup-america-board-of-directors.html" target="_blank">Startup America</a></li>
+<li><a href="https://twitter.com/search?q=treelinehq%20OR%20%40treelinehq%20OR%20%23treelinehq%20OR%20%40waterlineorm%20OR%20treeline.io%20OR%20sailsjs.com%20OR%20github.com%2Fbalderdashy%2Fsails%20OR%20sailsjs%20OR%20sails.js%20OR%20%23sailsjs%20OR%20%40sailsjs&amp;src=typd" target="_blank">Recent tweets about Sails.js</a></li>
+<li><a href="https://18f.gsa.gov/2014/11/26/how-to-use-more-open-source/" target="_blank">How to use more open source</a> <em>(18F is an office inside the U.s. General Services Administration that helps other federal agencies build, buy, and share efficient and easy-to-use digital services.)</em></li>
+<li><a href="https://18f.gsa.gov/2014/10/01/open-source-hack-series-midas/" target="_blank">18f Open Source Hack Series: Midas</a></li>
+<li><a href="https://adtmag.com/articles/2016/02/11/express-joins-node.aspx" target="_blank">Express Web Server Advances in Node.js Ecosystem</a> (<a href="http://www.heise.de/developer/meldung/IBM-uebergibt-JavaScript-Webframework-Express-an-Node-js-Foundation-3099223.html" target="_blank">auch auf Deutsch</a>)</li>
+<li>Interview w/ Tim Heckel <a href="http://www.infoq.com/news/2013/04/Sails-0.8.9-Released" target="_blank">on InfoQ</a></li>
+<li><a href="http://www.lafermeduweb.net/billet/sails-js-une-architecture-mvc-pour-applications-real-time-node-js-1528.html" target="_blank">Sails.js - Une Architecture MVC pour applications real-time Node.js</a></li>
+<li><a href="https://news.ycombinator.com/item?id=5373342" target="_blank">Hacker News</a></li>
+<li><a href="http://www.slideshare.net/michaelrmcneil/node-pdx" target="_blank">Intro to Sails.js :: Node PDX, Portland, 2013 (Slides)</a>)</li>
+<li><a href="http://javascript.developpez.com/actu/52729/Sail-js-un-framework-MVC-pour-Node-js/" target="_blank">Sail.js : un framework MVC pour Node.js</a></li>
+<li><a href="http://www.webappers.com/2013/03/29/build-custom-enterprise-node-js-apps-with-sails-js/" target="_blank">Build Custom &amp; Enterprise Node.js Apps with Sails.js</a></li>
+<li><a href="http://www.creativebloq.com/design-tools/new-tools-web-design-and-development-march-2013-4132972" target="_blank">New tools for web design and development: March 2013</a></li>
+<li><a href="http://www.infoq.com/news/2013/04/Sails-0.8.9-Released" target="_blank">Sails 0.8.9: A Rails-Inspired Real-Time Node MVC Framework</a></li>
+<li><a href="http://nantokaworks.com/?p=1101" target="_blank">Node.js &#x306E; MVC&#x30D5;&#x30EC;&#x30FC;&#x30E0;&#x30EF;&#x30FC;&#x30AF; Sails.js &#x304C;&#x826F;&#x3055;&#x3052;&#x306A;&#x306E;&#x3067;&#x5C11;&#x3057;&#x8A66;&#x3057;&#x3066;&#x307F;&#x305F;</a></li>
+<li><a href="http://www.infoworld.com/article/3064653/application-development/13-fabulous-frameworks-for-nodejs.html#slide9" target="_blank">InfoWorld: 13 fabulous frameworks for Node.js</a></li>
+<li><a href="http://www.designyourway.net/blog/resources/new-web-design-tools-that-you-need-to-check-out/" target="_blank">New web design tools that you need to check out</a></li>
+<li><a href="http://www.weezevent.com/live-code-sailsjs-avec-mike-mcneil" target="_blank">Live code Sails.js avec Mike McNeil</a></li>
+<li><a href="http://us2.campaign-archive1.com/?u=cf9af451f2674767755b02b35&amp;id=fb98713f48&amp;e=b2d87b15fe" target="_blank">#hack4good adds cities and welcomes Sails.js creator to speak and hack in Paris!</a></li>
+</ul>
+<h3 id="where-do-i-submit-ideas-report-bugs-" permalink="where-do-i-submit-ideas--report-bugs">Where do I submit ideas?  Report bugs?</h3>
+<p>The Sails project tracks bug reports in GitHub issues and uses pull requests for feature proposals.  Please read the <a href="/documentation/contributing">contribution guide</a> before you create an issue, submit a proposal, or begin working on pull request.</p>
+<h3 id="what-version-of-sails-should-i-use-" permalink="what-version-of-sails-should-i-use">What version of Sails should I use?</h3>
+<p><a href="http://badge.fury.io/js/sails" target="_blank"><img src="https://badge.fury.io/js/sails.png" alt="NPM version"></a></p>
+<p>Unless you are a contributor running a pre-release version of the framework in order to do some testing or work on core, you should use the latest stable version of Sails from NPM (click the badge above).  Installing is easy- just follow <a href="/get-started">these instructions</a>.</p>
+<blockquote>
+<p>Note: to install/upgrade to the latest version of Sails locally in an existing project, run <code>npm install sails@latest --force</code>.  If you are having trouble and are looking for a bazooka, you might also want to run <code>rm -rf node_modules &amp;&amp; npm cache clear &amp;&amp; npm install sails@latest --force &amp;&amp; npm install</code>.</p>
+</blockquote>
+<p>If you are looking to install a pre-release version of Sails, you can install from the <code>beta</code> tag on npm (i.e. <code>npm install sails@beta</code>). This is a great way to try out a coming release ahead of time and start upgrading before the release becomes official.  The beta npm release candidate corresponds with the <code>beta</code> branch in the Sails repo.</p>
+<p>Finally, if you like living on the edge, or you&apos;re working on adding a feature or fixing a bug in Sails, install the edge version from the <code>master</code> branch on github.  The edge version is not published on the registry since it&apos;s constantly under development, but you can <em>still use npm to install it</em> (e.g. <code>npm install sails@git://github.com/balderdashy/sails.git</code>)</p>
+<p>For more instructions on installing the beta and edge versions of Sails, check out the <a href="/documentation/contributing">contribution guide</a>.</p>
+<h3 id="how-do-i-get-involved-" permalink="how-do-i-get-involved">How do I get involved?</h3>
+<p>There are many different ways to contribute to Sails; for example you could help us improve the <a href="https://github.com/balderdashy/sails-docs" target="_blank">official documentation</a>, write a <a href="/documentation/concepts/extending-sails">plugin</a>, answer <a href="http://stackoverflow.com/questions/tagged/sails.js" target="_blank">StackOverflow questions</a>, start a Sails meetup, help troubleshoot GitHub issues, write some tests, or submit a patch to Sails core or one of its dependencies.  Please look through the <a href="/documentation/contributing">contribution guide</a> before you get started. It&apos;s a short read that covers guidelines and best practices that ensure your hard work will have the maximum impact.</p>
+<h3 id="how-does-the-documentation-end-up-on-the-sails-website-" permalink="how-does-the-documentation-end-up-on-the-sails-website">How does the documentation end up on the Sails website?</h3>
+<p>The documentation is compiled from the markdown files in the <a href="https://github.com/balderdashy/sails-docs" target="_blank"><code>sails-docs</code> repo on github</a>. A number of Sails users have expressed interest in emulating the process we use to generate the pages on the Sails website.  Good news is it&apos;s pretty simple:  The compilation process for the Sails docs involves generating HTML from Markdown files in the sails-docs repo, then performing some additional transformations such as adding data type bubbles, tagging permalinks for individual sections of pages, building JSON data to power the side navigation menu and setting HTML <code>&lt;title&gt;</code> attributes for better search engine discoverability of individual doc pages.  See the <a href="https://github.com/uncletammy/doc-templater" target="_blank">doc-templater</a> module for more information.</p>
+<h3 id="where-is-the-documentation-for-the-different-releases-of-sails-" permalink="where-is-the-documentation-for-the-different-releases-of-sails">Where is the documentation for the different releases of Sails?</h3>
+<p>The <a href="/documentation">documentation on the main website</a> is for the latest stable npm release of Sails, and is mirrored by the <a href="https://github.com/balderdashy/sails-docs" target="_blank">master branch of the <code>sails-docs</code> repo on github</a> (Master is sometimes a few commits ahead, but any critical documentation updates make it onto the website within a day or two.)</p>
+<p>For older releases of Sails that are still widely used, the documentation is compiled from the relevant <code>sails-docs</code> branches and hosted on the following subdomains:</p>
+<ul>
+<li><a href="http://0.12.sailsjs.com/">0.12.sailsjs.com</a></li>
+<li><a href="http://0.11.sailsjs.com/">0.11.sailsjs.com</a></li>
+</ul>

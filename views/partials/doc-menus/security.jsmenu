@@ -1,0 +1,16 @@
+[
+  {
+    "templateTitle": "README.ejs",
+    "fullPathAndFileName": "security/README.ejs",
+    "data": {
+      "lastModified": 1483231589000
+    }
+  },
+  {
+    "templateTitle": "SAILS-SECURITY-POLICY.ejs",
+    "fullPathAndFileName": "security/SAILS-SECURITY-POLICY.ejs",
+    "data": {
+      "lastModified": 1483241674000
+    }
+  }
+]

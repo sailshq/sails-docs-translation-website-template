@@ -1,0 +1,79 @@
+<h1 id="populate-blueprint-">Populate (Blueprint)</h1>
+<p>Populate and return foreign record(s) for the given association of this record.</p>
+<pre><code class="nohighlight">GET /:model/:id/:association
+</code></pre><!-- __LANG=%%__ -->
+<p>If the specified association is plural (&quot;collection&quot;), this action returns the list of associated records as a JSON-encoded array of dictionaries (plain JavaScript objects).  If the specified association is singular (&quot;model&quot;), this action returns the associated record as a JSON-encoded dictionary.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Parameter</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"> model</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> of the containing model.<br><br>e.g. <code>&apos;purchase&apos;</code> (in <code>GET /purchase/47/cashier</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"> id</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The primary key of the parent record.<br><br>e.g. <code>&apos;47&apos;</code> (in <code>GET /purchase/47/cashier</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"> association</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The name of the association.<br><br>e.g. <code>&apos;cashier&apos;</code> (in <code>GET /purchase/47/cashier</code>) or <code>&apos;products&apos;</code> (in <code>GET /purchase/47/products</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>Populate the <code>cashier</code> who conducted purchase #47:</p>
+<p><code>GET /purchase/47/cashier</code></p>
+<p><a href="https://www.getpostman.com/run-collection/96217d0d747e536e49a4" target="_blank"><img src="https://s3.amazonaws.com/postman-static/run-button.png" alt="Run in Postman"></a></p>
+<h5 id="expected-response" permalink="expected-response">Expected response</h5>
+<pre><code class="json">{
+  &quot;name&quot;: &quot;Dolly&quot;,
+  &quot;id&quot;: 7,
+  &quot;createdAt&quot;: &quot;2012-05-14T01:21:05.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2013-01-15T01:18:40.000Z&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p><strong>Using <a href="http://jquery.com/" target="_blank">jQuery</a>:</strong></p>
+<pre><code class="javascript">$.get(&apos;/purchase/47/cashier&apos;, function (cashier) {
+  console.log(cashier);
+});
+</code></pre><!-- __LANG=%%__ -->
+<p><strong>Using <a href="https://angularjs.org/" target="_blank">Angular</a>:</strong></p>
+<pre><code class="javascript">$http.get(&apos;/purchase/47/cashier&apos;)
+.then(function (cashier) {
+  console.log(cashier);
+});
+</code></pre><!-- __LANG=%%__ -->
+<p><strong>Using <a href="/documentation/reference/websockets/sails.io.js">sails.io.js</a>:</strong></p>
+<pre><code class="javascript">io.socket.get(&apos;/purchase/47/cashier&apos;, function (cashier) {
+  console.log(cashier);
+});
+</code></pre><!-- __LANG=%%__ -->
+<p><strong>Using <a href="http://en.wikipedia.org/wiki/CURL" target="_blank">cURL</a>:</strong></p>
+<pre><code class="bash">curl http://localhost:1337/purchase/47/cashier
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li><p>The example above assumes &quot;rest&quot; blueprints are enabled, and that your project contains at least an empty &apos;Employee&apos; model as well as a <code>Purchase</code> model with an association attribute: <code>cashier: {model: &apos;Employee&apos;}</code>.  You&apos;ll also need at least an empty <code>PurchaseController</code> and <code>EmployeeController</code>.  You can quickly achieve this by running:</p>
+<pre><code class="shell">$ sails new foo
+$ cd foo
+$ sails generate api purchase
+$ sails generate api employee
+</code></pre><!-- __LANG=%%__ -->
+<p>...then editing <code>api/models/Purchase.js</code>.</p>
+</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="populate where"></docmeta></p>
+<docmeta name="pageType" value="endpoint">
+
+</docmeta>

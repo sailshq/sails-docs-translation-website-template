@@ -1,0 +1,159 @@
+// Dependencies:
+@import '../utilities/index.less';
+@import '../styleguide/index.less';
+
+.custom-select-base(@max-width: 200px, @line-height: 28px) {
+  width: 100%;
+  max-width: @max-width;
+  z-index: 1000;
+  text-align: left;
+  .dropdown-wrapper {
+    .border-box();
+    position: relative;
+    width: 100%;
+    font-family: @main-font;
+    text-transform: none;
+    .resting-state {
+      .form-input(@line-height);
+      padding-right: 20px;
+      position: relative;
+      z-index: 25;
+      .dropdown-arrow-icon {
+        position: absolute;
+        right: 6px;
+        top: (@line-height - 13)/2;
+      }
+    }
+    .options-container {
+      position: absolute;
+      top: @line-height - 2;
+      left: 0px;
+      width: 100%;
+      z-index: 20;
+      ul.contents {
+        padding-top: 2px;
+        overflow: auto;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        li.choice {
+          .border-box();
+          .form-field-text(@line-height);
+          padding-left: 5px;
+          padding-right: 5px;
+          vertical-align: middle;
+          cursor: pointer;
+          .choice-icon {
+            margin-right: 10px;
+          }
+          &.imminent {
+            color: @text-dark;
+          }
+          &:last-child {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+  &.focused, .focused {
+    .resting-state {
+      border: 1px solid @brand-sails;
+    }
+  }
+  &.errored, .errored {
+    .resting-state {
+      border: 1px solid @accent-red;
+    }
+  }
+  &.disabled, .disabled {
+    .resting-state {
+      border: none;
+    }
+  }
+}
+
+.custom-select-lt(@max-width: 200px, @line-height: 28px) {
+  .custom-select-base(@max-width, @line-height);
+  .dropdown-wrapper {
+    .options-container {
+      ul.contents {
+        background-color: #fff;
+        border: 1px solid @border-med-gray;
+        li.choice {
+          border-bottom: 1px solid @border-med-gray;
+          &.imminent {
+            background-color: darken(#fff, 5%);
+            color: @text-dark;
+          }
+          &.disabled {
+            color: lighten(@text-normal, 15%);
+          }
+        }
+      }
+    }
+  }
+  &.focused, .focused {
+    .resting-state {
+      background-color: @bg-off-white;
+    }
+  }
+}
+
+.custom-select-dk(@max-width: 200px, @line-height: 28px) {
+  .custom-select-base(@max-width, @line-height);
+  .dropdown-wrapper {
+    .resting-state {
+      .transition(all 250ms);
+      color: @accent-white;
+      background-color: lighten(@black, 7%);
+      border: 1px solid rgba(255,255,255,0.1);
+      // background-color: rgba(255,255,255,0.1);
+      // &:hover {
+      //   background-color: rgba(255,255,255,0.8);
+      //   color: @text-normal;
+      // }
+    }
+    .options-container {
+      ul.contents {
+        // background-color: @bg-off-white;
+        // border: 1px solid @border-med-gray;
+        background-color: @black;
+        border: 1px solid lighten(@black, 7%);
+        li.choice {
+          color: @accent-white;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+          // color: @text-normal;
+          // border-bottom: 1px solid @border-med-gray;
+          &.imminent {
+            // background-color: @true-black;
+            color: @brand-sails;
+            // background-color: @bg-off-white;
+            // color: @text-dark;
+          }
+          &.disabled {
+            color: rgba(255,255,255,0.6);
+            // color: lighten(@text-normal, 20%);
+          }
+        }
+      }
+    }
+  }
+  &.focused, .focused {
+    .resting-state {
+      background-color: lighten(@black, 10%);
+      // background-color: @bg-off-white;
+      // border: 1px solid @border-med-gray;
+      // color: @text-normal;
+      // &:hover {
+      //   background-color: @bg-off-white;
+      // }
+    }
+  }
+  &.errored, .errored {
+    .resting-state {
+      border: 1px solid @accent-red;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<h1 id="authentication-and-permissioning-with-sails-passport">Authentication and Permissioning with Sails + Passport</h1>
+<p>Passport works with Sails just like it does with Express.  Since Sails uses Connect/Express at its core, all of the Connect/Express-oriented things work pretty well.  In addition, Sails has no problem interpreting most Express middleware to work with socket.io.</p>
+<p>In most cases, Passport is overkill for Sails apps, since it is straightforward to implement a simple authentication system.  For example:</p>
+<ul>
+<li><a href="/book">Sails.js in Action</a></li>
+<li><a href="https://github.com/sailsinaction/brushfire-ch15-end" target="_blank">Chp 15 Repo</a></li>
+<li><a href="https://github.com/sails101/basic-login" target="_blank">Sails 101: Basic Login</a></li>
+</ul>
+<p>Passport is, however, quite useful if you plan on integrating with many different social login providers (~4 or more).  For example:</p>
+<ul>
+<li><a href="https://github.com/sails101/using-passport" target="_blank">Sails 101: Sails with Passport.js</a></li>
+<li><a href="http://iliketomatoes.com/implement-passport-js-authentication-with-sails-js-0-10-2/" target="_blank">Another tutorial on how to implement Passport.js with Sails</a>.</li>
+<li><a href="http://waterlock.ninja/" target="_blank">Waterlock</a>: A user authentication/json web token (JWT) management tool, built for Sails.  Supports Twitter, Facebook, and Google Auth.</li>
+</ul>
+<docmeta name="displayName" value="Sails + Passport">
+</docmeta>

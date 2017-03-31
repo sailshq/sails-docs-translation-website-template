@@ -1,0 +1,161 @@
+<h1 id="policies">Policies</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Policies in Sails are versatile tools for authorization and access control-- they let you allow or deny access to your controllers down to a fine level of granularity.  For example, if you were building Dropbox, before letting a user upload a file to a folder, you might check that she <code>isAuthenticated</code>, then ensure that she <code>canWrite</code> (has write permissions on the folder.)  Finally, you&apos;d want to check that the folder she&apos;s uploading into <code>hasEnoughSpace</code>.</p>
+<p>Policies can be used for anything: HTTP BasicAuth, 3rd party single-sign-on, OAuth 2.0, or your own custom authorization/authentication scheme.</p>
+<blockquote>
+<p>NOTE: policies apply <strong>only</strong> to controller actions, not to views.  If you define a route in your <a href="/docs/reference/configuration/sails-config-routes">routes.js config file</a> that points directly to a view, no policies will be applied to it.  To make sure policies are applied, you can instead define a controller action which displays your view, and point your route to that action. &#xA0;</p>
+</blockquote>
+<h3 id="writing-your-first-policy" permalink="writing-your-first-policy">Writing Your First Policy</h3>
+<p>Policies are files defined in the <code>api/policies</code> folder in your Sails app.  Each policy file should contain a single function.</p>
+<p>When it comes down to it, policies are really just Connect/Express middleware functions which run <strong>before</strong> your controllers.  You can chain as many of them together as you like-- in fact they&apos;re designed to be used this way.  Ideally, each middleware function should really check just <em>one thing</em>.</p>
+<p>For example, the <code>canWrite</code> policy mentioned above might look something like this:</p>
+<pre><code class="javascript">// policies/canWrite.js
+module.exports = function canWrite (req, res, next) {
+  var targetFolderId = req.param(&apos;id&apos;);
+
+  // If the requesting user is not logged in, then they are _never_ allowed to write.
+  // No reason to continue-- we can go ahead and bail out now.
+  if (!req.session.me) {
+    return res.redirect(&apos;/login&apos;);
+  }
+
+  // Check the database to see if a permission record exists which matches both the
+  // target folder id, the appropriate &quot;type&quot;, and the id of the logged-in user.
+  Permission.findOne({
+    folder: targetFolderId,
+    user: req.session.me,
+    type: &apos;write&apos;
+  })
+  .exec(function (err, permission) {
+
+    // Unexpected error occurred-- use the app&apos;s default error (500) handler.
+    //
+    // &gt; We do this because this should never happen, and if it does, it means there
+    // &gt; is probably something wrong with our database, and we want to know about it!)
+    if (err) { return res.serverError(err); }
+
+    // No &quot;write&quot; permission record exists linking this user to this folder.
+    // Maybe they got removed from it?  Or maybe they never had permission in the first place...
+    if (!permission) {
+      return res.redirect(&apos;/login&apos;);
+    }
+
+    // If we made it all the way down here, looks like everything&apos;s ok, so we&apos;ll let the user through.
+    // (from here, the next policy or the controller action will run)
+    return next();
+
+  });
+};
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="protecting-controllers-with-policies" permalink="protecting-controllers-with-policies">Protecting Controllers with Policies</h3>
+<p>Sails has a built in ACL (access control list) located in <code>config/policies.js</code>.  This file is used to map policies to your controllers.</p>
+<p>This file is  <em>declarative</em>, meaning it describes <em>what</em> the permissions for your app should look like, not <em>how</em> they should work.  This makes it easier for new developers to jump in and understand what&apos;s going on, plus it makes your app more flexible as your requirements inevitably change over time.</p>
+<p>Your <code>config/policies.js</code> file should export a Javascript object whose keys are controller names (or <code>&apos;*&apos;</code> for  global policies), and whose values are objects mapping action names to one or more policies.  See below for more details and examples.</p>
+<h5 id="to-apply-a-policy-to-a-specific-controller-action-" permalink="to-apply-a-policy-to-a-specific-controller-action">To apply a policy to a specific controller action:</h5>
+<pre><code class="javascript">{
+  ProfileController: {
+      // Apply the &apos;isLoggedIn&apos; policy to the &apos;edit&apos; action of &apos;ProfileController&apos;
+      edit: &apos;isLoggedIn&apos;
+      // Apply the &apos;isAdmin&apos; AND &apos;isLoggedIn&apos; policies, in that order, to the &apos;create&apos; action
+      create: [&apos;isAdmin&apos;, &apos;isLoggedIn&apos;]
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="to-apply-a-policy-to-an-entire-controller-" permalink="to-apply-a-policy-to-an-entire-controller">To apply a policy to an entire controller:</h5>
+<pre><code class="javascript">{
+  ProfileController: {
+    // Apply &apos;isLoggedIn&apos; by default to all actions that are NOT specified below
+    &apos;*&apos;: &apos;isLoggedIn&apos;,
+    // If an action is explicitly listed, its policy list will override the default list.
+    // So, we have to list &apos;isLoggedIn&apos; again for the &apos;edit&apos; action if we want it to be applied.
+    edit: [&apos;isAdmin&apos;, &apos;isLoggedIn&apos;]
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>Note:</strong> Default policy mappings do not &quot;cascade&quot; or &quot;trickle down.&quot;  Specified mappings for the controller&apos;s actions will override the default mapping.</p>
+</blockquote>
+<h5 id="to-apply-a-policy-to-all-actions-that-are-not-explicitly-mapped-" permalink="to-apply-a-policy-to-all-actions-that-are-not-explicitly-mapped">To apply a policy to all actions that are not explicitly mapped:</h5>
+<pre><code class="javascript">{
+  // Apply &apos;isLoggedIn&apos; to all actions by default
+  &apos;*&apos;: &apos;isLoggedIn&apos;,
+  ProfileController: {
+      // Apply &apos;isAdmin&apos; to the &apos;foo&apos; action.  &apos;isLoggedIn&apos; will NOT be applied!
+      &apos;foo&apos;: &apos;isAdmin&apos;
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>Remember, default policies will not be applied to any controller / action that is given an explicit mapping.</p>
+</blockquote>
+<h5 id="using-policies-with-blueprint-actions" permalink="using-policies-with-blueprint-actions">Using policies with blueprint actions</h5>
+<p>Sails&apos; built-in <a href="/documentation/concepts/blueprints">blueprint API</a> is implemented using regular Sails controller actions.  The only difference is that blueprint actions are implicit.</p>
+<p>To apply your policies to blueprint actions, set up your policy mappings just like we did in the example above, but pointed at name of the relevant implicit <a href="/documentation/concepts/blueprints/blueprint-actions">blueprint action</a> in your controller.  For example:</p>
+<pre><code class="javascript">{
+  UserController: {
+    // Apply the &apos;isLoggedIn&apos; policy to the &apos;update&apos; action of &apos;UserController&apos;
+    update: &apos;isLoggedIn&apos;
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="built-in-policies" permalink="builtin-policies">Built-in policies</h3>
+<p>Sails provides two built-in policies that can be applied globally, or to a specific controller or action.</p>
+<ul>
+<li><code>true</code>: public access  (allows anyone to get to the mapped controller/action)</li>
+<li><p><code>false</code>: <strong>NO</strong> access (allows <strong>no-one</strong> to access the mapped controller/action)</p>
+<p><code>&apos;*&apos;: true</code> is the default policy for all controllers and actions.  In production, it&apos;s good practice to set this to <code>false</code> to prevent access to any logic you might have inadvertently exposed.</p>
+</li>
+</ul>
+<h5 id="adding-some-policies-to-a-controller-" permalink="adding-some-policies-to-a-controller">Adding some policies to a controller:</h5>
+<pre><code class="javascript">// in config/policies.js
+
+  // ...
+  RabbitController: {
+
+    // Apply the `false` policy as the default for all of RabbitController&apos;s actions
+    // (`false` prevents all access, which ensures that nothing bad happens to our rabbits)
+    &apos;*&apos;: false,
+
+    // For the action `nurture`, apply the &apos;isRabbitMother&apos; policy
+    // (this overrides `false` above)
+    nurture : &apos;isRabbitMother&apos;,
+
+    // Apply the `isNiceToAnimals` AND `hasRabbitFood` policies
+    // before letting any users feed our rabbits
+    feed : [&apos;isNiceToAnimals&apos;, &apos;hasRabbitFood&apos;]
+  }
+  // ...
+</code></pre><!-- __LANG=%%__ -->
+<p>Here&#x2019;s what the <code>isNiceToAnimals</code> policy from above might look like (this file would be located at <code>policies/isNiceToAnimals.js</code>):</p>
+<pre><code class="javascript">module.exports = function isNiceToAnimals (req, res, next) {
+
+  // `req.session` contains a set of data specific to the user making this request.
+  // It&apos;s kind of like our app&apos;s &quot;memory&quot; of the current user.
+
+  // If our user has a history of animal cruelty, not only will we
+  // prevent her from going even one step further (`return`),
+  // we&apos;ll go ahead and redirect her to PETA (`res.redirect`).
+  if ( req.session.user.hasHistoryOfAnimalCruelty ) {
+    return res.redirect(&apos;http://PETA.org&apos;);
+  }
+
+  // If the user has been seen frowning at puppies, we have to assume that
+  // they might end up being mean to them, so we&apos;ll
+  if ( req.session.user.frownsAtPuppies ) {
+    return res.redirect(&apos;http://www.dailypuppy.com/&apos;);
+  }
+
+  // Finally, if the user has a clean record, we&apos;ll call the `next()` function
+  // to let them through to the next policy or our controller
+  next();
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>Besides protecting rabbits (while a noble cause, no doubt), here are a few other use cases for policies:</p>
+<ul>
+<li>cookie-based authentication</li>
+<li>role-based access control</li>
+<li>limiting file uploads based on MB quotas</li>
+<li>any other kind of authentication scheme you can imagine</li>
+</ul>
+<docmeta name="displayName" value="Policies">
+</docmeta>

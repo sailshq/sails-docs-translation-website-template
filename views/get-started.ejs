@@ -1,0 +1,64 @@
+<!-- Header -->
+<%- partial ('partials/header.ejs', {currentSection: 'getStarted', isFlagshipPage: false })%>
+
+<!-- White bar with github updates & social media -->
+<%- partial ('partials/news-banner.ejs') %>
+
+<div id="sails-page_get-started">
+  <div class="page-header">
+    <div class="page-header-container">
+      <img class="hero-image" alt="A tentacle emerges from the water, waving at a bearkat in a sailboat" src="/images/get_started_hero.png" data-rjs="2"/>
+      <h1>Ready to set sail?</h1>
+      <h5>Whether you’re new to Node.js, or an Express pro, this part is pretty easy. <br/>You’ll be up and running in no time. </h5>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="get-started-section">
+    <img class="node" src="/images/get_started_node.png" data-rjs="2"/>
+    <h2 class="section-header">New to Node? No problem.</h2>
+    <p>In order to install Sails, you’ll first need to install Node.js. Node is supported on most major operating systems, including MacOS X, Windows, and many flavors of Linux. The website has pre-built installers for plenty of platforms, so you can just hop on over to the downloads section of <a target="_blank" href="https://nodejs.org/en/">nodejs.org</a> and choose the one that’ll work for you.</p>
+    <a target="_blank" href="https://nodejs.org/en/download/" class="link-btn link-btn-primary">Find my node installer</a>
+  </div>
+
+  <hr/>
+
+  <div class="get-started-section">
+    <img src="/images/get_started_install.png" data-rjs="2"/>
+    <h2 class="section-header">Install Sails</h2>
+    <p>To install Sails:</p>
+    <pre><code class="bash">$ npm install sails -g</code></pre>
+    <p>This usually takes about 48 seconds.  It’s a good time to grab a cup of coffee or tea.  Or if you’re on slow internet, maybe something a bit stronger.</p>
+    <p>If you run into any trouble running NPM, <a href="/support">ask for help.</a></p>
+  </div>
+
+  <div class="get-started-section">
+    <img src="/images/get_started_create.png" data-rjs="2"/>
+    <h2 class="section-header">Create your app</h2>
+    <p>To generate a new app, just <code>cd</code> into the directory where you want it to be, and type:</p>
+    <pre><code class="bash">$ sails new test-project</code></pre>
+    <p>You should see:</p>
+    <pre><code class="bash"><span class="entity function">info:</span> Created a new Sails app `test-project`!</code></pre>
+    <p>To take a look at your new Sails app:</p>
+    <pre><code class="bash">$ cd test-project
+$ sails lift</code></pre>
+    <p>Now you can go to <a target="_blank" href="http://localhost:1337">localhost:1337</a> to see your brand new homepage.</p>
+  </div>
+
+  <div class="get-started-section">
+    <img src="/images/get_started_build.png" data-rjs="2"/>
+    <h2 class="section-header">Build something cool</h2>
+    <p>Your project is ready for whatever you want to create. But in case you’re not sure what to do next, here are a few resources that will help get you acquainted with developing on Sails:</p>
+    <ul>
+      <li><a href="/documentation/anatomy/">Anatomy of a Sails App</a> - Documentation to get you acquainted with each file and folder in your newly-generated app.</li>
+      <li><a target="_blank" href="https://www.manning.com/books/sails-js-in-action">Sails.js in Action</a> - Book that guides you through building a basic app.</li>
+      <li><a target="_blank" href="https://courses.platzi.com/courses/develop-apps-sails-js/">Develop Web Apps in Node.js and Sails.js</a> - A free intro course taught by Mike, the creator and lead maintainer of Sails.</li>
+    </ul>
+    <a href="/documentation/anatomy/" class="link-btn link-btn-primary">Learn about your new app</a>
+    <a target="_blank" href="https://courses.platzi.com/courses/develop-apps-sails-js/" class="link-btn link-btn-secondary">Watch intro course<i class="sails-icon icon-arrow-circle-right"></i></a>
+  </div>
+</div>
+
+<!-- Footer -->
+<%- partial ('partials/footer.ejs', { isFlagshipPage: false })%>

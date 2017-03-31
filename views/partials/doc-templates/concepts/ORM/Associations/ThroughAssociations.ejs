@@ -1,0 +1,56 @@
+<h1 id="through-associations">Through Associations</h1>
+<p><strong>AKA &quot;Has Many Through&quot;</strong></p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Many-to-Many through associations behave the same way as many-to-many associations with the exception
+of the join table being automatically created for you. In a Many-To-Many through assocation you define a model containing two fields that correspond to the two models you will be joining together. When defining an association you will add the <code>through</code> key to show that the model should be used rather than the automatic join table.</p>
+<h3 id="has-many-through-example" permalink="has-many-through-example">Has Many Through Example</h3>
+<pre><code class="javascript">// myApp/api/models/User.js
+module.exports = {
+  attributes: {
+    name: {
+      type: &apos;string&apos;
+    },
+    pets:{
+      collection: &apos;pet&apos;,
+      via: &apos;owner&apos;,
+      through: &apos;petuser&apos;
+    }
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<pre><code class="javascript">// myApp/api/models/Pet.js
+module.exports = {
+  attributes: {
+    name: {
+      type: &apos;string&apos;
+    },
+    color: {
+      type: &apos;string&apos;
+    },
+    owners:{
+      collection: &apos;user&apos;,
+      via: &apos;pet&apos;,
+      through: &apos;petuser&apos;
+    }
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<pre><code class="javascript">// myApp/api/models/PetUser.js
+module.exports = {
+  attributes: {
+    owner:{
+      model:&apos;user&apos;
+    },
+    pet: {
+      model: &apos;pet&apos;
+    }
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>By using the <code>PetUser</code> model we can use <code>.populate()</code> on both the <code>User</code> model and <code>Pet</code> model just the same as a normal <a href="/documentation/concepts/models-and-orm/associations/many-to-many">Many-to-Many</a> association.</p>
+<blockquote>
+<p>Currently if you would like to add additional information to the <code>through</code> table it will not be available when calling <code>.populate</code>. To do this you will need to query the <code>through</code> model manually.</p>
+</blockquote>
+<docmeta name="displayName" value="Through Associations">
+
+</docmeta>

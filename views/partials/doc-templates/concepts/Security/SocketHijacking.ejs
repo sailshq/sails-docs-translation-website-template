@@ -1,0 +1,9 @@
+<h1 id="socket-hijacking">Socket Hijacking</h1>
+<p>Unfortunately, cross-site request forgery attacks are not limited to the HTTP protocol.  WebSocket hijacking (sometimes known as <a href="http://www.christian-schneider.net/CrossSiteWebSocketHijacking.html" target="_blank">CSWSH</a>) is a commonly overlooked vulnerability in most realtime applications.  Fortunately, since Sails treats both HTTP and WebSocket requests as first-class citizens, its built-in <a href="/documentation/concepts/Security/CSRF.html">CSRF protection</a> and <a href="/documentation/concepts/Security/CORS.html">configurable CORS rulesets</a> apply to both protocols.</p>
+<p>You can prepare your Sails app against CSWSH attacks by enabling the built-in protection in <a href="/documentation/anatomy/myApp/config/csrf.js.html"><code>config/csrf.js</code></a> and ensuring that a <code>_csrf</code> token is sent with all relevant incoming socket requests.  Additionally, if you&apos;re planning on allowing sockets to connect to your Sails app cross-origin (i.e. from a different domain, subdomain, or port) you&apos;ll want to configure your CORS settings accordingly.  You can also define the <code>authorization</code> setting in <a href="/documentation/anatomy/myApp/config/sockets.js.html"><code>config/sockets.js</code></a> as a custom function which allows or denies the initial socket connection based on your needs.</p>
+<h4 id="notes" permalink="notes">Notes</h4>
+<ul>
+<li>CSWSH prevention is only a concern in scenarios where people use the same client application to connect sockets to multiple web services (e.g. cookies in a browser like Google Chrome can be used to connect a socket to Chase.com from both Chase.com and Horrible-Hacker-Site.com.)</li>
+</ul>
+<docmeta name="displayName" value="Socket Hijacking">
+</docmeta>

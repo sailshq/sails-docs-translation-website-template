@@ -1,0 +1,24 @@
+<h1 id="api-services">api/services</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This folder contains your services.  &apos;Services&apos; are similar to controller actions but are typically used for things that don&apos;t necessarily have to happen between the time when the user sends a request and when the server sends back a response.  Any logic that doesn&apos;t rely on <code>.req()</code> and <code>.res()</code> can be turned into a service if for no other reason than to keep your controllers clean and manageable.</p>
+<p>Hypothetically, one could create a service for</p>
+<ul>
+<li>Sending emails</li>
+<li>Automating tweets to celebrities</li>
+<li>Retrieving data from a third party API then pushing that data to your client WHEN IT&apos;S READY (over websockets)</li>
+</ul>
+<p>Services are written in one or more .js file within this directory.</p>
+<h3 id="example-email-js" permalink="example-emailjs">Example Email.js</h3>
+<pre><code class="nohighlight">module.exports = {
+  send: function(to,from,body){
+    // fancy code that sends an email
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>You would call this service with <code>Email.send(&apos;rick&apos;,&apos;bill&apos;,&apos;lol&apos;)</code></p>
+<blockquote>
+<p>Mind your case.  Email.send !== email.send</p>
+</blockquote>
+<docmeta name="displayName" value="services">
+
+</docmeta>

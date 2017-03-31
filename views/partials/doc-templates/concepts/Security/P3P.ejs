@@ -1,0 +1,76 @@
+<h1 id="p3p">P3P</h1>
+<h3 id="background" permalink="background">Background</h3>
+<p>P3P stands for the &quot;Platform for Privacy Preferences&quot;, a browser/web standard designed to facilitate better consumer web privacy control.  Currently (as of 2014), out of all the major browsers, it is only supported by Internet Explorer.  It comes into play most often when dealing with legacy applications.</p>
+<p>Many modern organizations are willfully ignoring P3P. Here&apos;s what <a href="https://www.facebook.com/help/327993273962160/" target="_blank">Facebook has to say</a> on the subject:</p>
+<blockquote>
+<p>The organization that established P3P, the World Wide Web Consortium, suspended its work on this standard several years ago because most modern web browsers don&apos;t fully support P3P. As a result, the P3P standard is now out of date and doesn&apos;t reflect technologies that are currently in use on the web, so most websites currently don&apos;t have P3P policies.</p>
+<p>See also: <a href="http://www.zdnet.com/blog/facebook/facebook-to-microsoft-p3p-is-outdated-what-else-ya-got/9332" target="_blank">http://www.zdnet.com/blog/facebook/facebook-to-microsoft-p3p-is-outdated-what-else-ya-got/9332</a></p>
+</blockquote>
+<h3 id="supporting-p3p-with-sails" permalink="supporting-p3p-with-sails">Supporting P3P with Sails</h3>
+<p>But all that aside, sometimes you just have to support P3P anyways.</p>
+<p>Fortunately, a few different modules exist that bring P3P support to Express and Sails by enabling the relevant P3P headers.  To use one of these modules for handling P3P headers, install it from npm using the directions below, then open <code>config/http.js</code> in your project and configure it as a custom middleware.  To do that, define your P3P middleware as &quot;p3p&quot;, and add the string &quot;p3p&quot; to your <code>middleware.order</code> array wherever you&apos;d like it to run in the middleware chain (a good place to put it might be right before <code>cookieParser</code>):</p>
+<p>E.g. in <code>config/http.js</code>:</p>
+<pre><code class="javascript">// .....
+module.exports.http = {
+
+  middleware: {
+
+    p3p: require(&apos;p3p&apos;)(p3p.recommmended), // &lt;==== set up the custom middleware here and named it &quot;p3p&quot;
+
+    order: [
+      &apos;startRequestTimer&apos;,
+      &apos;p3p&apos;, // &lt;============ configured the order of our &quot;p3p&quot; custom middleware here
+      &apos;cookieParser&apos;,
+      &apos;session&apos;,
+      &apos;bodyParser&apos;,
+      &apos;handleBodyParserError&apos;,
+      &apos;compress&apos;,
+      &apos;methodOverride&apos;,
+      &apos;poweredBy&apos;,
+      &apos;$custom&apos;,
+      &apos;router&apos;,
+      &apos;www&apos;,
+      &apos;favicon&apos;,
+      &apos;404&apos;,
+      &apos;500&apos;
+    ],
+    // .....
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>Check out the examples below for more guidance - and be sure and follow the links to see the docs for the module you&apos;re using for the latest information, comparative analysis of its features, any recent bug fixes, and advanced usage details.</p>
+<h5 id="using-node-p3p-https-github-com-troygoode-node-p3p-" permalink="using-nodep3p">Using <a href="https://github.com/troygoode/node-p3p" target="_blank">node-p3p</a></h5>
+<blockquote>
+<p><code>node-p3p</code> is open-source under the <a href="https://github.com/troygoode/node-p3p/blob/master/LICENSE" target="_blank">MIT license</a>.</p>
+</blockquote>
+<pre><code class="bash"># In your sails app
+npm install p3p --save
+</code></pre><!-- __LANG=%%__ -->
+<p>Then in the <code>middleware</code> config object in <code>config/http.js</code>:</p>
+<pre><code class="javascript">// ...
+  // node-p3p provides a recommended compact privacy policy out of the box
+  p3p: require(&apos;p3p&apos;)(require(&apos;p3p&apos;).recommended)
+  // ...
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="using-lusca-https-github-com-krakenjs-lusca-luscap3pvalue-" permalink="using-lusca">Using <a href="https://github.com/krakenjs/lusca#luscap3pvalue" target="_blank">lusca</a></h5>
+<blockquote>
+<p><code>lusca</code> is open-source under the <a href="https://github.com/krakenjs/lusca/blob/master/LICENSE.txt" target="_blank">Apache license</a></p>
+</blockquote>
+<pre><code class="bash"># In your sails app
+npm install lusca --save
+</code></pre><!-- __LANG=%%__ -->
+<p>Then in the <code>middleware</code> config object in <code>config/http.js</code>:</p>
+<pre><code class="javascript">// ...
+  // &quot;ABCDEF&quot; ==&gt; The compact privacy policy to use.
+  p3p: require(&apos;lusca&apos;).p3p(&apos;ABCDEF&apos;)
+  // ...
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="additional-resources-" permalink="additional-resources">Additional Resources:</h3>
+<ul>
+<li><a href="http://support.microsoft.com/kb/290333" target="_blank">Description of the P3P Project (Microsoft)</a></li>
+<li><a href="http://www.w3.org/P3P/" target="_blank">&quot;P3P Work suspended&quot; (W3C)</a></li>
+<li><a href="http://compactprivacypolicy.org/compact_specification.htm" target="_blank">P3P Compact Specification (CompactPrivacyPolicy.org)</a></li>
+</ul>
+<docmeta name="displayName" value="P3P">
+
+</docmeta>

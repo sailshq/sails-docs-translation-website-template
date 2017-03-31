@@ -1,0 +1,80 @@
+<% /* Expose menu data to make it accessible to client-side javascript */ %>
+<script>
+window.MENU_DATA = <%- JSON.stringify(data.templateList) %>;
+</script>
+
+<div id="sails-page_anatomy" is="doc-page">
+  <div is="doc-template-contents" class="docs-section invisible fade-in" data-hide-until-rendered>
+    <div  class="anatomy-section">
+      <% /* Inject "Edit page" button via partial */ %>
+      <%- partial('partials/pencil-button', {templatePath: data.currentTemplate.path, branchToEdit: branchToEdit}) %>
+      <% /* Inject main content via partial */ %>
+      <%- partial('partials/doc-templates/'+data.currentTemplate.path) %>
+    </div>
+
+  </div>
+  <div class="contribution-message invisible fade-in" data-hide-until-rendered>
+    <h3>Want to see for yourself?</h3>
+    <% if(data.currentTemplate.isOverviewPage) {%>
+
+    <p>An example of an entire auto-generated Sails app can be found <% if(seedBranch !== 'master') {%><a href="https://github.com/balderdashy/seed/tree/<%= seedBranch %>" target="_blank"><%}else {%><a href="https://github.com/balderdashy/seed" target="_blank"><%}%>here</a>.</p>
+
+    <% } else { %>
+
+    <%
+    // Get the path to this file or folder from within an actual sails app.
+    var pathLevels = data.currentTemplate.path.split('/');
+    // Get rid of the ____.ejs at the end of this template path
+    pathLevels.splice(pathLevels.length - 1);
+    // If this is a folder do it again (because it always goes /foldername/foldername.ejs for the overview pages).
+    if(data.currentTemplate.isParent) {
+      pathLevels.splice(pathLevels.length - 1);
+    }
+    // Now reconstruct the path, adding the displayname to the end (because the displayname is always the file or folder this represents,
+    // with the proper extension if it's a file.)
+    var pathToCurrentItem = pathLevels.join('/') + '/' + data.currentTemplate.displayName;
+    // Now get the leading 'anatomy/' out of there.
+    pathToCurrentItem = pathToCurrentItem.replace('anatomy/', '');
+    %>
+
+    <p>An example of this <%= data.currentTemplate.isParent ? 'directory' : 'file' %> can be found in our sample app repo, <a href="https://github.com/balderdashy/seed/tree/<%= seedBranch %>/<%= pathToCurrentItem %>" target="_blank">here</a>.</p>
+    <% } %>
+  </div>
+
+  <!-- NAVIGATION -->
+  <!-- (underneath the docs content, so that the doc page h1s come before any other headers, for SEO.) -->
+
+  <!-- Header nav -->
+  <%- partial('partials/docs-main-header.ejs', {templateList: data.templateList}) %>
+  <!-- Side nav -->
+  <div is="side-nav" class="side-nav invisible fade-in" data-hide-until-rendered>
+    <div class="side-nav-inner" is="side-nav-contents">
+      <h4>App Structure</h4>
+
+      <!-- If this template has a stabilityIndex docMeta tag, show it here -->
+      <div class="stabilityIndex" ng-if="docs.currentPage.data.stabilityIndex" ng-include src="'./templates/stabilityIndexPartials/stability'+docs.currentPage.data.stabilityIndex+'.html'"></div>
+      <br ng-if="docs.currentPage.data.stabilityIndex">
+
+      <ul class="main-sections">
+        <% _.each(data.templateList, function(navItem) {
+          if(_.contains(data.expandedItems, navItem.path)) {
+            navItem.isInitiallyExpanded = true;
+          }
+          else navItem.isInitiallyExpanded = false;
+          // Start with the nav items directly inside 'myApp'
+          if(!navItem.isChild && !navItem.isOverviewPage && !navItem.notShownOnWebsite) {
+        %>
+        <li is="menu-item"
+          data-path="<%= navItem.path %>"
+          class="<%= navItem.isInitiallyExpanded ? 'expanded' : ''%> <%= navItem.isInitiallyExpanded && navItem.isParent ? 'current-parent' : '' %> <%= navItem.isParent ? 'folder' : '' %> <%= navItem.isDeprecated ? 'deprecated' : '' %>">
+          <%- partial('partials/nav-item', {navItem: navItem, navItems: data.templateList, section: data.section, expandedItems: data.expandedItems}) %>
+        </li>
+        <% }
+        }) %>
+      </ul>
+    </div>
+  </div>
+  <!-- Footer -->
+  <%- partial ('partials/footer.ejs', { isFlagshipPage: false })%>
+</div>
+

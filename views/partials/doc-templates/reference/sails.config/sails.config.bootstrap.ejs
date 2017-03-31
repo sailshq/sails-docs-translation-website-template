@@ -1,0 +1,67 @@
+<h1 id="sails-config-bootstrap">sails.config.bootstrap</h1>
+<h3 id="what-is-this-" permalink="what-is-this">What is this?</h3>
+<p><code>sails.config.bootstrap</code> is a customizable, asynchronous bootstrap function that runs before your Sails app gets lifted (i.e. starts up).</p>
+<p>The bootstrap can be used for all sorts of stuff, but here are a few particularly common use cases:</p>
+<ul>
+<li>setting up baseline data<ul>
+<li><em>e.g. find or create an admin user</em></li>
+</ul>
+</li>
+<li>running sanity checks on the status of your database<ul>
+<li><em>e.g. count hand records that don&apos;t have any fingers. If any are found, then refuse to lift until the database is fixed)</em></li>
+</ul>
+</li>
+<li>seeding your database with stub data<ul>
+<li><em>e.g. create &amp; associate a few fake &quot;Clinic&quot;, &quot;Pet&quot;, and &quot;Veterinarian&quot; records to make it easier to test your animal adoption app)</em></li>
+</ul>
+</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<blockquote>
+<p>Remember: Since the bootstrap is an asynchronous function, it&apos;s very important to trigger this callback method when you are finished!
+(otherwise your server will never lift, and eventually just time out, since it&apos;s waiting on the bootstrap)</p>
+</blockquote>
+<pre><code class="javascript">module.exports.bootstrap = function (done) {
+
+  // Don&apos;t seed fake data when running in production.
+  if (process.env.NODE_ENV === &apos;production&apos;) {
+    return done();
+  }
+
+  //--&#x2022;
+  // Check to see if we already have a fake clinic in the database.
+  Clinic.count({
+    slug: &apos;lost-snakes&apos;
+  }).exec(function (err, existingFakeClinics) {
+    if (err) { return done(err); }
+
+    if (existingFakeClinics.length &gt;= 2) {
+      return done(new Error(&apos;Consistency violation: Database is in invalid state: There should never be more than one fake clinic!&apos;));
+    }
+
+    if (existingFakeClinics.length === 1) {
+      // If the clinic already exists, then we&apos;re done.
+      // That means we must have already run the bootstrap and seeded the fake data.
+      return done();
+    }
+
+    // --&#x2022;
+    // But otherwise, we&apos;ll seed some fake data.
+    Clinic.create({
+      friendlyName: &apos;Lost Snakes Clinic&apos;,
+      slug: &apos;lost-snakes&apos;,
+      address: &apos;158 Lost Snakes Blvd\nAustin, TX  78759&apos;
+    }).exec(function (err){
+      if (err) { return done(err); }
+
+      // ...etc...
+      return done();
+
+    });//&lt;/Clinic.create()&gt;
+  });//&lt;/Clinic.count()&gt;
+
+};
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="sails.config.bootstrap()"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

@@ -1,0 +1,50 @@
+<h1 id="-leaveall-">.leaveAll()</h1>
+<p>Unsubscribe all members of a room (e.g. <code>chatroom7</code>) from that room <em>and</em> every other room they are currently subscribed to; except the automatic room associated with their socket ID.</p>
+<pre><code class="javascript">sails.sockets.leaveAll(roomName, cb);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>roomName</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The room to evactuate.  Note that this room&apos;s members will be forced to leave <em>all of their rooms</em>, not just this one.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em><code>cb</code></em></td>
+<td style="text-align:center"><bubble type="function?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">An optional callback which will be called when the operation is complete <em>on the current server</em> (see notes below for more information), or if fatal errors were encountered.  In the case of errors, it will be called with a single argument (<code>err</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>In a controller action:</p>
+<pre><code class="javascript">unsubscribeFunRoomMembersFromEverything: function(req, res) {
+  sails.sockets.leaveAll(&apos;funRoom&apos;, function(err) {
+    if (err) {return res.serverError(err);}
+    return res.json({
+      message: &apos;Unsubscribed all members of `funRoom` from everything!&apos;
+    });
+  });
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>In a multi-server environment, the callback function (<code>cb</code>) will be executed when the <code>.leaveAll()</code> call completes <em>on the current server</em>.  This does not guarantee that other servers in the cluster have already finished running the operation.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".leaveAll()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

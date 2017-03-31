@@ -1,0 +1,438 @@
+<h1 id="validations">Validations</h1>
+<p>Sails bundles support for automatic validations of your models&apos; attributes. Any time a record is updated, or a new record is created, the data for each attribute will be checked against all of your predefined validation rules. This provides a convenient failsafe to ensure that invalid entries don&apos;t make their way into your app&apos;s database(s). </p>
+<p>Except for <code>unique</code> (which is implemented as a database-level constraint; <a href="/documentation/concepts/models-and-orm/validations#?unique">see &quot;Unique&quot;</a>), all validations below are implemented in JavaScript and run in the same Node.js server process as Sails.  Also keep in mind that, no matter what validations are used, an attribute must <em>always</em> specify one of the built in data types (&apos;string&apos;, &apos;number&apos;, json&apos;, etc).</p>
+<pre><code class="javascript">// User
+module.exports = {
+  attributes: {
+    emailAddress: {
+      type: &apos;string&apos;,
+      unique: true,
+      required: true
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="built-in-data-types" permalink="builtin-data-types">Built-in Data Types</h3>
+<p>Every attribute definition must have a built-in data type (or <em>typeclass</em>) specified.  This is used for logical validation and coercion of results and criteria.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Data Type</th>
+<th style="text-align:left">Usage</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>type: &apos;string&apos;</code></td>
+<td style="text-align:left">Any string (tolerates <code>null</code>).</td>
+</tr>
+<tr>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>type: &apos;number&apos;</code></td>
+<td style="text-align:left">Any number (tolerates <code>null</code>)</td>
+</tr>
+<tr>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>type: &apos;boolean&apos;</code></td>
+<td style="text-align:left"><code>true</code> or <code>false</code> (also tolerates <code>null</code>)</td>
+</tr>
+<tr>
+<td style="text-align:center"><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>type: &apos;json&apos;</code></td>
+<td style="text-align:left">Any JSON-serializable value, including numbers, booleans, strings, arrays, dictionaries, and <code>null</code>.</td>
+</tr>
+<tr>
+<td style="text-align:center"><bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>type: &apos;array&apos;</code></td>
+<td style="text-align:left">Any array consisting solelyof JSON-serializable contents.</td>
+</tr>
+</tbody>
+</table>
+<p>Different databases vary slightly in the way they handle edge cases and special values such as <code>Infinity</code>, <code>null</code>, strings of varying lengths, etc.  Sails&apos; ORM (Waterline) and its adapters perform loose validation to ensure that the values provided in criteria dictionaries and as values to <code>.create()</code> or <code>.update()</code> match the expected typeclass.</p>
+<blockquote>
+<p>Note that auto-migration also relies on the attribute&apos;s declared <code>type</code>. This is mainly relevant for schemaful databases (like MySQL or PostgreSQL), since the relevant adapter needs to use this information in order to alter/define tables during auto-migration.  Remember that in production, <code>migrate: &apos;safe&apos;</code> will be enabled and auto-migration will be skipped.</p>
+</blockquote>
+<h3 id="validation-rules" permalink="validation-rules">Validation Rules</h3>
+<p>The following validation rules are handled by <a href="https://github.com/sailsjs/anchor" target="_blank">Anchor</a>, a robust validation library for Node.js.</p>
+<p>In the table below, the &quot;Compatible Attribute Type(s)&quot; column shows what data type(s) (i.e. for the attribute definition&apos;s <code>type</code> property) are appropriate for each validation rule.  In many cases, a validation rule can be used with more than one type.  Note that coincidentally, the table below takes a shortcut:  If compatible with <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="number" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble>, or <bubble type="array" class="colors"><span is="bubble-heart"></span></bubble>, then the validation rule is also compatible with <bubble type="json" class="colors"><span is="bubble-heart"></span></bubble>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name of Rule</th>
+<th style="text-align:left">What It Checks For</th>
+<th style="text-align:left">Notes On Usage</th>
+<th style="text-align:center">Compatible Attribute Type(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">after</td>
+<td style="text-align:left">A value that, when parsed as a date, refers to moment <em>after</em> the configured JavaScript <code>Date</code> instance.</td>
+<td style="text-align:left"><code>after: new Date(&apos;Sat Nov 05 1605 00:00:00 GMT-0000&apos;)</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">alpha</td>
+<td style="text-align:left">A value that contains only uppercase and/or lowercase letters.</td>
+<td style="text-align:left"><code>alpha: true</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">alphadashed</td>
+<td style="text-align:left">A value that contains only letters and dashes.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">alphanumeric</td>
+<td style="text-align:left">A value that contains only letters and numbers.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">alphanumericdashed</td>
+<td style="text-align:left">A value that is a string consisting of only letters, numbers, and/or dashes.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">before</td>
+<td style="text-align:left">A value that, when parsed as a date, refers to a moment <em>before</em> the configured JavaScript <code>Date</code> instance.</td>
+<td style="text-align:left"><code>before: new Date(&apos;Sat Nov 05 1605 00:00:00 GMT-0000&apos;)</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">contains</td>
+<td style="text-align:left">A value that contains the specified substring.</td>
+<td style="text-align:left"><code>contains: &apos;needle&apos;</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">creditcard</td>
+<td style="text-align:left">A value that is a credit card number.</td>
+<td style="text-align:left"><strong>Do not store credit card numbers in your database unless your app is PCI compliant!</strong>  If you want to allow users to store credit card information, a safe alternative is to use a payment API like <a href="https://stripe.com" target="_blank">Stripe</a>.</td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">datetime</td>
+<td style="text-align:left">A value that can be parsed as a timestamp; i.e. would construct a JavaScript Date with <code>new Date()</code></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left"><em>decimal</em></td>
+<td style="text-align:left"><em>Alias for <code>float</code>.</em></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">email</td>
+<td style="text-align:left">A value that looks like an email address.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">finite</td>
+<td style="text-align:left">A value that is, or can be coerced to, a finite number.</td>
+<td style="text-align:left">This is not the same as native isFinite which will return true for booleans and empty strings</td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble> or <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">float</td>
+<td style="text-align:left">A value that is, or can be coerced to, a floating point (aka decimal) number.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble> or <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">hexadecimal</td>
+<td style="text-align:left">A value that is a hexadecimal number.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble> or <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">hexColor</td>
+<td style="text-align:left">A value that is a hexadecimal color.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">in</td>
+<td style="text-align:left">A value that is in the specified array of allowed strings.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left"><em>int</em></td>
+<td style="text-align:left"><em>Alias for <code>integer</code>.</em></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">integer</td>
+<td style="text-align:left">A value that is an integer, or a string that looks like one.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble> or <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">ip</td>
+<td style="text-align:left">A value that is a valid IP address (v4 or v6)</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">ipv4</td>
+<td style="text-align:left">A value that is a valid IP v4 address.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">ipv6</td>
+<td style="text-align:left">A value that is a valid IP v6 address.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left"><em>is</em></td>
+<td style="text-align:left"><em>Alias for <code>regex</code>.</em></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">lowercase</td>
+<td style="text-align:left">A value that consists only of lowercase characters.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">max</td>
+<td style="text-align:left">A value that is less than the configured number.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">maxLength</td>
+<td style="text-align:left">A value that has no more than the configured number of characters.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">min</td>
+<td style="text-align:left">A value that is greater than the configured number.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">minLength</td>
+<td style="text-align:left">A value that has at least the configured number of characters.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">notRegex</td>
+<td style="text-align:left">A value that <strong>does not</strong> match the configured regular expression.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">notContains</td>
+<td style="text-align:left">A value that does not contain the configured substring.</td>
+<td style="text-align:left">e.g. <code>&apos;-haystack-needle-haystack-&apos;</code> would fail validation against <code>notContains: &apos;needle&apos;</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">notIn</td>
+<td style="text-align:left">A value that <strong>is not in</strong> the configured array.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">notNull</td>
+<td style="text-align:left">A value that <strong>is not</strong> equal to <code>null</code></td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">numeric</td>
+<td style="text-align:left">A value that is a string which is parseable as a number.</td>
+<td style="text-align:left">Note that <a href="https://www.destroyallsoftware.com/talks/wat" target="_blank">while <code>NaN</code> is considered a number in JavaScript</a>, that is not true for the purposes of this validation.</td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">required</td>
+<td style="text-align:left">A value that is defined; that is, <strong>not <code>undefined</code></strong>.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">regex</td>
+<td style="text-align:left">A value that matches the configured regular expression.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">truthy</td>
+<td style="text-align:left">A value that would be considered truthy if used in a JavaScript <code>if</code> statement.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">uppercase</td>
+<td style="text-align:left">A value that is uppercase.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">url</td>
+<td style="text-align:left">A value that is a URL.</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">urlish</td>
+<td style="text-align:left">A value that looks vaguely like a URL of some kind (i.e. <code>/^\s([^\/]+\.)+.+\s*$/g</code>).</td>
+<td style="text-align:left"><code>urlish: true</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">uuid</td>
+<td style="text-align:left">A value that is a UUID (v3, v4, or v5)</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">uuidv3</td>
+<td style="text-align:left">A value that is a UUID (v3)</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+<tr>
+<td style="text-align:left">uuidv4</td>
+<td style="text-align:left">A value that is a UUID (v4)</td>
+<td style="text-align:left"></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+</tr>
+</tbody>
+</table>
+<h3 id="unique" permalink="unique">Unique</h3>
+<p><code>unique</code> is different from all of the validation rules listed above.  In fact, it isn&apos;t really a validation at all: it is a <strong>database-level constraint</strong>.  More on that in a second.</p>
+<p>If an attribute declares itself <code>unique: true</code>, then Sails ensures no two records will be allowed with the same value.  The canonical example is an <code>emailAddress</code> attribute on a <code>User</code> model:</p>
+<pre><code class="javascript">// api/models/User.js
+module.exports = {
+
+  attributes: {
+    emailAddress: {
+      type: &apos;string&apos;,
+      unique: true,
+      required: true
+    }
+  }
+
+};
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="why-is-unique-different-from-other-validations-" permalink="why-is-unique-different-from-other-validations">Why is <code>unique</code> different from other validations?</h5>
+<p>Imagine you have 1,000,000 user records in your database.  If <code>unique</code> was implemented like other validations, every time a new user signed up for your app, Sails would need to search through <em>one million</em> existing records to ensure that no one else was already using the email address provided by the new user.  Not only would that be slow, but by the time we finished searching through all those records, someone else could have signed up!</p>
+<p>Fortunately, this type of uniqueness check is perhaps the most universal feature of <em>any</em> database.  To take advantage of that, Sails relies on the <a href="/documentation/concepts/models-and-orm#?adapters">database adapter</a> to implement support for the <code>unique</code> validation-- specifically, by adding a <strong>uniqueness constraint</strong> to the relevant field/column/attribute in the database itself during <a href="/documentation/concepts/models-and-orm/model-settings#?migrate">auto-migration</a>.  That is, while your app is set to <code>migrate:&apos;alter&apos;</code>, Sails will automatically generate tables/collections in the underlying database with uniqueness constraints built right in.  Once you switch to <code>migrate:&apos;safe&apos;</code>, updating your database constraints is up to you.</p>
+<h5 id="what-about-indexes-" permalink="what-about-indexes">What about indexes?</h5>
+<p>When you start using your production database, it is always a good idea to set up indexes to boost your database&apos;s performance.  The exact process and best practices for setting up indexes varies between databases, and is out of the scope of the documentation here.  That said if you&apos;ve never done this before, don&apos;t worry-- it&apos;s <a href="http://stackoverflow.com/a/1130/486547" target="_blank">easier than you might think</a>.</p>
+<p>Just like everything else related to your production schema, once you set your app to use <code>migrate: &apos;safe&apos;</code>, Sails leaves database indexes entirely up to you.</p>
+<blockquote>
+<p>Note that this means you should be sure to update your indexes alongside your uniqueness constraints when performing <a href="https://github.com/BlueHotDog/sails-migrations" target="_blank">manual migrations</a>.</p>
+</blockquote>
+<h3 id="when-to-use-validations" permalink="when-to-use-validations">When to Use Validations</h3>
+<p>Validations can be a huge time-saver, preventing you from writing many hundreds of lines of repetitive code.  But keep in mind that model validations are run for <em>every create or update</em> in your application.  Before using a validation rule in one of your attribute definitions, make sure you are OK with it being applied <em>every time</em> your application calls <code>.create()</code> or <code>.update()</code> to specify a new value for that attribute.  If that is <em>not</em> the case, write code that validates the incoming values inline in your controller; or call out to a custom function in one of your <a href="/documentation/concepts/services">services</a>, or a <a href="/documentation/concepts/models-and-orm/models#?model-methods-aka-static-or-class-methods">model class method</a>.</p>
+<p>For example, let&apos;s say that your Sails app allows users to sign up for an account by either (A) entering an email address and password and then confirming that email address or (B) signing up with LinkedIn.  Now let&apos;s say your <code>User</code> model has one attribute called <code>linkedInEmail</code> and another attribute called <code>manuallyEnteredEmail</code>.  Even though <em>one</em> of those email address attributes is required, <em>which one</em> is required depends on how a user signed up.  So in that case, your <code>User</code> model cannot use the <code>required: true</code> validation-- instead you&apos;ll need to validate that one email or the other was provided and is valid by manually checking these values before the relevant <code>.create()</code> and <code>.update()</code> calls in your code, e.g.:</p>
+<pre><code class="javascript">if ( !_.isString( req.param(&apos;email&apos;) ) ) {
+  return res.badRequest();
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>To take this one step further, now let&apos;s say your application accepts payments.  During the sign up flow, if a user signs up with a paid plan, he or she must also provide an email address for billing purposes (<code>billingEmail</code>).  If a user signs up with a free account, he or she skips that step.  On the account settings page, users on a paid plan do see a &quot;Billing Email&quot; form field where they can customize their billing address.  This is different from users on the free plan, who see a call to action which links to the &quot;Upgrade Plan&quot; page.</p>
+<p>Even with these requirements, which seem quite specific, there are unanswered questions:</p>
+<ul>
+<li>Do we update the billing email automatically when the other email address from which it was defaulted changes?</li>
+<li>What if the billing email had been changed at least once?</li>
+<li>What happens to the billing email after a user downgrades to the free plan? If a user upgrades to a paid plan again, do we infer his or her billing email address anew or use the old one?</li>
+<li>What happens to the billing email when an existing user connects his or her LinkedIn account and a new <code>linkedInEmail</code> is saved?</li>
+<li>What happens to the billing email if a monthly invoice email cannot be delivered?</li>
+<li>What happens to the billing email if a member of your support team logs into the admin interface and changes it manually?</li>
+<li>What happens to the billing email if a POST request is received on the callback URL we provided to the LinkedIn API to notify our app that the user changed her email address on <a href="http://linkedin.com" target="_blank">http://linkedin.com</a>, and so a new <code>linkedInEmail</code> is saved?</li>
+<li>What happens to the billing email when an existing user disconnects her LinkedIn account?</li>
+<li>Are two user accounts in the database allowed to have the same billing email?  What about the email from LinkedIn?  Or the one they entered manually?</li>
+</ul>
+<p>Depending on the answers to questions like these, we might end up keeping the <code>required</code> validation on <code>billingEmail</code>, adding new attributes (like <code>hasBillingEmailBeenChangedManually</code>), or even changing whether or not to use a <code>unique</code> constraint.</p>
+<h3 id="best-practices" permalink="best-practices">Best Practices</h3>
+<p>Finally, here are a few tips:</p>
+<ul>
+<li>Your initial decision about whether or not to use validations for a particular attribute should depend on your app&apos;s requirements and how you are calling <code>.update()</code> and <code>.create()</code>. Don&apos;t be afraid to forgo built-in validation support and check values by hand in your controllers or in a helper function.  Oftentimes this is the cleanest and most maintainable approach.</li>
+<li>There&apos;s nothing wrong with adding or removing validations from your models as your app evolves. But once you go to production, there is one <strong>very important exception</strong>: <code>unique</code>.  During development, when your app is configured to use <a href="/documentation/concepts/models-and-orm/model-settings#?migrate"><code>migrate: &apos;alter&apos;</code></a>, you can add or remove <code>unique</code> validations at will.  However, if you are using <code>migrate: safe</code> (e.g. with your production database), you will want to update constraints/indices in your database, as well as <a href="https://github.com/BlueHotDog/sails-migrations" target="_blank">migrate your data by hand</a>.</li>
+<li>It is a very good idea to spend the time to fully understand your application&apos;s user interface <em>first</em> before setting up complex validations on your model attributes.</li>
+</ul>
+<blockquote>
+<p>As much as possible, it is a good idea to obtain or flesh out your own wireframes of your app&apos;s user interface <em>before</em> you spend any serious amount of time implementing <em>any</em> backend code.  Of course, this isn&apos;t always possible- and that&apos;s what the <a href="/documentation/concepts/blueprints">blueprint API</a> is for.  Applications built with a UI-centric, or &quot;front-end first&quot; philosophy are easier to maintain, tend to have fewer bugs and, since they are built with full knowledge of the user interface from the get-go, they often have more elegant APIs.</p>
+</blockquote>
+<h3 id="custom-validation-rules" permalink="custom-validation-rules">Custom Validation Rules</h3>
+<blockquote>
+<p><strong>Warning:</strong> Support for custom validation rules as documented here will very likely be ending in Waterline 1.0.  To future-proof your app, use a function from one of your <a href="/documentation/concepts/services">services</a> or a <a href="/documentation/concepts/models-and-orm/models#?model-methods-aka-static-or-class-methods">model class method</a> for custom validation instead.</p>
+</blockquote>
+<p>You can define your own custom validation rules by specifying a <code>types</code> dictionary as a top level property of your model, then use them in your attribute definitions just like you could any other validation rule above:</p>
+<pre><code class="javascript">// api/models/User.js
+module.exports = {
+
+  // Values passed for creates or updates of the User model must obey the following rules:
+  attributes: {
+
+    firstName: {
+      // Note that a base type (in this case &quot;string&quot;) still has to be defined, even though validation rules are in use.
+      type: &apos;string&apos;,
+      required: true,
+      minLength: 5,
+      maxLength: 15
+    },
+
+    location: {
+      type: &apos;json&apos;,
+      isPoint: true // &lt;&lt; defined below
+    },
+
+    password: {
+      type: &apos;string&apos;,
+      password: true // &lt;&lt; defined below
+    }
+
+  },
+
+  // Custom types / validation rules
+  // (available for use in this model&apos;s attribute definitions above)
+  types: {
+    isPoint: function(value){
+      // For all creates/updates of `User` records that specify a value for an attribute
+      // which declares itself `isPoint: true`, that value must:
+      // &#x2022; be a dictionary with numeric `x` and `y` properties
+      // &#x2022; both `x` and `y` must be neither `Infinity` nor `-Infinity`
+      return _.isObject(value) &amp;&amp;
+      _.isNumber(value.x) &amp;&amp; _.isNumber(value.y) &amp;&amp;
+      value.x !== Infinity &amp;&amp; value.x !== -Infinity &amp;&amp;
+      value.y !== Infinity &amp;&amp; value.y !== -Infinity;
+    },
+    password: function(value) {
+      // For all creates/updates of `User` records that specify a value for an attribute
+      // which declares itself `type: &apos;password&apos;`, that value must:
+      // &#x2022; be a string
+      // &#x2022; be at least 6 characters long
+      // &#x2022; contain at least one number
+      // &#x2022; contain at least one letter
+      return _.isString(value) &amp;&amp; value.length &gt;= 6 &amp;&amp; value.match(/[a-z]/i) &amp;&amp; value.match(/[0-9]/);
+    }
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Custom validation functions receive the incoming value being validated as their first argument, and are expected to return <code>true</code> if it is valid, <code>false</code> otherwise.  Once set up, these custom validation rules can be used in one or more attributes in the model where they are defined by setting an extra property with the same name in relevant attribute definitions; e.g. <code>someCustomValidationRuleOrType: true</code>.</p>
+<p>Note that custom validation rules are not namespaced from built-in validations and types-- they are all merged together. So be careful not to define a custom validation that collides with any of the base types or validations in Waterline (e.g. don&apos;t name your custom validation rule <code>string</code> or <code>minLength</code>).</p>
+<h5 id="custom-validation-messages" permalink="custom-validation-messages">Custom Validation Messages</h5>
+<p>Out of the box, Sails.js does not support custom validation messages.  Instead your code should look at validation errors in the callback from your <code>create()</code> or <code>update()</code> calls and take the appropriate action; whether that&apos;s sending a particular error code in your JSON response or rendering the appropriate message in an HTML error page.</p>
+<blockquote>
+<p>If you are using Sails v0.11.0+, you may want to take advantage of <a href="https://github.com/lykmapipo/sails-hook-validation" target="_blank"><code>sails-hook-validation</code></a>, a <a href="/documentation/concepts/extending-sails/Hooks">custom hook</a> by <a href="http://github.com/lykmapipo" target="_blank">@lykmapipo</a>.  Details regarding its installation and usage can be found in the <a href="https://github.com/lykmapipo/sails-hook-validation" target="_blank"><code>sails-hook-validation</code> repository on GitHub</a>.</p>
+</blockquote>
+<docmeta name="displayName" value="Validations">
+</docmeta>

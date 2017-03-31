@@ -1,0 +1,18 @@
+<h1 id="tasks-config-less-js">tasks/config/less.js</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This file configures a Grunt task called &quot;less&quot;.</p>
+<p>Its job is to compile your LESS files into a CSS stylesheet.</p>
+<p>By default, only the <code>assets/styles/importer.less</code> file is compiled.  This allows you to control the ordering yourself, i.e. import your dependencies, mixins, variables, resets, etc. before your other more application-specific styles.  This is entirely up to you, and based on the order with which write your <code>@import</code>s in your LESS file.</p>
+<h3 id="but-i-m-not-using-less-" permalink="but-im-not-using-less">But I&apos;m not using LESS...</h3>
+<p>No problem!</p>
+<p>If you aren&apos;t using <em>any</em> preprocessor for your stylesheets, then just ignore this file.</p>
+<p>If you want to use a different pre-processor like <a href="http://sass-lang.com/" target="_blank">SASS</a> or <a href="http://stylus-lang.com/" target="_blank">Stylus</a>, and you want Sails to process your stylesheets automatically as you work, then you&apos;re in luck.  In most cases, this is as easy as installing the appropriate Grunt plugin as a dependency of your Sails app, and then configuring it to output compiled CSS to the same path as in this default task.</p>
+<p>Here are a couple of popular examples:</p>
+<ul>
+<li><a href="http://npmjs.com/package/grunt-sass" target="_blank">grunt-sass</a></li>
+<li><a href="https://npmjs.com/package/grunt-contrib-stylus" target="_blank">grunt-contrib-stylus</a></li>
+</ul>
+<h3 id="usage" permalink="usage">Usage</h3>
+<p>For additional usage documentation, see <a href="https://npmjs.com/package/grunt-contrib-less" target="_blank"><code>grunt-contrib-less</code></a>.</p>
+<docmeta name="displayName" value="less.js">
+</docmeta>

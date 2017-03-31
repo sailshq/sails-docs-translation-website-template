@@ -1,0 +1,18 @@
+<h1 id="res-attachment-">res.attachment()</h1>
+<p>Sets the &quot;Content-Disposition&quot; header of the current response to &quot;attachment&quot;. If a <code>filename</code> is given, then the &quot;Content-Type&quot; will be automatically set based on the extension of the file (e.g. <code>.jpg</code> or <code>.html</code>), and the &quot;Content-Disposition&quot; header will be set to &quot;filename=<code>filename</code>&quot;.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">res.attachment([filename]);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">res.attachment();
+// -&gt; response header will contain:
+//   Content-Disposition: attachment
+
+res.attachment(&apos;path/to/logo.png&apos;);
+// -&gt; response header will contain:
+//   Content-Disposition: attachment; filename=&quot;logo.png&quot;
+//   Content-Type: image/png
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="res.attachment()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

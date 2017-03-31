@@ -1,0 +1,227 @@
+<h1 id="models">Models</h1>
+<p>A model represents a collection of structured data, usually corresponding to a single table or collection in a database.  Models are usually defined by creating a file in an app&apos;s <code>api/models/</code> folder.</p>
+<pre><code class="javascript">// Parrot.js
+// The set of parrots registered in our app.
+module.exports = {
+  attributes: {
+    // e.g., &quot;Polly&quot;
+    name: {
+      type: &apos;string&apos;
+    },
+
+    // e.g., 3.26
+    wingspan: {
+      type: &apos;float&apos;,
+      required: true
+    },
+
+    // e.g., &quot;cm&quot;
+    wingspanUnits: {
+      type: &apos;string&apos;,
+      enum: [&apos;cm&apos;, &apos;in&apos;, &apos;m&apos;, &apos;mm&apos;],
+      defaultsTo: &apos;cm&apos;
+    },
+
+    // e.g., [{...}, {...}, ...]
+    knownDialects: {
+      collection: &apos;Dialect&apos;
+    }
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<!--
+
+// api/models/Product.js
+module.exports = {
+  attributes: {
+    nameOnMenu: { type: 'string' },
+    price: { type: 'string' },
+    percentRealMeat: { type: 'float' },
+    numCalories: { type: 'integer' }
+  }
+}
+-->
+<h3 id="using-models" permalink="using-models">Using models</h3>
+<p>Models may be accessed from our controllers, policies, services, responses, tests, and in custom model methods.  There are many built-in methods available on models, the most important of which are the query methods: <a href="/documentation/reference/waterline/models/find.html">find</a>, <a href="/documentation/reference/waterline/models/create.html">create</a>, <a href="/documentation/reference/waterline/models/update.html">update</a>, and <a href="/documentation/reference/waterline/models/destroy.html">destroy</a>.  These methods are <a href="https://github.com/balderdashy/sails-docs/blob/master/PAGE_NEEDED.md" target="_blank">asynchronous</a> - under the covers, Waterline has to send a query to the database and wait for a response.</p>
+<p>Consequently, query methods return a deferred query object.  To actually execute a query, <code>.exec(cb)</code> must be called on this deferred object, where <code>cb</code> is a callback function to run after the query is complete.</p>
+<p>Waterline also includes opt-in support for promises.  Instead of calling <code>.exec()</code> on a query object, we can call <code>.then()</code>, <code>.spread()</code>, or <code>.catch()</code>, which will return a <a href="https://github.com/petkaantonov/bluebird" target="_blank">Bluebird promise</a>.</p>
+<h3 id="model-methods-aka-static-or-class-methods-" permalink="model-methods-(aka-static-or-class-methods)">Model Methods (aka &quot;static&quot; or &quot;class&quot; methods)</h3>
+<p>Model class methods are functions built into the model itself that perform a particular task on its instances (records).  This is where you will find the familiar CRUD methods for performing database operations like <code>.create()</code>, <code>.update()</code>, <code>.destroy()</code>, <code>.find()</code>, etc.</p>
+<h6 id="custom-model-methods">Custom model methods</h6>
+<p>Waterline allows you to define custom methods on your models.  This feature takes advantage of the fact that Waterline models ignore unrecognized keys, so you do need to be careful about inadvertently overriding built-in methods and dynamic finders (don&apos;t define methods named &quot;create&quot;, etc.)  Custom model methods are most useful for extrapolating controller code that relates to a particular model; i.e. this allows you to pull code out of your controllers and into reusuable functions that can be called from anywhere (i.e. don&apos;t depend on <code>req</code> or <code>res</code>.)</p>
+<p>Model methods are generally asynchronous functions.  By convention, asynchronous model methods should be 2-ary functions, which accept an object of inputs as their first argument (usually called <code>opts</code> or <code>options</code>) and a Node callback as the second argument.  Alternatively, you might opt to return a promise (both strategies work just fine- it&apos;s a matter of preference.  If you don&apos;t have a preference, stick with Node callbacks.)</p>
+<p>A best practice is to write your static model method so that it can accept either a record OR its primary key value.  For model methods that operate on/from <em>multiple</em> records at once, you should allow an array of records OR an array of primary key values to be passed in.  This takes more time to write, but makes your method much more powerful.  And since you&apos;re doing this to extrapolate commonly-used logic anyway, it&apos;s usually worth the extra effort.</p>
+<p>For example:</p>
+<pre><code class="javascript">// in api/models/Monkey.js...
+
+// Find monkeys with the same name as the specified person
+findWithSameNameAsPerson: function (opts, cb) {
+
+  var person = opts.person;
+
+  // Before doing anything else, check if a primary key value
+  // was passed in instead of a record, and if so, lookup which
+  // person we&apos;re even talking about:
+  (function _lookupPersonIfNecessary(afterLookup){
+    // (this self-calling function is just for concise-ness)
+    if (typeof person === &apos;object&apos;) return afterLookup(null, person);
+    Person.findOne(person).exec(afterLookup);
+  })(function (err, person){
+    if (err) return cb(err);
+    if (!person) {
+      err = new Error();
+      err.message = require(&apos;util&apos;).format(&apos;Cannot find monkeys with the same name as the person w/ id=%s because that person does not exist.&apos;, person);
+      err.status = 404;
+      return cb(err);
+    }
+
+    Monkey.findByName(person.name)
+    .exec(function (err, monkeys){
+      if (err) return cb(err);
+      cb(null, monkeys);
+    })
+  });
+
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Then you can do:</p>
+<pre><code class="javascript">Monkey.findWithSameNameAsPerson(albus, function (err, monkeys) { ... });
+// -or-
+Monkey.findWithSameNameAsPerson(37, function (err, monkeys) { ... });
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>For more tips, read about the incident involving <a href="">Timothy the Monkey</a>.</p>
+</blockquote>
+<p>Another example:</p>
+<pre><code class="javascript">// api/models/User.js
+module.exports = {
+
+  attributes: {
+
+    name: {
+      type: &apos;string&apos;
+    },
+    enrolledIn: {
+      collection: &apos;Course&apos;, via: &apos;students&apos;
+    }
+  },
+
+  /**
+   * Enrolls a user in one or more courses.
+   * @param  {Object}   options
+   *            =&gt; courses {Array} list of course ids
+   *            =&gt; id {Integer} id of the enrolling user
+   * @param  {Function} cb
+   */
+  enroll: function (options, cb) {
+
+    User.findOne(options.id).exec(function (err, theUser) {
+      if (err) return cb(err);
+      if (!theUser) return cb(new Error(&apos;User not found.&apos;));
+      theUser.enrolledIn.add(options.courses);
+      theUser.save(cb);
+    });
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="dynamic-finders" permalink="dynamic-finders">Dynamic Finders</h4>
+<p>These are special static methods that are dynamically generated by Sails when you lift your app.  For instance, if your Person model has a &quot;firstName&quot;, you might run:</p>
+<pre><code class="javascript">Person.findByFirstName(&apos;emma&apos;).exec(function(err,people){ ... });
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="resourceful-pubsub-methods" permalink="resourceful-pubsub-methods">Resourceful Pubsub Methods</h4>
+<p>A special type of model methods which are attached by the pubsub hook.  More on that in the <a href="/documentation/reference/websockets/resourceful-pubsub">section of the docs on resourceful pubsub</a>.</p>
+<!--
+another special type of class method.  It stands for 'Publish, Subscribe' and that's just what they do. These methods play a big role in how Sails integrates and utilizes Socket.IO.  They are used to subscribe clients to and publish messages about the creation, update, and destruction of models.  If you want to build real-time functionality in Sails, these will come in handy.
+-->
+<h4 id="attribute-methods-i-e-record-instance-methods-" permalink="attribute-methods-(ie-record/instance-methods)">Attribute Methods (i.e. record/instance methods)</h4>
+<p>Attribute methods are functions available on records (i.e. model instances) returned from Waterline queries.  For example, if you find the ten students with the highest GPA from the Student model, each of those student records will have access to all the built-in attribute methods, as well as any custom attribute methods defined on the Student model.</p>
+<h6 id="built-in-attribute-methods">Built-in attribute methods</h6>
+<p>Every Waterline model includes some attribute methods automatically, including:</p>
+<ul>
+<li><a href="/documentation/reference/waterline/records/toJSON.html"><code>.toJSON()</code></a></li>
+<li><a href="/documentation/reference/waterline/records/save.html"><code>.save()</code></a></li>
+<li><a href="/documentation/reference/waterline/models/destroy.html"><code>.destroy()</code></a></li>
+<li><a href="/documentation/reference/waterline/records/validate.html"><code>.validate()</code></a></li>
+</ul>
+<!-- note to self- we should bundle a getPrimaryKeyValue() attribute method on every model in waterline core (or maybe just getId() since "id" is simpler to understand) ~mike - aug2,2014 -->
+<h6 id="custom-attribute-methods">Custom attribute methods</h6>
+<p>Waterline models also allow you to define your own custom attribute methods.  Define them like any other attribute, but instead of an attribute definition object, write a function on the right-hand-side.</p>
+<pre><code class="javascript">// From api/models/Person.js...
+
+module.exports = {
+  attributes: {
+    // Primitive attributes
+    firstName: {
+      type: &apos;string&apos;,
+      defaultsTo: &apos;&apos;
+    },
+    lastName: {
+      type: &apos;string&apos;,
+      defaultsTo: &apos;&apos;
+    },
+    age: {
+      type: &apos;integer&apos;
+    },
+
+    // Associations (aka relational attributes)
+    spouse: { model: &apos;Person&apos; },
+    pets: { collection: &apos;Pet&apos; },
+
+    // Attribute methods
+    getFullName: function (){
+      return this.firstName + &apos; &apos; + this.lastName;
+    },
+    isMarried: function () {
+      return !!this.spouse;
+    },
+    isEligibleForSocialSecurity: function (){
+      return this.age &gt;= 65;
+    },
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>Note that with the notable exception of the built-in <code>.save()</code> and <code>.destroy()</code> attribute methods, attribute methods are almost always <em>synchronous</em> by convention.</p>
+<p>Also note that custom attributes methods are not serialized to JSON by default.  To serialize them, you can override <a href="/documentation/reference/waterline-orm/records/to-json">toJSON</a>.</p>
+</blockquote>
+<h6 id="when-to-write-a-custom-attribute-method">When to write a custom attribute method</h6>
+<p>Custom attribute methods are particularly useful for extracting some information out of a record.  I.e. you might want to reduce some information from one or more attributes (i.e. &quot;is this person married?&quot;)</p>
+<pre><code class="javascript">if ( rick.isMarried() ) {
+  // ...
+}
+</code></pre><!-- __LANG=%%__ -->
+<h6 id="when-not-to-write-a-custom-attribute-method">When NOT to write a custom attribute method</h6>
+<p>You should <strong>avoid writing your own <em>asynchronous</em> attribute methods</strong>.  While built-in asynchronous attribute methods like <code>.save()</code> and <code>.destroy()</code> can be convenient from your app code, writing your <em>own</em> asynchronous attribute methods can sometimes have unintended consequences, and is not the most efficient way to build your app.</p>
+<p>For instance, consider an app that manages wedding records.  You might think to write an attribute method on the Person model that updates the <code>spouse</code> attribute on both individuals in the database.  This would allow you to write controller code like:</p>
+<pre><code class="javascript">personA.marry(personB, function (err) {
+  if (err) return res.negotiate(err);
+  return res.ok();
+})
+</code></pre><!-- __LANG=%%__ -->
+<p>Which looks great...until you need to write a different action where you don&apos;t have an actual record for &quot;personA&quot;.</p>
+<p>A better strategy is to write a custom (static) model method instead.  This makes your function more reusable/versatile, since it will be accessible whether or not you have an actual record instance on hand.  You might refactor the code from the previous example to look like:</p>
+<pre><code class="javascript">Person.marry([joe,raquel], function (err) {
+  if (err) return res.negotiate(err);
+  return res.ok();
+})
+</code></pre><!-- __LANG=%%__ -->
+<h6 id="naming-your-attribute-methods">Naming your attribute methods</h6>
+<p>Make sure you use a naming convention that helps you avoid confusing <strong>attribute methods</strong> from <em>attribute values</em> when you&apos;re working with records in your app.  A good best practice is to use &quot;get<em>&quot; or &quot;is</em>&quot; (e.g. <code>getFullName()</code> or <code>isMarried()</code>) prefix and avoid writing attribute methods that change records in-place.</p>
+<!--
+
+Imagine you have a small monkey named Timothy that rides on your shoulders and styles your hair when you are scheduled to speak at a conference.  In this scenario, you are a record of the `Person` model and Timothy is a record of the `Monkey` model. The `Person` model has primitive attributes like "name", "email", and "phoneNumber", and relational attributes like "petMonkey" (points to an individual `Monkey`) and "mom" (points to an individual `Person`).  Meanwhile the `Monkey` model has primitive attributes "name", "age", and "demeanor", as well as an relational attribute: "petOfPerson" (which points to an individual person).
+
+
+Everyone knows that a person can style her own hair, but it is more efficient if her pet monkey does it.  We can represent this by definining `styleHair: function (cb){ return cb(); }` as an attribute method on Person and `styleOwnersHair: function (cb){ return cb();}` as an attribute method on Monkey.
+
+
+If your app involves multigenerational hair-styling, you might think it would make sense to write an attribute method on the Monkey model called "getOwnersGrandma()" which would call a callback with the monkey's owner's mom's mom.
+-->
+<!--
+
+###### an aside about promises
+
+Promises are most effective when used to handle asynchronous, but referentially transparent ("nullipotent") operations; i.e. logic without any side-effects.
+-->
+<docmeta name="displayName" value="Models">
+</docmeta>

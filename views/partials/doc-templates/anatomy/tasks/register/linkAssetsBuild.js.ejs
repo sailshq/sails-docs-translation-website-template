@@ -1,0 +1,15 @@
+<h1 id="tasks-register-linkassetsbuild-js">tasks/register/linkAssetsBuild.js</h1>
+<docmeta name="displayName" value="linkAssetsBuild.js">
+
+<pre><code class="nohighlight">module.exports = function (grunt) {
+  grunt.registerTask(&apos;linkAssetsBuild&apos;, [
+    &apos;sails-linker:devJsRelative&apos;,
+    &apos;sails-linker:devStylesRelative&apos;,
+    &apos;sails-linker:devTpl&apos;,
+    &apos;sails-linker:devJsRelativeJade&apos;,
+    &apos;sails-linker:devStylesRelativeJade&apos;,
+    &apos;sails-linker:devTplJade&apos;
+  ]);
+};
+</code></pre><!-- __LANG=%%__ -->
+</docmeta>

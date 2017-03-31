@@ -1,0 +1,83 @@
+<h1 id="upgrading-to-sails-v0-12">Upgrading to Sails v0.12</h1>
+<p>Sails v0.12 comes with an upgrade to Socket.io and Express, as well as many bug fixes and performance enhancements. You will find that this version is mostly backwards compatible with Sails v0.11, however there are some major changes to <code>sails.sockets.*</code> methods which may or may not affect your app. Most of the migration guide below deals with those changes, so if you are upgrading an existing app from v0.11 and are using <code>sails.sockets</code> methods, please be sure and carefully read the information below in case it affects your app.  Other than that, running <code>sails lift</code> in an existing project should just work.</p>
+<p>The sections below provide a high level overview of what&apos;s changed, major bug fixes, enhancements and new features, as well as a basic tutorial on how to upgrade your v0.11.x Sails app to v0.12.</p>
+<h2 id="installing-the-update" permalink="installing-the-update">Installing the update</h2>
+<p>Run the following command from the root of your Sails app:</p>
+<pre><code class="bash">npm install sails@~0.12.0 --force --save
+</code></pre><!-- __LANG=%%__ -->
+<p>The <code>--force</code> flag will override the existing Sails dependency installed in your <code>node_modules/</code> folder with the latest patch release of Sails v0.12, and the <code>--save</code> flag will update your package.json file so that future npm installs will also use the new version.</p>
+<h2 id="things-to-do-immediately-after-upgrading" permalink="things-to-do-immediately-after-upgrading">Things to do immediately after upgrading</h2>
+<ul>
+<li>If your app uses the <code>socket.io-redis</code> adapter, upgrade to at least version 1.0.0 (<code>npm install --save socket.io-redis@^1.0.0</code>).</li>
+<li>If your app is using the Sails socket client (e.g. <code>assets/js/dependencies/sails.io.js</code>) on the front end, also install the newest version (<code>sails generate sails.io.js --force</code>)</li>
+</ul>
+<h2 id="overview-of-changes-in-v0-12" permalink="overview-of-changes-in-v012">Overview of changes in v0.12</h2>
+<blockquote>
+<p>For a full list of changes, see the changelog file for <a href="https://github.com/balderdashy/sails/blob/master/CHANGELOG.md" target="_blank">Sails</a>, as well as those for <a href="https://github.com/balderdashy/waterline/blob/master/CHANGELOG.md" target="_blank">Waterline</a>, <a href="https://github.com/balderdashy/sails-hook-sockets/blob/master/CHANGELOG.md" target="_blank">sails-hook-sockets</a> and <a href="https://github.com/balderdashy/sails.io.js/blob/master/CHANGELOG.md" target="_blank">sails.io.js</a>.</p>
+</blockquote>
+<ul>
+<li>Security enhancements: updated several dependencies with potential vulnerabilities</li>
+<li>Reverse routing functionality is now built in to Sails core via the new <a href="/documentation/reference/application/sails-get-route-for"><code>sails.getRouteFor()</code></a> and <a href="/documentation/reference/application/sails-get-url-for"><code>sails.getUrlFor()</code></a> methods<ul>
+<li>Generally improved multi-node support (and therefore scalability) of low-level <code>sails.socket.*</code> methods, and made additional adjustments and improvements related to the latest socket.io upgrade.  Added a much tighter Redis integration that sits on top of <code>socket.io-redis</code>, using a Redis client to implement cross-server communication rather than an additional socket client.</li>
+<li>Cleaned up the API for <code>sails.socket.*</code> methods, normalizing overloaded functions and deprecating methods which cause problems in multiserver deployments (more on that below).</li>
+<li>Added a few brand new sails.sockets methods: <code>.leaveAll()</code>, <code>.addRoomMembersToRooms()</code>, and <code>.removeRoomMembersFromRooms()</code></li>
+<li><code>sails.sockets.id()</code> is now <code>sails.sockets.getId()</code> (backwards compatible w/ deprecation message)</li>
+<li>New Sails apps are now generated with the updated version of <code>sails.io.js</code> (the JavaScript Sails socket client).  This upgrade bundles the latest version of <code>socket.io-client</code>, as well as some more advanced functionality (including the ability to specify common headers for all virtual socket requests)</li>
+<li>Upgraded to latest trusted versions of <code>grunt-contrib-*</code> dependencies (eliminates many NPM deprecation warnings and provides better error messages from NPM).</li>
+<li>If you are using NPM v3, running <code>sails new</code> will now run <code>npm install</code> instead of symlinking your new app&apos;s initial dependencies.  This is slower than you may be used to, but is a necessary change due to changes in the way NPM handles nested dependencies.  The core maintainers are <a href="https://github.com/npm/npm/issues/10013#issuecomment-178238596" target="_blank">working on</a> a better long-term solution, but in the mean time if you run <code>sails new</code> a lot and the slowdown is bugging you, consider temporarily downgrading to an earlier version of NPM (v2.x).  If the installed version of NPM is &lt; version 3, Sails will continue to take advantage of the classic symlinking strategy.</li>
+</ul>
+</li>
+</ul>
+<h2 id="socket-methods" permalink="socket-methods">Socket Methods</h2>
+<p>Without question, the biggest change in Sails v0.12 is to the API of the low-level <code>sails.sockets</code> methods exposed by the <code>sockets</code> hook.  In order to ensure that Sails apps perform flawlessly in a <a href="/documentation/concepts/realtime/multi-server-environments">multi-server (aka &quot;multi-node&quot; or &quot;clustered&quot;) environment</a>, several <a href="/documentation/reference/web-sockets/sails-sockets">low-level methods</a> have been deprecated, and some new ones have been added.</p>
+<p>The following <code>sails.sockets</code> methods have been deprecated:</p>
+<ul>
+<li><a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-emit"><code>.emit()</code></a></li>
+<li><a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-id"><code>.id()</code></a> (renamed to <a href="/documentation/reference/web-sockets/sails-sockets/get-id"><code>.getId()</code></a>)</li>
+<li><a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-socket-rooms"><code>.socketRooms()</code></a></li>
+<li><a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-rooms"><code>.rooms()</code></a></li>
+<li><a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-subscribers"><code>.subscribers()</code></a></li>
+</ul>
+<p>If you are using any of those methods in your app, they will still work in v0.12 but <em>you should replace them as soon as possible</em> as they may be removed from Sails in the next version.  See the individual doc pages for each method for more information.</p>
+<h2 id="resourceful-pubsub-methods" permalink="resourceful-pubsub-methods">Resourceful PubSub Methods</h2>
+<p>The <a href="/documentation/reference/web-sockets/resourceful-pub-sub/subscribers"><code>.subscribers()</code></a> resourceful pubsub method has been deprecated for the same reasons as <a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-subscribers"><code>sails.sockets.subscribers()</code></a>.  Follow the guidelines in the docs for replacing this method if you are using it in your code.</p>
+<h2 id="waterline-orm-updates" permalink="waterline-(orm)-updates">Waterline (ORM) Updates</h2>
+<p>Sails v0.12 comes with the latest version of the Waterline ORM (v0.11.0).  There are two API changes to be aware of:</p>
+<h5 id="-save-no-longer-provides-a-second-argument-to-its-callback" permalink="save()-no-longer-provides-a-second-argument-to-its-callback"><code>.save()</code> no longer provides a second argument to its callback</h5>
+<p>The callback to the <code>.save()</code> instance method no longer receives a second argument.  While convenient, the requirement of providing this second argument made <code>.save()</code> less performant, especially for apps working with millions of records.  This change resolves those issues by eliminating the need to build redundant queries, and preventing your database from having to process them.</p>
+<p>If there are places in your app where you have code like this:</p>
+<pre><code class="javascript">sierra.save(function (err, modifiedSierra){
+  if (err) { /* ... */  return; }
+
+  // ...
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>You should replace it with:</p>
+<pre><code class="javascript">sierra.save(function (err){
+  if (err) { /* ... */  return; }
+
+  // ...
+});
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="custom-column-field-names-for-built-in-timestamps" permalink="custom-column/field-names-for-builtin-timestamps">Custom column/field names for built-in timestamps</h5>
+<p>You can now configure a custom column name (i.e. field name for Mongo/Redis folks) for the built-in <code>createdAt</code> and <code>updatedAt</code> attributes.  In the past, the top-level <code>autoCreatedAt</code> and <code>autoUpdatedAt</code> model settings could be specified as <code>false</code> to disable the automatic injection of <code>createdAt</code> and <code>updatedAt</code> altogether.  That <em>still works as it always has</em>, but now you can also specify string values for one or both of these settings instead.  If a string is specified, it will be understood as the custom column (/field) name to use for the automatic timestamp.</p>
+<pre><code class="javascript">{
+  attributes: {},
+  autoCreatedAt: &apos;my_cool_created_when_timestamp&apos;,
+  autoUpdatedAt: &apos;my_cool_updated_at_timestamp&apos;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>If you were using the <a href="http://stackoverflow.com/a/24562385/486547" target="_blank">workaround suggested by @sgress454 here</a>, you may want to take advantage of this simpler approach instead.</p>
+<h2 id="sql-adapter-performance" permalink="sql-adapter-performance">SQL Adapter Performance</h2>
+<p><a href="https://github.com/balderdashy/sails-postgresql" target="_blank">Sails-PostgreSQL</a> and <a href="https://github.com/balderdashy/sails-mysql" target="_blank">Sails-MySQL</a> recieved patch updates that significantly improved performance when populating associations. Thanks to <a href="https://github.com/jianpingw" target="_blank">@jianpingw</a> for digging into the source and finding a bug that was processing database records too many times. If you are using either of these adapters, upgrading to <code>sails-postgresql@0.11.1</code> or <code>sails-mysql@0.11.3</code> will give you a significant performance boost.</p>
+<h2 id="contributing" permalink="contributing">Contributing</h2>
+<p>While not technically part of the release, Sails v0.12 is accompanied by some major improvements to the tools and resources available to contributors.  More core hooks are now fully documented (<a href="https://github.com/balderdashy/sails/tree/master/lib/hooks/controllers" target="_blank">controllers</a>|<a href="https://github.com/balderdashy/sails/tree/master/lib/hooks/grunt" target="_blank">grunt</a>|<a href="https://github.com/balderdashy/sails/tree/master/lib/hooks/logger" target="_blank">logger</a>|<a href="https://github.com/balderdashy/sails/tree/master/lib/hooks/cors" target="_blank">cors</a>|<a href="https://github.com/balderdashy/sails/tree/master/lib/hooks/responses" target="_blank">responses</a>|<a href="https://github.com/balderdashy/sails/tree/master/lib/hooks/orm" target="_blank">orm</a>), and the team has put together a <a href="https://github.com/balderdashy/sails/blob/master/CODE-OF-CONDUCT.md" target="_blank">Code of Conduct</a> for contributing to the Sails project.</p>
+<p>The biggest change for contributors is the <a href="https://github.com/balderdashy/sails/blob/master/CONTRIBUTING.md" target="_blank">updated contribution guide</a>, which contains the new, streamlined process for feature/enhancement proposals and for merging features, enhancements, and patches into core.  As the Sails framework has grown (both the code base and the user base), it&apos;s become necessary to establish clearer processes for how issue contributions, code contributions, and contributions to the documentation are reviewed and merged.</p>
+<h2 id="documentation" permalink="documentation">Documentation</h2>
+<p>This release also comes with a deep clean of the official reference documentation, and some minor usability improvements to the online docs at <a href="/documentation">http://sailsjs.com/documentation</a>. The entire Sails website is now available in <a href="http://sailsjs.jp/" target="_blank">Japanese</a>, and four other <a href="https://github.com/balderdashy/sails-docs#in-other-languages" target="_blank">translation projects</a> are underway for Korean, Brazillian Portugese, Taiwanese Mandarin, and Spanish.</p>
+<p>In addition, the Sails.js project (finally) has an <a href="http://blog.sailsjs.com">official blog</a>.  The Sails.js blog is the new source for all longform updates and announcements about Sails, as well as for our related projects like Waterline, Skipper and the machine specification.</p>
+<h2 id="need-help-" permalink="need-help">Need Help?</h2>
+<p>If you run into an unexpected issue upgrading your Sails app to v0.12.0, please review our contribution guide and <a href="https://github.com/balderdashy/sails/blob/master/CONTRIBUTING.md" target="_blank">submit an issue in the Sails GitHub repo</a>.</p>
+<p><docmeta name="displayName" value="To v0.12"></docmeta></p>
+<docmeta name="version" value="0.12.0">
+</docmeta>

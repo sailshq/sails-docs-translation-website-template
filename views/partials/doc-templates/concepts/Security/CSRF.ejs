@@ -1,0 +1,53 @@
+<h1 id="csrf">CSRF</h1>
+<p>Cross-site request forgery (<a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery" target="_blank">CSRF</a>) is a type of attack which forces an end user to execute unwanted actions on a web application backend with which he/she is currently authenticated.  In other words, without protection, cookies stored in a browser like Google Chrome can be used to send requests to Chase.com from a user&apos;s computer whether that user is currently visiting Chase.com or Horrible-Hacker-Site.com.</p>
+<h3 id="enabling-csrf-protection" permalink="enabling-csrf-protection">Enabling CSRF Protection</h3>
+<p>Sails bundles optional CSRF protection out of the box. To enable the built-in enforcement, just make the following adjustment to <a href="/docs/reference/configuration/sails-config-csrf">sails.config.csrf</a> (conventionally located in your project&apos;s <a href="/anatomy/config/csrf-js"><code>config/csrf.js</code></a> file):</p>
+<pre><code class="javascript">csrf: true
+</code></pre><!-- __LANG=%%__ -->
+<p>Note that if you have existing code that communicates with your Sails backend via POST, PUT, or DELETE requests, you&apos;ll need to acquire a CSRF token and include it as a parameter or header in those requests.  More on that in a sec.</p>
+<h3 id="csrf-tokens" permalink="csrf-tokens">CSRF tokens</h3>
+<p>Like most Node applications, Sails and Express are compatibile with Connect&apos;s <a href="http://www.senchalabs.org/connect/csrf.html" target="_blank">CSRF protection middleware</a> for guarding against such attacks.  This middleware implements the <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet#General_Recommendation:_Synchronizer_Token_Pattern" target="_blank">Synchronizer Token Pattern</a>.  When CSRF protection is enabled, all non-GET requests to the Sails server must be accompanied by a special token, identified by either a header or a parameter in the query string or HTTP body.</p>
+<p>CSRF tokens are temporary and session-specific; e.g. Imagine Mary and Muhammad are both shoppers accessing our e-commerce site running on Sails, and CSRF protection is enabled.  Let&apos;s say that on Monday, Mary and Muhammad both make purchases.  In order to do so, our site needed to dispense at least two different CSRF tokens- one for Mary and one for Muhammad.  From then on, if our web backend received a request with a missing or incorrect token, that request will be rejected. So now we can rest assured that when Mary navigates away to play online poker, the 3rd party website cannot trick the browser into sending malicious requests to our site using her cookies.</p>
+<h3 id="dispensing-csrf-tokens" permalink="dispensing-csrf-tokens">Dispensing CSRF tokens</h3>
+<p>To get a CSRF token, you should either bootstrap it in your view using <a href="/docs/concepts/views/locals">locals</a> (good for traditional multi-page web applications) or fetch it using sockets or AJAX from a special protected JSON endpoint (handy for single-page-applications (SPAs).)</p>
+<h5 id="using-view-locals-" permalink="using-view-locals">Using view locals:</h5>
+<p>For old-school form submissions, it&apos;s as easy as passing the data from a view into a form action.  You can grab hold of the token in your view, where it may be accessed as a view local: <code>&lt;%= _csrf %&gt;</code></p>
+<p>e.g.:</p>
+<pre><code class="html">&lt;form action=&quot;/signup&quot; method=&quot;POST&quot;&gt;
+ &lt;input type=&quot;text&quot; name=&quot;emailaddress&quot;/&gt;
+ &lt;input type=&apos;hidden&apos; name=&apos;_csrf&apos; value=&apos;&lt;%= _csrf %&gt;&apos;&gt;
+ &lt;input type=&apos;submit&apos;&gt;
+&lt;/form&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p>If you are doing a <code>multipart/form-data</code> upload with the form, be sure to place the <code>_csrf</code> field before the <code>file</code> input, otherwise you run the risk of a timeout and a 403 firing before the file finishes uploading.</p>
+<h5 id="using-ajax-websockets" permalink="using-ajax/websockets">Using AJAX/WebSockets</h5>
+<p>In AJAX/Socket-heavy apps, you might prefer to send a GET request to the built-in <code>/csrfToken</code> route, where it will be returned as JSON, e.g.:</p>
+<pre><code class="json">{
+  &quot;_csrf&quot;: &quot;ajg4JD(JGdajhLJALHDa&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="spending-csrf-tokens" permalink="spending-csrf-tokens">Spending CSRF tokens</h3>
+<p>Once you&apos;ve enabled CSRF protection, any POST, PUT, or DELETE requests (<strong>including</strong> virtual requests, e.g. from Socket.io) made to your Sails app will need to send an accompanying CSRF token as a header or parameter.  Otherwise, they&apos;ll be rejected with a 403 (Forbidden) response.</p>
+<p>For example, if you&apos;re sending an AJAX request from a webpage with jQuery:</p>
+<pre><code class="javascript">$.post(&apos;/checkout&apos;, {
+  order: &apos;8abfe13491afe&apos;,
+  electronicReceiptOK: true,
+  _csrf: &apos;USER_CSRF_TOKEN&apos;
+}, function andThen(){ ... });
+</code></pre><!-- __LANG=%%__ -->
+<p>With some client-side modules, you may not have access to the AJAX request itself. In this case, you can consider sending the CSRF token directly in the URL of your query. However, if you do so, remember to URL-encode the token before spending it:</p>
+<pre><code class="javascript">..., {
+  checkoutAction: &apos;/checkout?_csrf=&apos;+encodeURIComponent(&apos;USER_CSRF_TOKEN&apos;)
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>You can choose to send the CSRF token as the <code>X-CSRF-Token</code> header instead of the <code>_csrf</code> parameter.</li>
+<li>For most developers and organizations, CSRF attacks need only be a concern if you allow users to log into/securely access your Sails backend <em>from the browser</em> (i.e. from your HTML/CSS/JavaScript front-end code). If you <em>don&apos;t</em> (e.g. users only access the secured sections from your native iOS or Android app), it is possible you don&apos;t need to enable CSRF protection.  Why?  Because technically, the common CSRF attack discussed on this page is only <em>possible</em> in scenarios where users use the <em>same client application</em> (e.g. Chrome) to access different web services (e.g. Chase.com, Horrible-Hacker-Site.com.)</li>
+<li>For more information on CSRF, check out <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery" target="_blank">Wikipedia</a></li>
+<li>For &quot;spending&quot; CSRF tokens in a traditional form submission, refer to the example above (under &quot;Using view locals&quot;.)</li>
+</ul>
+</blockquote>
+<docmeta name="displayName" value="CSRF">
+</docmeta>

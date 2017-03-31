@@ -1,0 +1,22 @@
+<h1 id="disabling-grunt">Disabling Grunt</h1>
+<p>To disable Grunt integration in Sails, simply delete your Gruntfile (and/or <a href="/documentation/anatomy/tasks"><code>tasks/</code></a> folder). You can also disable the Grunt hook. Just set the <code>grunt</code> property to <code>false</code> in <code>.sailsrc</code> hooks like this:</p>
+<pre><code class="json">{
+    &quot;hooks&quot;: {
+        &quot;grunt&quot;: false
+    }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="can-i-customize-this-for-sass-angular-client-side-jade-templates-etc-" permalink="can-i-customize-this-for-sass,-angular,-clientside-jade-templates,-etc">Can I customize this for SASS, Angular, client-side Jade templates, etc?</h3>
+<p>Yep! Just replace the relevant grunt task in your <code>tasks/</code> directory, or add a new one.  Like <a href="https://github.com/sails101/using-sass" target="_blank">SASS</a> for example.</p>
+<p>If you still want to use Grunt for other purposes, but don&apos;t want any of the default web front-end stuff, just delete your project&apos;s assets folder and remove the front-end oriented tasks from the <code>tasks/register/</code> and <code>tasks/config/</code> folders.  You can also run <code>sails new myCoolApi --no-frontend</code> to omit the assets folder and front-end-oriented Grunt tasks for future projects.  You can also replace your <code>sails-generate-frontend</code> module with alternative community generators, or <a href="https://github.com/balderdashy/sails-generate-generator" target="_blank">create your own</a>.  This allows <code>sails new</code> to create the boilerplate for native iOS apps, Android apps, Cordova apps, SteroidsJS apps, etc.</p>
+<docmeta name="displayName" value="Disabling Grunt">
+
+<h3 id="note-" permalink="note">NOTE:</h3>
+<p>When removing the grunt hook above you must also specify the following in <code>.sailsrc</code> in order for your assets to be served, otherwise all assets will return a <code>404</code>.</p>
+<pre><code class="json">{
+    &quot;paths&quot;: {
+        &quot;public&quot;: &quot;assets&quot;
+    }
+}
+</code></pre><!-- __LANG=%%__ -->
+</docmeta>

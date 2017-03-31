@@ -1,0 +1,60 @@
+<h1 id="sails-sockets-emit-">sails.sockets.emit()</h1>
+<blockquote>
+<p><em><strong>This method is deprecated</strong>.  Call  <a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-broadcast"><code>.broadcast()</code></a> instead, using the desired socket id(s) as room names.</em></p>
+</blockquote>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>Send a message to one or more sockets by id.</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<h4 id="parameters" permalink="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Accepted Data Types</th>
+<th>Required ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>IDs of sockets to receive message</td>
+<td><code>string</code>, <code>array</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Event name</td>
+<td><code>string</code></td>
+<td>No</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Message data</td>
+<td><code>object</code></td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<pre><code class="javascript">// Controller action
+
+sayHiToFriend: function(req, res) {
+    var friendId = req.param(&apos;friendId&apos;);
+    sails.sockets.emit(friendId, &apos;privateMessage&apos;, {from: req.session.userId, msg: &apos;Hi!&apos;});
+    res.json({
+      message: &apos;Message sent!&apos;
+    });
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>If the event name is not specified then the &quot;message&quot; event will be used by default. That means that target sockets listening for the <code>message</code> event in client-side code (e.g. <code>io.socket.on(&apos;message&apos;, function (data){ /* ... */ })</code>) will have that event handler triggered.</li>
+<li>If <em>any</em> of the target socket ids are unknown, an error is thrown (this error has a <code>code</code> property equal to <code>SAILS:HOOK:SOCKETS:NO_SUCH_SOCKET</code>).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="sails.sockets.emit()"></docmeta></p>
+<docmeta name="isDeprecated" value="true">
+
+</docmeta>

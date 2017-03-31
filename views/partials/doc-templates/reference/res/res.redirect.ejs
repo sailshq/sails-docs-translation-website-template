@@ -1,0 +1,51 @@
+<h1 id="res-redirect-">res.redirect()</h1>
+<p>Redirect the requesting user-agent to the given absolute or relative url.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">return res.redirect(url);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="arguments" permalink="arguments">Arguments</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>url</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>A URL expression (see below for complete specification).<br> e.g. <code>&quot;http://google.com&quot;</code> or <code>&quot;/login&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="details" permalink="details">Details</h3>
+<p>Sails/Express support a few forms of redirection, first being a fully qualified URI for redirecting to a different domain:</p>
+<pre><code class="javascript">return res.redirect(&apos;http://google.com&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<p>The second form is the domain-relative redirect.  For example, if you were on <a href="http://example.com/admin/post/new" target="_blank">http://example.com/admin/post/new</a>, the following redirect to <code>/admin</code> would land you at <a href="http://example.com/admin" target="_blank">http://example.com/admin</a>:</p>
+<pre><code class="javascript">return res.redirect(&apos;/checkout&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<p>Pathname relative redirects are also possible. If you were on <a href="http://example.com/admin/post/new" target="_blank">http://example.com/admin/post/new</a>, the following redirect would land you at http//example.com/admin/post:</p>
+<pre><code class="javascript">return res.redirect(&apos;..&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<p>The final special-case is a back redirect, which allows you to redirect a request back where it came from using the &quot;Referer&quot; (or &quot;Referrer&quot;) header (if omitted, redirects to <code>/</code> by default)</p>
+<pre><code class="javascript">return res.redirect(&apos;back&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method is <strong>terminal</strong>, meaning it is generally the last line of code your app should run for a given request (hence the advisory usage of <code>return</code> throughout these docs).</li>
+<li>When your app calls <code>res.redirect()</code>, Sails sends a response with status code <a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection" target="_blank">302</a>.  This instructs the user-agent to send a new request to the indicated URL.  There is no way to <em>force</em> a user-agent to follow redirects, but most clients play nicely.</li>
+<li>In general, you should not need to use <code>res.redirect()</code> if a request &quot;wants JSON&quot; (i.e. <a href="/documentation/reference/req/req.wantsJSON.html"><code>req.wantsJSON</code></a>).</li>
+<li>The <a href="/documentation/reference/web-sockets/socket-client">Sails socket client</a> does <em>not</em> follow redirects, so if an action is called via a websocket request using (for example) <a href="/documentation/reference/web-sockets/socket-client/io-socket-get"><code>io.socket.get()</code></a>, it will simply receive a 302 status code and a header indicating the location of the desired resource.  It&#x2019;s up to the client-side code to decide how to handle redirects for websocket requests.</li>
+<li>If you want to send a custom status code along with a redirect, you can chain the following functions, res.status() and res.redirect(): <code>return res.status(301).redirect(&apos;/foo&apos;);</code></li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="res.redirect()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

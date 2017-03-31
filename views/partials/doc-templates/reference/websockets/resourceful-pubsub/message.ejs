@@ -1,0 +1,84 @@
+<h1 id="-message-">.message()</h1>
+<p>Broadcast a custom message about the record with the specified <code>id</code> to all sockets currently subscribed to it.</p>
+<pre><code class="javascript">Something.message( id, data )
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>Something.message(id, data, req);</code></li>
+</ul>
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left"><code>id</code></td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble>,<bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <code>id</code> of the record whose subscribers will receive this broadcast. <br><br> e.g. <code>4</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left"><code>data</code></td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Arbitrary data to send to the subscribed sockets; i.e. a dictionary containing any JSON-serializable data you would like to broadcast to all sockets subscribed to this record.  Must be JSON-serializable.</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:left"><em><code>req</code></em></td>
+<td><bubble type="req?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If provided, then the requesting socket will <em>not</em> receive the broadcast.</td>
+</tr>
+</tbody>
+</table>
+<p><code>message()</code> broadcasts to all sockets subscribed to the record (e.g. via <a href="/documentation/reference/web-sockets/resourceful-pub-sub/subscribe"><code>.subscribe()</code></a>) and uses the model&apos;s <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> as the event name.  The broadcasted event data received by the subscribed sockets will be a dictionary with the following properties:</p>
+<ul>
+<li><strong>verb</strong>  - a <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble> constant: <code>&apos;messaged&apos;</code></li>
+<li><strong>id</strong> - the record&apos;s <code>id</code> which is a <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble> or <bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></li>
+<li><strong>data</strong> - the <bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble> of custom data that was provided when calling <code>.message()</code> on the backend</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<p>In a controller+action...  Find a user by username and broadcast a message back to all of its subscribers:</p>
+<pre><code class="javascript">User.findOne({username: &apos;bob&apos;}).exec(function(err, foundUser){
+  if (err) return res.serverError(err);
+  if (!foundUser) return res.notFound();
+
+  // This message can contain anything you want!
+  User.message(foundUser.id, {count: 12, hairColor: &apos;red&apos;});
+
+  return res.ok();
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>The endpoint will respond with a simple 200 (because of <code>res.ok()</code>), but all subscribed client sockets will receive a <code>user</code> event:</p>
+<pre><code class="javascript">// e.g. in the browser...
+io.socket.on(&apos;user&apos;, function (event){
+  console.log(event);
+  // =&gt; see below
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>In this case, the <code>event</code> dictionary would look the same for every client socket which received the message:</p>
+<pre><code class="javascript">{
+  verb: &apos;messaged&apos;,
+  id: 83,
+  data: {
+    count: 12,
+    hairColor: &apos;red&apos;
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code> to refer to the requesting socket.  If used, the provided <code>req</code> must be from a socket request, not just any old HTTP request.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".message()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

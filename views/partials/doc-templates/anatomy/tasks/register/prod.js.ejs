@@ -1,0 +1,20 @@
+<h1 id="tasks-register-prod-js">tasks/register/prod.js</h1>
+<docmeta name="displayName" value="prod.js">
+
+<p>The production grunt task list.  sails will run this if there is no task list file matching NODE_ENV (eg. NODE_ENV = QA and QA.js exists).</p>
+<pre><code class="nohighlight">module.exports = function (grunt) {
+  grunt.registerTask(&apos;prod&apos;, [
+    &apos;compileAssets&apos;,
+    &apos;concat&apos;,
+    &apos;uglify&apos;,
+    &apos;cssmin&apos;,
+    &apos;sails-linker:prodJs&apos;,
+    &apos;sails-linker:prodStyles&apos;,
+    &apos;sails-linker:devTpl&apos;,
+    &apos;sails-linker:prodJsJade&apos;,
+    &apos;sails-linker:prodStylesJade&apos;,
+    &apos;sails-linker:devTplJade&apos;
+  ]);
+};
+</code></pre><!-- __LANG=%%__ -->
+</docmeta>

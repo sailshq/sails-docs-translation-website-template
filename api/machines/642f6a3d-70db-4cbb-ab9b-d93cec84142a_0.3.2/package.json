@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "machinepack-headers": "0.3.2"
+  },
+  "machinepack": {
+    "machines": []
+  }
+}

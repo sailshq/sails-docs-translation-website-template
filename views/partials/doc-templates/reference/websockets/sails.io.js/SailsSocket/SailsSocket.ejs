@@ -1,0 +1,13 @@
+<h1 id="sailssocket">SailsSocket</h1>
+<p>By default, <a href="/documentation/reference/web-sockets/socket-client"><code>sails.io.js</code></a> automatically connects a single socket (<code>io.socket</code>) almost immediately after it loads.  This allows your client-side code to send socket requests to a particular Sails server, and to be able to receive events and data sent from that server.  For 99% of apps, this is all you need.</p>
+<p>However, for certain advanced use cases (including automated tests), it can be helpful to connect additional sockets from the same instance of the socket client (e.g. browser tab).  For this reason, Sails exposes the <code>SailsSocket</code> class.</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>The <code>sails.io.js</code> library works by wrapping low-level <a href="http://socket.io" target="_blank">Socket.io</a> clients in instances of the <code>SailsSocket</code> class.  This class provides higher-level methods like <a href="/documentation/reference/web-sockets/socket-client/io-socket-get"><code>.get()</code></a> and <a href="/documentation/reference/web-sockets/socket-client/io-socket-post"><code>.post()</code></a> to your sockets, allowing you to communicate with your Sails app in a familiar way.</p>
+<h3 id="creating-a-sailssocket-instance" permalink="creating-a-sailssocket-instance">Creating a SailsSocket instance</h3>
+<p>Any web page which loads the <code>sails.io.js</code> will create a new SailsSocket instance on page load unless <a href="/documentation/reference/web-sockets/socket-client/io-sails#?autoconnect"><code>io.sails.autoConnect</code></a> is set to <code>false</code>.  This instance is then available as the global variable <a href="/documentation/reference/web-sockets/socket-client/io-socket"><code>io.socket</code></a>.</p>
+<p>Additional SailsSocket instances can be created via calls to <a href="/documentation/reference/web-sockets/socket-client/io-sails#?the-connect-method"><code>io.sails.connect</code></a>:</p>
+<pre><code class="nohighlight">var newSailsSocket = io.sails.connect();
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="SailsSocket"></docmeta></p>
+<docmeta name="pageType" value="class">
+</docmeta>

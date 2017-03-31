@@ -1,0 +1,91 @@
+<h1 id="-destroy-">.destroy()</h1>
+<p>Destroy records in your database that match the given criteria.</p>
+<pre><code class="javascript">Something.destroy(criteria).exec(function (err) {
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="usage" permalink="usage">Usage</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">criteria</td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Records which match this <a href="https://github.com/balderdashy/waterline-docs/blob/master/queries/query-language.md" target="_blank">Waterline criteria</a> will be destroyed.  Be warned, if you specify an empty dictionary (<code>{}</code>) as your criteria, <em>all records will be destroyed!</em></td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">err</td>
+<td><bubble type="Error?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The error that occurred, or <code>null</code> if there were no errors.</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left">deletedRecords</td>
+<td><bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">An array containing any records which were deleted.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>To delete any users named Finn from the database:</p>
+<pre><code class="javascript">User.destroy({name:&apos;Finn&apos;}).exec(function (err){
+  if (err) {
+    return res.negotiate(err);
+  }
+  sails.log(&apos;Any users named Finn have now been deleted, if there were any.&apos;);
+  return res.ok();
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>To delete a particular book which is no longer available:</p>
+<pre><code class="javascript">Book.destroy({
+  id: 4
+}).exec(function (err){
+  if (err) {
+    return res.negotiate(err);
+  }
+  sails.log(&apos;Deleted book with `id: 4`, if it existed.&apos;);
+  return res.ok();
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>To delete two particular users who have been causing trouble:</p>
+<pre><code class="javascript">User.destroy({
+  id: [ 3, 97 ]
+}).exec(function (err){
+  if (err) {
+    return res.negotiate(err);
+  }
+  sails.log(&apos;The records for troublesome users (3 and 97) have been deleted, if they still existed.&apos;);
+  return res.ok();
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>If you want to confirm that one or more records exist before destroying them, you should first perform a <code>find()</code>.  However, keep in mind it is generally a good idea to <em>try to do things</em> rather than <em>checking first</em>, lest you end up with a <a href="http://people.cs.umass.edu/~emery/classes/cmpsci377/f07/scribe/scribe8-1.pdf" target="_blank">race condition</a>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".destroy()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

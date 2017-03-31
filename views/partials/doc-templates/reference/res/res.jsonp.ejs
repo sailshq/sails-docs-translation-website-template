@@ -1,0 +1,46 @@
+<h1 id="res-jsonp-">res.jsonp()</h1>
+<p>Send a JSON or JSONP response.</p>
+<p>Identical to <a href="/documentation/reference/res/res.json.html"><code>res.json()</code></a>, except if a &quot;callback&quot; parameter exists, a <a href="http://en.wikipedia.org/wiki/JSONP" target="_blank">JSONP</a> response will be sent instead, using the value of the &quot;callback&quot; parameter as the name of the function wrapper.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">return res.jsonp([statusCode, ] data);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">return res.jsonp({
+  users: [{
+    name: &apos;Thelma&apos;,
+    id: 1
+  }, {
+    name: &apos;Leonardo&apos;
+    id: 2
+  }]
+});
+</code></pre><!-- __LANG=%%__ -->
+<!--
+
+Need to make this better:
+
+By default the JSONP callback name is simply callback, however you may alter this with the jsonp callback name setting. The following are some examples of JSONP responses using the same code:
+
+```
+<!-- __LANG=%javascript%__ -->
+<p>// ?callback=foo
+res.jsonp({ user: &apos;tobi&apos; })
+// foo({ &quot;user&quot;: &quot;tobi&quot; })</p>
+<p>app.set(&apos;jsonp callback name&apos;, &apos;cb&apos;);</p>
+<p>// ?cb=foo
+res.jsonp(500, { error: &apos;message&apos; })
+// foo({ &quot;error&quot;: &quot;message&quot; })
+```
+<!-- __LANG=%%__ -->
+--&gt;</p>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Don&apos;t forget this method&apos;s name is all lowercase.</li>
+<li>This method is <strong>terminal</strong>, meaning it is generally the last line of code your app should run for a given request (hence the advisory usage of <code>return</code> throughout these docs).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="res.jsonp()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

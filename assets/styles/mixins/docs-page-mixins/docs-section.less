@@ -1,0 +1,230 @@
+// Dependencies:
+@import '../../utilities/index.less';
+@import '../../styleguide/index.less';
+
+.docs-section() {
+
+  h1 {
+    font-family: @header-font;
+    font-size: 28px;
+    font-weight: @normal;
+    margin-bottom: 25px;
+    color: @text-dark;
+  }
+
+  h2 {
+    font-family: @header-font;
+    font-size: 24px;
+    font-weight: @normal;
+    color: @text-normal;
+    margin-bottom: 20px;
+    padding-top: 35px;
+  }
+
+  h3 {
+    font-family: @header-font;
+    font-size: 23px;
+    font-weight: @normal;
+    color: @text-dark;
+    margin-bottom: 20px;
+    padding-top: 35px;
+  }
+
+  h4 {
+    font-family: @header-font;
+    font-size: 18px;
+    font-weight: @normal;
+    color: @text-normal;
+    padding-top: 14px;
+    margin-bottom: 20px;
+  }
+
+  h5 {
+    font-family: @main-font;
+    font-size: 17px;
+    color: @text-normal;
+    font-weight: @bold;
+    padding-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  p {
+    .paragraph(@text-dark);
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+
+  a {
+    .link-default();
+  }
+
+  code {
+    .border-box();
+    font-family: @code-font;
+    font-size: 0.8em;
+    display: inline-block;
+    background-color: @bg-off-white;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 3px;
+    border: 1px solid @border-lt-gray;
+    line-height: 1.5em;
+  }
+
+
+  ul {
+    margin-bottom: 20px;
+    padding-left: 20px;
+    li {
+      .paragraph( @text-dark);
+      list-style-type: disc;
+      list-style-position: outside;
+      margin-bottom: 15px;
+      pre {
+        margin-top: 5px;
+      }
+      ul {
+        padding-top: 10px;
+      }
+    }
+  }
+
+  ol {
+    margin-bottom: 20px;
+    padding-left: 20px;
+    li {
+      .paragraph(@text-dark);
+      list-style-type: decimal;
+      list-style-position: outside;
+      margin-bottom: 15px;
+      pre {
+        margin-top: 5px;
+      }
+      ul {
+        padding-top: 10px;
+      }
+    }
+  }
+
+  blockquote {
+    .border-box();
+    margin-top: 0px;
+    margin-bottom: 25px;
+    margin-left: 0px;
+    margin-right: 0px;
+    border-left: 2px solid @border-lt-gray;
+    padding-left: 25px;
+  }
+
+  bubble {
+    .bubble();
+  }
+
+  .table-wrapper {
+    .border-box();
+    overflow-x: auto;
+    margin-bottom: 25px;
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-button {
+      width: 10px;
+      height: 10px;
+    }
+    // ::-webkit-scrollbar-thumb {
+    //   background: @ltTurquoise;
+    //   border: 1px solid @darkTurquoise;
+    //   border-radius: 50px;
+    // }
+    // ::-webkit-scrollbar-track {
+    //   background: @ltestGray ;
+    //   border: 0px none @ltestGray;
+    //   border-radius: 4px;
+    // }
+    ::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+    table {
+      border: 1px solid @border-lt-gray;
+      border-collapse: collapse;
+      font-size: 14px;
+      line-height: 22px;
+
+      th {
+        font-weight: @bold;
+        font-family: @header-font;
+        border: 1px solid @border-lt-gray;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+      td {
+        font-family: @main-font;
+        border: 1px solid @border-lt-gray;
+        color: @text-dark;
+        // text-align: center;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+      code {
+        font-family: @code-font;
+      }
+    }
+  }
+
+  .replacement-icon {
+    .border-box();
+    font-size: 18px;
+    margin-left: 10px;
+    margin-right: 10px;
+    &.yes {
+      // TODO
+    }
+    &.no {
+      // TODO
+    }
+    &.never {
+      // TODO
+    }
+  }
+
+  code:not(.usage) {
+    .monokai-theme();
+  }
+  pre {
+    background: #23241f;
+    word-wrap: break-word;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    overflow: auto;
+    border-radius: 6px;
+    color: @accent-white;
+    code {
+      .border-box();
+      display: block;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      padding-left: 15px;
+      padding-right: 15px;
+      font-family: @code-font;
+      border: none;
+      background: transparent;
+      line-height: 22px;
+    }
+    &.muted, &.usage-wrapper {
+      border: 1px solid @border-med-gray;
+      background: transparent;
+      color: @text-dark;
+      // background: @bg-off-white;
+    }
+  }
+}

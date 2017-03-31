@@ -1,0 +1,17 @@
+<h1 id="req-path">req.path</h1>
+<p>The URL pathname from the <a href="http://nodejs.org/api/http.html#http_message_url" target="_blank">request URL string</a> of the current request (<code>req</code>). Note that this is the part of the URL after and including the leading slash (e.g. <code>/foo/bar</code>), but without the query string (e.g. <code>?name=foo</code>) or fragment (e.g. <code>#foobar</code>.)</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.path;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>Assuming a client sends the following request:</p>
+<blockquote>
+<p><a href="http://localhost:1337/donor/37?name=foo#foobar" target="_blank">http://localhost:1337/donor/37?name=foo#foobar</a></p>
+</blockquote>
+<p><code>req.path</code> will be defined as follows:</p>
+<pre><code class="javascript">req.path;
+// -&gt; &quot;/donor/37&quot;
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="req.path"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

@@ -1,0 +1,74 @@
+<% /* Expose menu data to make it accessible to client-side javascript */ %>
+<script>
+window.MENU_DATA = <%- JSON.stringify(data.templateList) %>;
+</script>
+
+<div id="sails-page_reference-or-concepts" is="doc-page">
+  <!-- Main content -->
+  <div is="doc-template-contents" class="docs-section invisible fade-in" data-hide-until-rendered>
+    <% if(!data.currentTemplate.isTableOfContents) { %>
+    <% /* Inject "Edit page" button via partial */%>
+    <%- partial('partials/pencil-button', {templatePath: data.currentTemplate.path, branchToEdit: branchToEdit }) %>
+    <%- partial('partials/doc-templates/'+ data.currentTemplate.path) %>
+    <% } else {
+      // If this is a top-level docs page (e.g. Reference), build a table of contents
+      // (basically the nav menu but all expanded and easy-to-read)
+      %>
+      <!-- <h1>Sails.js documentation: <%= sectionTitle === 'Concepts' ? 'Core concepts' : 'API reference' %></h1> -->
+      <h1>Table of Contents</h1>
+      <div class="table-of-contents">
+        <% if(_.isArray(data.templateList) && data.templateList.length > 0) { %>
+        <ol>
+          <% _.each(data.templateList, function(navItem) {
+          // Only show top-level nav items initially
+          // (Except for the overview/ToC pages and the ones that aren't even for the website, like READMEs.)
+          if(!navItem.isOverviewPage && !navItem.isTableOfContents && !navItem.isChild && !navItem.notShownOnWebsite) { %>
+          <li><%- partial('partials/table-of-contents-item', {navItem: navItem, navItems: data.templateList}) %></li>
+          <% }
+          }) %>
+        </ol>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+  <div class="contribution-message invisible fade-in" data-hide-until-rendered>
+    <h3>Is something missing?</h3>
+    <p>If you notice something we've missed or could be improved on, please follow <a href="https://github.com/balderdashy/sails-docs/blob/<%= branchToEdit %>/<%= data.currentTemplate.path.replace(/\.ejs/, '') %>.md" target="_blank">this link</a> and submit a pull request to the sails-docs repo.  Once we merge it, the changes will be reflected on the website the next time it is deployed.</p>
+  </div>
+
+
+  <!-- NAVIGATION -->
+  <!-- (underneath the docs content, so that the doc page h1s come before any other headers, for SEO.) -->
+
+  <!-- Header nav -->
+  <%- partial('partials/docs-main-header.ejs', {templateList: data.templateList}) %>
+  <!-- Side nav -->
+  <div is="side-nav" class="side-nav invisible fade-in" data-hide-until-rendered>
+    <div class="side-nav-inner" is="side-nav-contents">
+      <h4><%= sectionTitle %></h4>
+      <ul class="main-sections">
+        <% _.each(data.templateList, function(navItem) {
+
+          if(_.contains(data.expandedItems, navItem.path)) {
+            navItem.isInitiallyExpanded = true;
+          }
+          else navItem.isInitiallyExpanded = false;
+          // Only show top-level nav items initially
+          // (Except for the overview/ToC pages and the ones that aren't even for the website, like READMEs.)
+          if(!navItem.isOverviewPage && !navItem.isTableOfContents && !navItem.isChild && !navItem.notShownOnWebsite) { %>
+
+          <li is="menu-item"
+            data-path="<%= navItem.path %>"
+            class="<%= navItem.isInitiallyExpanded ? 'expanded' : ''%> <%= navItem.isInitiallyExpanded && navItem.isParent ? 'current-parent' : '' %> <%= navItem.isParent ? 'folder' : '' %> <%= navItem.isDeprecated ? 'deprecated' : '' %> <%= navItem.isExperimental ? 'experimental' : '' %>">
+            <%- partial('partials/nav-item', {navItem: navItem, navItems: data.templateList, section: data.section, expandedItems: data.expandedItems}) %>
+          </li>
+          <% }
+
+          }) %>
+      </ul>
+    </div>
+  </div>
+  <!-- Footer -->
+  <%- partial ('partials/footer.ejs', { isFlagshipPage: false })%>
+</div>
+

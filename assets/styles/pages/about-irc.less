@@ -1,0 +1,34 @@
+// Dependencies:
+@import '../utilities/index.less';
+@import '../styleguide/index.less';
+@import '../mixins/informational-page-heading.less';
+@import '../mixins/docs-page-mixins/docs-section.less';
+
+
+/**
+ * About IRC
+ */
+.about-irc() {
+  padding-bottom: 100px;
+  .page-header {
+    .informational-page-heading();
+  }
+
+  hr {
+    .divider();
+  }
+  .container {
+    .docs-section();
+    .container();
+    section {
+      padding-top: 75px;
+      padding-bottom: 75px;
+      .permalink-thing {
+        display: inline-block;
+        float: right;
+        position: relative;
+        top: -55px;
+      }
+    }
+  }
+}

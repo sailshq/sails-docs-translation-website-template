@@ -1,0 +1,79 @@
+<h1 id="best-practices">Best Practices</h1>
+<p>There are many undocumented best practices and workflow improvements for developing on Sails that contributors have developed over years.  This section is an attempt to document some of the basics, but be sure and pop in to Gitter if you ever have a question about how to set things up, or want to share your own tool chain.</p>
+<p>The best way to work with Sails core is to fork the repository, <code>git clone</code> it to your filesystem, and then run <code>npm link</code>.  In addition to writing tests, you&apos;ll often want to use a sample project as a harness-- to do that, <code>cd</code> into the sample app and run <code>npm link sails</code>.  This will create a symbolic link in the <code>node_modules</code> directory of your sample app that points to your local cloned version of sails.  This keeps you from having to copy the framework over every time you make a change.  You can force your sample app to use the local sails dependency by running <code>node app</code> instead of <code>sails lift</code> (although <code>sails lift</code> <strong>should</strong> use the local dependency, if one exists).  If you need to test the command line tool this way, you can access it from your sample app as <code>node node_modules/sails/bin/sails</code>.  For example, if you were working on <code>sails new</code>, and you wanted to test it manually, you could run <code>node node_modules/sails/bin/sails new testProj</code>.</p>
+<h4 id="installing-different-versions-of-sails" permalink="installing-different-versions-of-sails">Installing different versions of Sails</h4>
+<table>
+<thead>
+<tr>
+<th>Release</th>
+<th>Install Command</th>
+<th>Build Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/balderdashy/sails/tree/stable" target="_blank">stable</a></td>
+<td><code>npm install sails</code></td>
+<td><a href="https://travis-ci.org/balderdashy/sails/branches" target="_blank"><img src="https://travis-ci.org/balderdashy/sails.png?branch=stable" alt="Build Status"></a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/balderdashy/sails/tree/beta" target="_blank">beta</a></td>
+<td><code>npm install sails@beta</code></td>
+<td><a href="https://travis-ci.org/balderdashy/sails/branches" target="_blank"><img src="https://travis-ci.org/balderdashy/sails.png?branch=beta" alt="Build Status"></a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/balderdashy/sails/tree/master" target="_blank">edge</a></td>
+<td><code>npm install sails@git://github.com/balderdashy/sails.git</code></td>
+<td><a href="https://travis-ci.org/balderdashy/sails/branches" target="_blank"><img src="https://travis-ci.org/balderdashy/sails.png?branch=master" alt="Build Status"></a></td>
+</tr>
+</tbody>
+</table>
+<h4 id="installing-an-unreleased-branch-for-testing" permalink="installing-an-unreleased-branch-for-testing">Installing an unreleased branch for testing</h4>
+<p>In general, you can <code>npm install</code> sails directly from Github as follows:</p>
+<pre><code class="bash"># Install an unreleased branch of Sails in the current directory&apos;s `node_modules`
+$ npm install sails@git://github.com/balderdashy/sails.git#nameOfDesiredBranch
+</code></pre><!-- __LANG=%%__ -->
+<p>This is useful for testing/installing hot-fixes, and just a good thing to know how to do in general.  Here&apos;s how you&apos;d install a few different branches:</p>
+<table>
+<thead>
+<tr>
+<th>Release</th>
+<th>Install Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/balderdashy/sails/tree/stable" target="_blank">stable</a></td>
+<td><code>npm install sails@git://github.com/balderdashy/sails.git#stable</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/balderdashy/sails/tree/beta" target="_blank">beta</a></td>
+<td><code>npm install sails@git://github.com/balderdashy/sails.git#beta</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/balderdashy/sails/tree/master" target="_blank">edge</a></td>
+<td><code>npm install sails@git://github.com/balderdashy/sails.git</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="submitting-pull-requests" permalink="submitting-pull-requests">Submitting Pull Requests</h4>
+<ol>
+<li>If this is your first time forking and submitting a PR, <a href="/documentation/contributing/code-submission-guidelines/sending-pull-requests">follow our instructions here</a>.</li>
+<li>Fork the repo.</li>
+<li>Add a test for your change. Only refactoring and documentation changes require no new tests. If you are adding functionality or fixing a bug, we need a test!</li>
+<li>Make the tests pass and make sure you follow <a href="https://github.com/balderdashy/sails/blob/master/.jshintrc" target="_blank">our syntax guidelines</a>.</li>
+<li>Add a line of what you did to CHANGELOG.md (right under <code>master</code>).</li>
+<li>Push to your fork and submit a pull request to the appropriate branch:<ul>
+<li><a href="https://github.com/balderdashy/sails/tree/master" target="_blank">master</a><ul>
+<li>corresponds with the &quot;edge&quot; version-- the latest, not-yet-released version of Sails. Most pull requests should be sent here</li>
+</ul>
+</li>
+<li><a href="https://github.com/balderdashy/sails/tree/stable" target="_blank">stable</a><ul>
+<li>corresponds with the latest stable release on npm (i.e. if you have a high-priority hotfix, send the PR here)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<docmeta name="displayName" value="Best Practices">
+</docmeta>

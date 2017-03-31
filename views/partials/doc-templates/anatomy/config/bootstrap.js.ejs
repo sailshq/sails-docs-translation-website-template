@@ -1,0 +1,25 @@
+<h1 id="config-bootstrap-js">config/bootstrap.js</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This is a server-side javascript file that is executed by Sails just before your app is lifted.</p>
+<p>This gives you an opportunity to set up your data model, run jobs, or perform some special logic.</p>
+<docmeta name="displayName" value="bootstrap.js">
+
+<pre><code class="nohighlight">/**
+ * Bootstrap
+ * (sails.config.bootstrap)
+ *
+ * An asynchronous bootstrap function that runs before your Sails app gets lifted.
+ * This gives you an opportunity to set up your data model, run jobs, or perform some special logic.
+ *
+ * For more information on bootstrapping your app, check out:
+ * http://sailsjs.com/documentation/reference/configuration/sails-config-bootstrap
+ */
+
+module.exports.bootstrap = function(cb) {
+
+  // It&apos;s very important to trigger this callback method when you are finished
+  // with the bootstrap!  (otherwise your server will never lift, since it&apos;s waiting on the bootstrap)
+  cb();
+};
+</code></pre><!-- __LANG=%%__ -->
+</docmeta>

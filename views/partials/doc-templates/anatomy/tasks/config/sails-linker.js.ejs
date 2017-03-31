@@ -1,0 +1,25 @@
+<h1 id="tasks-config-sails-linker-js">tasks/config/sails-linker.js</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This file configures a Grunt task called &quot;sails-linker&quot;.</p>
+<p>Automatically inject <code>&lt;script&gt;</code> tags and <code>&lt;link&gt;</code> tags into the specified
+specified HTML and/or EJS files.  The specified delimiters (<code>startTag</code>
+and <code>endTag</code>) determine the insertion points.</p>
+<h4 id="development-default-" permalink="development-(default)">Development (default)</h4>
+<p>By default, tags will be injected for your app&apos;s client-side JavaScript files,
+CSS stylesheets, and precompiled client-side HTML templates in the <code>templates/</code>
+directory (see the <code>jst</code> task for more info on that).  In addition, if a LESS
+stylesheet exists at <code>assets/styles/importer.less</code>, it will be compiled to CSS
+and a <code>&lt;link&gt;</code> tag will be inserted for it.  Similarly, if any Coffeescript
+files exists in <code>assets/js/</code>, they will be compiled into JavaScript and injected
+as well.</p>
+<h4 id="production-node_env-production-" permalink="production-(nodeenv=production)">Production (<code>NODE_ENV=production</code>)</h4>
+<p>In production, all stylesheets are minified into a single <code>.css</code> file (see
+<code>tasks/config/cssmin.js</code> task) and all client-side scripts are minified into
+a single <code>.js</code> file (see <code>tasks/config/uglify.js</code> task).  Any client-side HTML
+templates, CoffeeScript, or LESS files are bundled into these same two minified
+files as well.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<p>For additional usage documentation, see <a href="https://www.npmjs.com/package/grunt-sails-linker" target="_blank"><code>grunt-sails-linker</code></a>.</p>
+<docmeta name="displayName" value="sails-linker.js">
+
+</docmeta>

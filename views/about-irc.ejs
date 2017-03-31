@@ -1,0 +1,24 @@
+<!-- Header -->
+<%- partial ('partials/header.ejs', {currentSection: 'about-irc', isFlagshipPage: false })%>
+
+<!-- White bar with github updates & social media -->
+<%- partial ('partials/news-banner.ejs') %>
+
+<div id="sails-page_about-irc">
+  <div class="page-header">
+    <div class="page-header-container">
+      <!-- <img src="http://placehold.it/175x175/f8f8f8?text=TBD"/> -->
+      <h1>About IRC</h1>
+      <h5>How to join us in #sailsjs on Freenode.</h5>
+    </div>
+  </div>
+  <div class="container">
+    <hr/>
+    <section>
+      <%- partial('partials/doc-templates/irc/irc.ejs') %>
+    </section>
+  </div>
+</div>
+
+<!-- Footer -->
+<%- partial ('partials/footer.ejs', { isFlagshipPage: false })%>

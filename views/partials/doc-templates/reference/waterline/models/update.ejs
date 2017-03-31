@@ -1,0 +1,80 @@
+<h1 id="-update-">.update()</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>Updates existing records in the database that match the specified criteria.</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<h4 id="parameters" permalink="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Accepted Data Types</th>
+<th>Required ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Find Criteria</td>
+<td><code>{}</code>,<code>[{}]</code>, <code>string</code>, <code>int</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Updated Records</td>
+<td><code>{}</code>,<code>[{}]</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Callback</td>
+<td><code>function</code></td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h4 id="callback-parameters" permalink="callback-parameters">Callback Parameters</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Possible Data Types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Error</td>
+<td><code>Error</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Sucessfully Updated Records</td>
+<td><code>[{}]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<pre><code class="javascript">User.update({name:&apos;Walter Jr&apos;},{name:&apos;Flynn&apos;}).exec(function afterwards(err, updated){
+
+  if (err) {
+    // handle error here- e.g. `res.serverError(err);`
+    return;
+  }
+
+  console.log(&apos;Updated user to have name &apos; + updated[0].name);
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>An array of primary key values passed to <code>.update()</code> for a <code>collection</code> association will set the association to contain <strong>only</strong> the records with those primary key values provided.  That is- it <strong>unlinks all other</strong> records from the association.</li>
+<li>Although you may pass .update() an object or an array of objects, it will always return an array of objects.</li>
+<li>If you specify a primary key (e.g. <code>7</code> or <code>&quot;50c9b254b07e040200000028&quot;</code>) instead of a criteria object, any <code>.where()</code> filters will be ignored.</li>
+<li>Currently, calling <code>.populate()</code> on an <code>.update()</code> query has no effect.  To populate attributes on the results, you should follow up your update with a <code>find().populate()</code> query.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".update()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

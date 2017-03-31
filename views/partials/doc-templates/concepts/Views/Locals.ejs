@@ -1,0 +1,70 @@
+<h1 id="locals">Locals</h1>
+<p>The variables accessible in a particular view are called <code>locals</code>.  Locals represent server-side data that is <em>accessible</em> to your view-- locals are not actually <em>included</em> in the compiled HTML unless you explicitly reference them using special syntax provided by your view engine.</p>
+<pre><code class="ejs">&lt;div&gt;Logged in as &lt;a&gt;&lt;%= name %&gt;&lt;/a&gt;.&lt;/div&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="using-locals-in-your-views" permalink="using-locals-in-your-views">Using locals in your views</h5>
+<p>The notation for accessing locals varies between view engines.  In EJS, you use special template markup (e.g. <code>&lt;%= someValue %&gt;</code>) to include locals in your views.</p>
+<p>There are three kinds of template tags in EJS:</p>
+<ul>
+<li><code>&lt;%= someValue %&gt;</code><ul>
+<li>HTML-escapes the <code>someValue</code> local, and then includes it as a string.</li>
+</ul>
+</li>
+<li><code>&lt;%- someRawHTML %&gt;</code><ul>
+<li>Includes the <code>someRawHTML</code> local verbatim, without escaping it.</li>
+<li>Be careful!  This tag can make you vulnerable to XSS attacks if you don&apos;t know what you&apos;re doing.</li>
+</ul>
+</li>
+<li><code>&lt;% if (!loggedIn) { %&gt;  &lt;a&gt;Logout&lt;/a&gt;  &lt;% } %&gt;</code><ul>
+<li>Runs the javascript inside the <code>&lt;% ... %&gt;</code> when the view is compiled.</li>
+<li>Useful for conditionals (<code>if</code>/<code>else</code>), and looping over data (<code>for</code>/<code>each</code>).</li>
+</ul>
+</li>
+</ul>
+<p>Here&apos;s an example of a view (<code>views/backOffice/profile.ejs</code>) using two locals, <code>user</code> and <code>corndogs</code>:</p>
+<pre><code class="html">&lt;div&gt;
+  &lt;h1&gt;&lt;%= user.name %&gt;&apos;s first view&lt;/h1&gt;
+  &lt;h2&gt;My corndog collection:&lt;/h2&gt;
+  &lt;ul&gt;
+    &lt;% _.each(corndogs, function (corndog) { %&gt;
+    &lt;li&gt;&lt;%= corndog.name %&gt;&lt;/li&gt;
+    &lt;% }) %&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>You might have noticed another local, <code>_</code>.  By default, Sails passes down a few locals to your views automatically, including lodash (<code>_</code>).</p>
+</blockquote>
+<p>If the data you wanted to pass down to this view was completely static, you don&apos;t necessarily need a controller- you could just hard-code the view and its locals in your <code>config/routes.js</code> file, i.e:</p>
+<pre><code class="javascript">// ...
+  &apos;get /profile&apos;: {
+    view: &apos;backOffice/profile&apos;,
+    locals: {
+      user: {
+        name: &apos;Frank&apos;,
+        emailAddress: &apos;frank@enfurter.com&apos;
+      },
+      corndogs: [
+        { name: &apos;beef corndog&apos; },
+        { name: &apos;chicken corndog&apos; },
+        { name: &apos;soy corndog&apos; }
+      ]
+    }
+  },
+  // ...
+</code></pre><!-- __LANG=%%__ -->
+<p>On the other hand, in the more likely scenario that this data is dynamic, we&apos;d need to use a controller action to load it from our models, then pass it to the view using the <a href="/documentation/reference/res/res.view.html">res.view()</a> method.</p>
+<p>Assuming we hooked up our route to one of our controller&apos;s actions (and our models were set up), we might send down our view like this:</p>
+<pre><code class="javascript">// in api/controllers/UserController.js...
+
+  profile: function (req, res) {
+    // ...
+    return res.view(&apos;backOffice/profile&apos;, {
+      user: theUser,
+      corndogs: theUser.corndogCollection
+    });
+  },
+  // ...
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="Locals">
+</docmeta>

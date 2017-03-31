@@ -1,0 +1,73 @@
+<h1 id="remove-blueprint-">Remove (Blueprint)</h1>
+<p>Remove a foreign record (e.g. a comment) from one of this record&apos;s collection associations (e.g. &quot;comments&quot;).</p>
+<pre><code class="nohighlight">DELETE /:model/:id/:association/:fk
+</code></pre><!-- __LANG=%%__ -->
+<p>This action removes a reference to some other record (the &quot;foreign&quot; record) from a collection attribute of this record (the &quot;primary&quot; record).  Note that this does not actually destroy the foreign record-- it just removes it.</p>
+<ul>
+<li>If the foreign record does not exist, it is created first.</li>
+<li>If the collection doesn&apos;t contain a reference to the foreign record, this action will be ignored.</li>
+<li>If the association is 2-way (i.e. reflexive, with &quot;via&quot; on both sides) the association on the foreign record will also be updated.</li>
+</ul>
+<h3 id="parameters" permalink="parameters">Parameters</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Parameter</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"> model</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> of the containing model for the parent record.<br><br>e.g. <code>&apos;store&apos;</code> (in <code>/store/16/employeesOfTheMonth/7</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"> id</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The desired target record&apos;s primary key value<br><br>e.g. <code>&apos;16&apos;</code> (in <code>/store/16/employeesOfTheMonth/7</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"> association</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The name of the collection association<br><br>e.g. <code>&apos;employeesOfTheMonth&apos;</code></td>
+</tr>
+<tr>
+<td style="text-align:left"> fk</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The id of the foreign record to remove from the collection association.<br><br>e.g. <code>7</code></td>
+</tr>
+<tr>
+<td style="text-align:left"> <em>callback</em></td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If specified, a JSONP response will be sent (instead of JSON). This is the name of the client-side javascript function to call, passing results as the first (and only) argument<br> <br> e.g. <code>?callback=myJSONPHandlerFn</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>Say you&apos;re building an app for a small chain of grocery stores.  Each store has a giant television screen that displays the current &quot;Employee of the Month&quot; at that store, so that customers and team members see it when they walk in the door.  In order to be sure it is up to date, you build a scheduled job (e.g. using <a href="https://en.wikipedia.org/wiki/Cron" target="_blank">cron</a>) that runs on the first day of every month to change the &quot;Employees of the Month&quot; for each store in our system.</p>
+<p>Let&apos;s say that, as a part of this scheduled job, we send a request to remove Dolly (employee #7) from the <code>employeesOfTheMonth</code> list of store #16:</p>
+<pre><code class="nohighlight">DELETE /store/16/employeesOfTheMonth/7
+</code></pre><!-- __LANG=%%__ -->
+<p><a href="https://www.getpostman.com/run-collection/96217d0d747e536e49a4" target="_blank"><img src="https://s3.amazonaws.com/postman-static/run-button.png" alt="Run in Postman"></a></p>
+<h5 id="expected-response" permalink="expected-response">Expected Response</h5>
+<pre><code class="json">{
+  &quot;id&quot;: 16,
+  &quot;name&quot;: &quot;Parmer and N. Lamar&quot;,
+  &quot;createdAt&quot;: &quot;2014-08-03T01:16:35.440Z&quot;,
+  &quot;updatedAt&quot;: &quot;2014-08-03T01:51:41.567Z&quot;,
+  &quot;employeesOfTheMonth&quot;: []
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>If you&apos;d like to spend some more time with Dolly, a more detailed walkthrough for the example above is available <a href="https://gist.github.com/mikermcneil/e5a20b03be5aa4e0459b" target="_blank">here</a>.</li>
+<li>This action is for dealing with <em>plural</em> (&quot;collection&quot;) associations.  If you want to set or unset a <em>singular</em> (&quot;model&quot;) association, just use <a href="/documentation/reference/blueprint-api/Update.html">update</a> and set the model association to the id of the new foreign record (or <code>null</code> to clear the association).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="remove from"></docmeta></p>
+<docmeta name="pageType" value="endpoint">
+
+</docmeta>

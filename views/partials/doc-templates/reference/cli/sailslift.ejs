@@ -1,0 +1,41 @@
+<h1 id="sails-lift">sails lift</h1>
+<p>Run the Sails app in the current dir (if <code>node_modules/sails</code> exists, it will be used instead of the globally installed Sails)</p>
+<h5 id="options-" permalink="options">Options:</h5>
+<ul>
+<li><code>--dev</code> - in development environment (the default). In the development environment Sails use <em>grunt-watch</em> to keep a eye on your files in <code>/assets</code>. If you change something (for example in one of our css-files) and reload your browser Sails will automatically show your changes. Also you views won&apos;t be cached so you can change your view-files without restarting Sails like the assets.</li>
+<li><code>--prod</code> - in production environment</li>
+<li><code>--port &lt;portNum&gt;</code> - on the port specified by <code>portNum</code> instead of the default (1337)</li>
+<li><code>--verbose</code> - with verbose logging enabled</li>
+<li><code>--silly</code> - with insane logging enabled</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="bash">$ sails lift
+
+info: Starting app...
+
+info:
+info:
+info:    Sails              &lt;|
+info:    v0.10.3             |\
+info:                       /|.\
+info:                      / || \
+info:                    ,&apos;  |&apos;  \
+info:                 .-&apos;.-==|/_--&apos;
+info:                 `--&apos;-------&apos;
+info:    __---___--___---___--___---___--___
+info:  ____---___--___---___--___---___--___-__
+info:
+info: Server lifted in `/Users/mikermcneil/code/sandbox/second`
+info: To see your app, visit http://localhost:1337
+info: To shut down Sails, press &lt;CTRL&gt; + C at any time.
+
+debug: --------------------------------------------------------
+debug: :: Sat Apr 05 2014 17:03:39 GMT-0500 (CDT)
+
+debug: Environment : development
+debug: Port        : 1337
+debug: --------------------------------------------------------
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="sails lift"></docmeta></p>
+<docmeta name="pageType" value="command">
+</docmeta>

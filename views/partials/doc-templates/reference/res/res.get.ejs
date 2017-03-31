@@ -1,0 +1,20 @@
+<h1 id="res-get-">res.get()</h1>
+<p>Returns the current value of the specified response header (<code>header</code>).</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">res.get(header);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">res.get(&apos;Content-Type&apos;);
+// -&gt; &quot;text/plain&quot;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>The <code>header</code> argument is case-insensitive.
++Response headers can be changed up until the response is sent - see <a href="/documentation/reference/res/res.set.html"><code>res.set()</code></a>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="res.get()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

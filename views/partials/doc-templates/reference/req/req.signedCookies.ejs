@@ -1,0 +1,18 @@
+<h1 id="req-signedcookies">req.signedCookies</h1>
+<p>A dictionary containing all the signed cookies from the request object. A signed cookie is protected against modification by the client. This protection is provided by a base64 encoded HMAC of the cookie value. When retrieving the cookie, if the HMAC signature does not match based on the cookie&apos;s value, then the cookie is not available as a member of the <code>req.signedCookies</code> object</p>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>A dictionary containing all of the signed cookies from this request (<code>req</code>).</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.signedCookies;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>Adding a signed cookie named &quot;chocolatechip&quot; with value &quot;Yummy:</p>
+<pre><code class="javascript">res.cookie(&apos;chocolatechip&apos;, &apos;Yummy&apos;, {signed:true});
+</code></pre><!-- __LANG=%%__ -->
+<p>Retrieving the cookie:</p>
+<pre><code class="javascript">req.signedCookies.chocolatechip;
+// &quot;Yummy&quot;
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="req.signedCookies"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

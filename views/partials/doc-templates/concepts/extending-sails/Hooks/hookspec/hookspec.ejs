@@ -1,0 +1,49 @@
+<h1 id="the-hook-specification">The Hook Specification</h1>
+<h2 id="overview" permalink="overview">Overview</h2>
+<p>Each Sails hook is implemeted as a Javascript function that takes a single argument&#x2014;a reference to the running <code>sails</code> instance&#x2014;and returns an object with one or more of the keys described later in this document.  So, the most basic hook would look like this:</p>
+<pre><code class="nohighlight">module.exports = function myBasicHook(sails) {
+   return {};
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>It wouldn&apos;t do much, but it would work!  </p>
+<p>Each hook should be saved in its own folder with the filename <code>index.js</code>.  The folder name should uniquely identify the hook, and the folder can contain any number of additional files and subfolders.  Extending the previous example, if you saved the file containing <code>myBasicHook</code> in a Sails project as <code>index.js</code> in the folder <code>api/hooks/my-basic-hook</code> and then lifted your app with <code>sails lift --verbose</code>, you would see the following in the output:</p>
+<p><code>verbose: my-basic-hook hook loaded successfully.</code></p>
+<h2 id="hook-features" permalink="hook-features">Hook features</h2>
+<p>The following features are available to implement in your hook.  All features are optional, and can be implemented by adding them to the object returned by your hook function.</p>
+<ul>
+<li><a href="/documentation/concepts/extending-sails/Hooks/hookspec/defaults.html">.defaults</a></li>
+<li><a href="/documentation/concepts/extending-sails/Hooks/hookspec/configure.html">.configure()</a></li>
+<li><a href="/documentation/concepts/extending-sails/Hooks/hookspec/initialize.html">.initialize()</a></li>
+<li><a href="/documentation/concepts/extending-sails/Hooks/hookspec/routes.html">.routes</a></li>
+</ul>
+<h2 id="custom-hook-data-and-functions" permalink="custom-hook-data-and-functions">Custom hook data and functions</h2>
+<p>Any other keys added to the object returned from the main hook function will be provided in the <code>sails.hooks[&lt;hook name&gt;]</code> object.  This is how custom hook functionality is provided to end-users.  Any data and functions that you wish to remain private to the hook can be added <em>outside</em> the returned object:</p>
+<pre><code class="nohighlight">// File api/hooks/myhook/index.js
+module.exports = function myHook(sails) {
+
+   // This var will be private
+   var foo = &apos;bar&apos;;
+
+   // This var will be public
+   this.abc = 123;
+
+   return {
+
+      // This function will be public
+      sayHi: function (name) {
+         console.log(greet(name));
+      }
+
+   };
+
+   // This function will be private
+   function greet (name) {
+      return &quot;Hi, &quot; + name + &quot;!&quot;;
+   }
+
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>The public var and function above would be available as <code>sails.hooks.myhook.abc</code> and <code>sails.hooks.myhook.sayHi</code>, respectively.</p>
+<p><docmeta name="displayName" value="Hook Specification"></docmeta></p>
+<docmeta name="stabilityIndex" value="3">
+</docmeta>

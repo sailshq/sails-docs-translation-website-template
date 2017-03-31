@@ -1,0 +1,49 @@
+<h1 id="-unwatch-">.unwatch()</h1>
+<p>Unenroll the requesting client socket from this model&apos;s &quot;class room&quot; for this model, meaning it will no longer receive broadcasts every time <a href="/documentation/reference/web-sockets/resourceful-pub-sub/publish-create"><code>publishCreate()</code></a> is called on this model, and also no longer be subscribed to those new records.</p>
+<pre><code class="javascript">Something.unwatch(req);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left"><code>req</code></td>
+<td style="text-align:center"><bubble type="req" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The incoming socket request (<code>req</code>).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>See <a href="/documentation/reference/web-sockets/resourceful-pub-sub/watch"><code>.watch()</code></a> for more information.</p>
+</blockquote>
+<h3 id="example" permalink="example">Example</h3>
+<p>Let&apos;s say we have a mobile app or single-page web app where new public pictures of cute animals are displayd in real time when you are viewing the dashboard.  Since there is no page refresh, the client-side socket remains connected; so when you view your user settings, as an optimization our app might hit a special endpoint that uses <code>.unwatch()</code> to temporarily stop receiving new animal pictures:</p>
+<pre><code class="javascript">// We can only do this for socket requests.
+// (to accomplish the same functionality using raw socket ids, see `sails.sockets.leave()`)
+if (!req.isSocket) {
+  return res.badRequest(&apos;Only a socket request can use this endpoint!&apos;);
+}
+
+// Temporarily disable the cute animal picture firehose.
+Photo.unwatch(req);
+
+return res.ok();
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code> to refer to the requesting socket.  The provided <code>req</code> must be from a socket request, not just any old HTTP request.</li>
+<li><code>unwatch()</code> will only work when the request is made over a socket connection (e.g. using <a href="/documentation/reference/web-sockets/socket-client/io-socket-get"><code>io.socket.get()</code></a>), <em>not</em> over HTTP (e.g. using <a href="https://api.jquery.com/jquery.get/" target="_blank"><code>jQuery.get()</code></a>).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".unwatch()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

@@ -1,0 +1,56 @@
+<h1 id="contributing-to-the-documentation">Contributing to the Documentation</h1>
+<p>The official documentation on the Sails website is compiled from markdown files in the <a href="https://github.com/balderdashy/sails-docs" target="_blank">sails-docs</a> repo. Please send a pull request to the <strong>master</strong> branch with corrections/additions and they&apos;ll be double-checked and merged as soon as possible.</p>
+<p>We are open to suggestions about the process we&apos;re using to manage our documentation, and to work with the community in general.  Please post to the <a href="https://groups.google.com/forum/#!forum/sailsjs" target="_blank">Google Group</a> with your ideas- or if you&apos;re interested in helping directly, contact @fancydoilies, @rudeboot, or @mikermcneil on Twitter.</p>
+<h4 id="what-branch-should-i-edit-" permalink="what-branch-should-i-edit">What branch should I edit?</h4>
+<p>That depends on what kind of edit you are making.  Most often, you&apos;ll be making an edit that is relevant for the latest stable version of Sails (i.e. the version on <a href="npmjs.org/package/sails">NPM</a>) and so you&apos;ll want to edit the <code>master</code> branch of <em>this</em> repo (what you see in the sails-docs repo by default).  The docs team merges master into the appropriate branch for the latest stable release of Sails, and then deploys that to sailsjs.com about once per week.</p>
+<p>On the other hand, if you are making an edit related to an unreleased feature in an upcoming version; most commonly as an accompaniment a feature proposal or open pull request to Sails or a related project, then you will want to edit the branch for the next, unreleased version of Sails (sometimes called &quot;edge&quot;).</p>
+<table>
+<thead>
+<tr>
+<th>Branch (in <code>sails-docs</code>)</th>
+<th>Documentation for Sails Version...</th>
+<th style="text-align:left">Preview At...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/balderdashy/sails-docs/tree/1.0" target="_blank"><code>1.0</code></a></td>
+<td>Upcoming v1.0 release</td>
+<td style="text-align:left"><a href="http://next.sailsjs.com">next.sailsjs.com</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/balderdashy/sails-docs/tree/master" target="_blank"><code>master</code></a></td>
+<td><a href="http://badge.fury.io/js/sails" target="_blank"><img src="https://badge.fury.io/js/sails.png" alt="NPM version"></a></td>
+<td style="text-align:left"><a href="http://preview.sailsjs.com">preview.sailsjs.com</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/balderdashy/sails-docs/tree/0.12" target="_blank"><code>0.12</code></a></td>
+<td>Sails v0.12.x</td>
+<td style="text-align:left"><a href="">sailsjs.com</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/balderdashy/sails-docs/tree/0.11" target="_blank"><code>0.11</code></a></td>
+<td>Sails v0.11.x</td>
+<td style="text-align:left"><a href="http://0.11.sailsjs.com">0.11.sailsjs.com</a></td>
+</tr>
+</tbody>
+</table>
+<h4 id="how-are-these-docs-compiled-and-pushed-to-the-website-" permalink="how-are-these-docs-compiled-and-pushed-to-the-website">How are these docs compiled and pushed to the website?</h4>
+<p>We use a module called <code>doc-templater</code> to convert the .md files to the html for the website. You can learn more about how it works in <a href="https://github.com/uncletammy/doc-templater" target="_blank">the doc-templater repo</a>.</p>
+<p>Each .md file has its own page on the website (i.e. all reference, concepts, and anatomy files), and should include a special <code>&lt;docmeta name=&quot;displayName&quot;&gt;</code> tag with a <code>value</code> property specifying the title for the page.  This will impact how the doc page appears in search engine results, and it will also be used as its display name in the navigation menu on sailsjs.com.  For example:</p>
+<pre><code class="markdown">&lt;docmeta name=&quot;displayName&quot; value=&quot;Building Custom Homemade Puddings&quot;&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="when-will-my-change-appear-on-the-sails-website-" permalink="when-will-my-change-appear-on-the-sails-website">When will my change appear on the Sails website?</h4>
+<p>Documentation changes go live when they are merged onto a special branch corresponding with the current stable version of Sails (e.g. 0.12). We cannot merge pull requests sent directly to this branch-- its sole purpose is to reflect the content currently hosted on sailsjs.com, and content is only merged just before redeploying the sails website.</p>
+<p>If you want to see how documentation changes will appear on sailsjs.com, you can visit <a href="http://preview.sailsjs.com">preview.sailsjs.com</a>. The preview site updates itself automatically as changes are merged into the master branch of sails-docs.</p>
+<h4 id="how-can-i-help-translate-the-documentation-" permalink="how-can-i-help-translate-the-documentation">How can I help translate the documentation?</h4>
+<p>A great way to help the Sails project, especially if you speak a language other than English natively, is to volunteer to translate the Sails documentation.  If you are interested in collaborating with any of the translation projects listed in the table above, contact the maintainer of the translation project using the instructions in the README of that fork.</p>
+<p>If your language is not represented in the table above, and you are interested in beginning a translation project, follow these steps:</p>
+<ul>
+<li>Fork the <a href="https://github.com/balderdashy/sails-docs" target="_blank">sails-docs</a> repo (<code>balderdashy/sails-docs</code>) and change the name of your fork to be <code>sails-docs-{{IETF}}</code> where {{IETF}} is the <a href="https://en.wikipedia.org/wiki/IETF_language_tag" target="_blank">IETF language tag</a> for your language.</li>
+<li>Edit the README to summarize your progress so far, provide any other information you think would be helpful for others reading your translation, and let interested contributors know how to contact you.</li>
+<li>Send a pull request editing the table above to add a link to your fork.</li>
+<li>When you are satisfied with the first complete version of your translation, open an issue and someone from our docs team will be happy to help you get preview it in the context of the Sails website, get it live on a domain (yours, or a subdomain of sailsjs.com, whichever makes the most sense), and share it with the rest of the Sails community.</li>
+</ul>
+<docmeta name="displayName" value="Contributing to the Docs">
+</docmeta>

@@ -1,0 +1,23 @@
+[
+  {
+    "templateTitle": "README.ejs",
+    "fullPathAndFileName": "faq/README.ejs",
+    "data": {
+      "lastModified": 1482176541000
+    },
+    "parent": "faq/faq.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "faq.ejs",
+    "fullPathAndFileName": "faq/faq.ejs",
+    "realPath": "faq/",
+    "data": {
+      "lastModified": 1490037367000
+    },
+    "children": [
+      "faq/README.ejs"
+    ],
+    "isParent": true
+  }
+]

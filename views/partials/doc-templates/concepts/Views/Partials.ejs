@@ -1,0 +1,112 @@
+<h1 id="partials">Partials</h1>
+<p>When using the default view engine (<code>ejs</code>), Sails supports the use of <em>partials</em> (aka &quot;view partials&quot;).  Partials are basically just views that are designed to be used from within other views.</p>
+<p>They are particularly useful for reusing the same markup between different views, layouts, and even other partials.</p>
+<pre><code class="nohighlight">&lt;%- partial(&apos;./partials/navbar.ejs&apos;) %&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p>Depending on where this  render the partial located at <code>views/partials/navbar.ejs</code>, which might look something like this:</p>
+<pre><code class="nohighlight">&lt;%
+/**
+ * views/partials/navbar.ejs
+ *
+ * &gt; Note: This EJS comment won&apos;t show up in the HTML served to the browser.
+ * &gt; So you can be as verbose as you like.  Just be careful not to inadvertently
+ * &gt; type a percent sign followed by a greater-than sign (it&apos;ll bust you out of
+ * &gt; the EJS block).
+ *
+ */%&gt;
+&lt;div class=&quot;navbar&quot;&gt;
+  &lt;a href=&quot;/&quot;&gt;Dashboard&lt;/a&gt;
+  &lt;a href=&quot;/inbox&quot;&gt;Inbox&lt;/a&gt;
+&lt;/div&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p>The target path that you pass in as the first argument to <code>partial()</code> should be relative from the view, layout, or partial where you call it.  So if you are calling <code>partial()</code> from within a view file located at <code>views/pages/dashboard/user-profile.ejs</code>, and want to load <code>views/partials/widget.ejs</code> then you would use:</p>
+<pre><code class="nohighlight">&lt;%- partial(&apos;../../partials/navbar.ejs&apos;) %&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="partials-and-view-locals" permalink="partials-and-view-locals">Partials and view locals</h3>
+<p>Partials automatically inherit the view locals that are available wherever they are used.  For example, if you call <code>partial()</code> within a view where a variable named <code>currentUser</code> is available, then <code>currentUser</code> will also be available within the partial:</p>
+<pre><code class="ejs">&lt;%
+/**
+ * views/partials/navbar.ejs
+ *
+ * The navbar at the top of the page.
+ *
+ * @needs {Dictionary} currentUser
+ *   @property {Boolean} isLoggedIn
+ *   @property {String} username
+ */%&gt;
+&lt;div class=&quot;navbar&quot;&gt;
+  &lt;div class=&quot;links&quot;&gt;
+    &lt;a href=&quot;/&quot;&gt;Dashboard&lt;/a&gt;
+    &lt;a href=&quot;/inbox&quot;&gt;Inbox&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;login-or-signup&quot;&gt;&lt;%
+  // If the user accessing this page is logged in...
+  if (currentUser.isLoggedIn) {
+  %&gt;&lt;span&gt;
+    You are signed in as &lt;a href=&quot;/&lt;%= currentUser.username %&gt;&quot;&gt;&lt;%= currentUser.username %&gt;&lt;/a&gt;.
+  &lt;/span&gt;&lt;%
+  } 
+  // Otherwise the user accessing this page must be a visitor:
+  else {
+  %&gt;&lt;span&gt;
+    &lt;a href=&quot;/login&quot;&gt;Log in&lt;/a&gt;
+  &lt;/span&gt;&lt;%
+  }
+  %&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="overriding-locals-in-a-partial" permalink="overriding-locals-in-a-partial">Overriding locals in a partial</h3>
+<p>Automatic inheritance of view locals takes care of most use cases for partials.  But sometimes, you might want to pass in additional, dynamic data.  For example, imagine your app has duplicate copies of the following code in a few different views:</p>
+<pre><code class="ejs">&lt;%
+// A list representing the currently-logged in user&apos;s inbox.
+%&gt;&lt;ul class=&quot;message-list&quot;&gt;&lt;%
+  // Display each message, with a button to delete it.
+  _.each(messages, function (message) {
+  %&gt;&lt;li class=&quot;inbox-message&quot; data-id=&quot;&lt;%= message.id %&gt;&quot;&gt;
+    &lt;a href=&quot;/messages/&lt;%= message.id %&gt;&quot;&gt;&lt;%= message.subject %&gt;&lt;/a&gt;
+    &lt;button class=&quot;fa fa-trash&quot; is=&quot;delete-btn&quot;&gt;&lt;/button&gt;
+  &lt;/li&gt;&lt;% });
+ %&gt;&lt;/ul&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p>To refactor this, you might extrapolate the <code>&lt;li&gt;</code> into a partial to avoid duplicating code.  But if we do that, <em>we cannot rely on automatic inheritance</em>.  Partials only inherit locals that are available to the view, partial, or layout where they&apos;re called as a whole, but this <code>&lt;li&gt;</code> relies on a variable called <code>message</code>, which comes from the call to <a href="https://lodash.com/docs/3.10.1#forEach" target="_blank"><code>_.each()</code></a>.</p>
+<p>Fortunately, Sails also allows you to pass in an optional dictionary (aka plain JavaScript object) of overrides as the second argument to <code>partial()</code>:</p>
+<pre><code class="nohighlight">&lt;%- partial(relPathToPartial, optionalOverrides) %&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p>These overrides will be accessible in the partial as local variables, where they will take precedence over any automatically inherited locals with the same variable name.</p>
+<p>Here&apos;s our example from above, refactored to take advantage of this:</p>
+<pre><code class="ejs">&lt;%
+// A list representing the currently-logged in user&apos;s inbox.
+%&gt;&lt;ul class=&quot;message-list&quot;&gt;&lt;%
+  // Display each message, with a button to delete it.
+  _.each(messages, function (message) { %&gt;
+  &lt;%- partial (&apos;../partials/inbox-message.ejs&apos;, { message: message }) %&gt;
+  &lt;% });
+%&gt;&lt;/ul&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p>And finally, here is our new partial representing an individual inbox message:</p>
+<pre><code class="nohighlight">/**
+ * views/partials/inbox-message.ejs
+ * 
+ * An individual inbox message.
+ *
+ * @needs {Dictionary} message
+ *   @property {Number} id
+ *   @property {String} subject
+ *
+ */%&gt;
+&lt;li class=&quot;inbox-message&quot; data-id=&quot;&lt;%= message.id %&gt;&quot;&gt;
+  &lt;a href=&quot;/messages/&lt;%= message.id %&gt;&quot;&gt;&lt;%= message.subject %&gt;&lt;/a&gt;
+  &lt;button class=&quot;fa fa-trash&quot; is=&quot;delete-btn&quot;&gt;&lt;/button&gt;
+&lt;/li&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Partials are rendered synchronously, so they will block Sails from serving more requests until they&apos;re done loading.  It&apos;s something to keep in mind while developing your app, especially if you anticipate a large number of connections.</li>
+<li>Built-in support for partials in Sails is only for the default view engine, <code>ejs</code>.  If you decide to customize your Sails install and use a view engine other than <code>ejs</code>, then please be aware that support for partials (sometimes known as &quot;blocks&quot;, &quot;includes&quot;, etc.) may or may not be included, and that the usage will vary.  Refer to the documentation for your view engine of choice for more information on its syntax and conventions.</li>
+</ul>
+</blockquote>
+<docmeta name="displayName" value="Partials">
+
+</docmeta>

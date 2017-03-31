@@ -1,0 +1,1133 @@
+[
+  {
+    "templateTitle": "Gruntfile.js.ejs",
+    "fullPathAndFileName": "anatomy/Gruntfile.js.ejs",
+    "data": {
+      "displayName": "Gruntfile.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "README.ejs",
+    "fullPathAndFileName": "anatomy/README.ejs",
+    "data": {
+      "notShownOnWebsite": "true",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "README.md.ejs",
+    "fullPathAndFileName": "anatomy/README.md.ejs",
+    "data": {
+      "displayName": "README.md",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "anatomy.ejs",
+    "fullPathAndFileName": "anatomy/anatomy.ejs",
+    "realPath": "anatomy/",
+    "data": {
+      "displayName": "Anatomy of a Sails App",
+      "isOverviewPage": "true",
+      "lastModified": 1482175906000
+    },
+    "children": [
+      "anatomy/Gruntfile.js.ejs",
+      "anatomy/sailsrc.ejs",
+      "anatomy/gitignore.ejs",
+      "anatomy/README.ejs",
+      "anatomy/app.js.ejs",
+      "anatomy/README.md.ejs",
+      "anatomy/package.json.ejs",
+      "anatomy/api/api.ejs",
+      "anatomy/config/config.ejs",
+      "anatomy/assets/assets.ejs",
+      "anatomy/views/views.ejs",
+      "anatomy/tasks/tasks.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "api.ejs",
+    "fullPathAndFileName": "anatomy/api/api.ejs",
+    "realPath": "anatomy/api/",
+    "data": {
+      "displayName": "api",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/api/hooks/hooks.ejs",
+      "anatomy/api/controllers/controllers.ejs",
+      "anatomy/api/models/models.ejs",
+      "anatomy/api/policies/policies.ejs",
+      "anatomy/api/responses/responses.ejs",
+      "anatomy/api/services/services.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "UserController.js.ejs",
+    "fullPathAndFileName": "anatomy/api/controllers/UserController.js.ejs",
+    "data": {
+      "displayName": "UserController.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/api/controllers/controllers.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "controllers.ejs",
+    "fullPathAndFileName": "anatomy/api/controllers/controllers.ejs",
+    "realPath": "anatomy/api/controllers/",
+    "data": {
+      "displayName": "controllers",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/api.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/api/controllers/UserController.js.ejs",
+      "anatomy/api/controllers/gitkeep.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "gitkeep.ejs",
+    "fullPathAndFileName": "anatomy/api/controllers/gitkeep.ejs",
+    "data": {
+      "displayName": ".gitkeep",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/controllers/controllers.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "hooks.ejs",
+    "fullPathAndFileName": "anatomy/api/hooks/hooks.ejs",
+    "realPath": "anatomy/api/hooks/",
+    "data": {
+      "displayName": "hooks",
+      "lastModified": 1482181109000
+    },
+    "parent": "anatomy/api/api.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/api/hooks/myHook/myHook.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "index.js.ejs",
+    "fullPathAndFileName": "anatomy/api/hooks/myHook/index.js.ejs",
+    "data": {
+      "displayName": "index.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/api/hooks/myHook/myHook.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "myHook.ejs",
+    "fullPathAndFileName": "anatomy/api/hooks/myHook/myHook.ejs",
+    "realPath": "anatomy/api/hooks/myHook/",
+    "data": {
+      "displayName": "myHook",
+      "lastModified": 1482181109000
+    },
+    "parent": "anatomy/api/hooks/hooks.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/api/hooks/myHook/index.js.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "User.js.ejs",
+    "fullPathAndFileName": "anatomy/api/models/User.js.ejs",
+    "data": {
+      "displayName": "User.js",
+      "lastModified": 1482352443000
+    },
+    "parent": "anatomy/api/models/models.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "gitkeep.ejs",
+    "fullPathAndFileName": "anatomy/api/models/gitkeep.ejs",
+    "data": {
+      "displayName": ".gitkeep",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/models/models.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "models.ejs",
+    "fullPathAndFileName": "anatomy/api/models/models.ejs",
+    "realPath": "anatomy/api/models/",
+    "data": {
+      "displayName": "models",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/api.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/api/models/gitkeep.ejs",
+      "anatomy/api/models/User.js.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "policies.ejs",
+    "fullPathAndFileName": "anatomy/api/policies/policies.ejs",
+    "realPath": "anatomy/api/policies/",
+    "data": {
+      "displayName": "policies",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/api.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/api/policies/sessionAuth.js.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "sessionAuth.js.ejs",
+    "fullPathAndFileName": "anatomy/api/policies/sessionAuth.js.ejs",
+    "data": {
+      "displayName": "sessionAuth.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/api/policies/policies.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "badRequest.js.ejs",
+    "fullPathAndFileName": "anatomy/api/responses/badRequest.js.ejs",
+    "data": {
+      "displayName": "badRequest.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/responses/responses.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "forbidden.js.ejs",
+    "fullPathAndFileName": "anatomy/api/responses/forbidden.js.ejs",
+    "data": {
+      "displayName": "forbidden.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/responses/responses.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "notFound.js.ejs",
+    "fullPathAndFileName": "anatomy/api/responses/notFound.js.ejs",
+    "data": {
+      "displayName": "notFound.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/responses/responses.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "ok.js.ejs",
+    "fullPathAndFileName": "anatomy/api/responses/ok.js.ejs",
+    "data": {
+      "displayName": "ok.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/responses/responses.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "responses.ejs",
+    "fullPathAndFileName": "anatomy/api/responses/responses.ejs",
+    "realPath": "anatomy/api/responses/",
+    "data": {
+      "displayName": "responses",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/api.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/api/responses/badRequest.js.ejs",
+      "anatomy/api/responses/serverError.js.ejs",
+      "anatomy/api/responses/forbidden.js.ejs",
+      "anatomy/api/responses/notFound.js.ejs",
+      "anatomy/api/responses/ok.js.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "serverError.js.ejs",
+    "fullPathAndFileName": "anatomy/api/responses/serverError.js.ejs",
+    "data": {
+      "displayName": "serverError.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/responses/responses.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "gitkeep.ejs",
+    "fullPathAndFileName": "anatomy/api/services/gitkeep.ejs",
+    "data": {
+      "displayName": ".gitkeep",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/services/services.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "services.ejs",
+    "fullPathAndFileName": "anatomy/api/services/services.ejs",
+    "realPath": "anatomy/api/services/",
+    "data": {
+      "displayName": "services",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/api/api.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/api/services/gitkeep.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "app.js.ejs",
+    "fullPathAndFileName": "anatomy/app.js.ejs",
+    "data": {
+      "displayName": "app.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "assets.ejs",
+    "fullPathAndFileName": "anatomy/assets/assets.ejs",
+    "realPath": "anatomy/assets/",
+    "data": {
+      "displayName": "assets",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/assets/favicon.ico.ejs",
+      "anatomy/assets/robots.txt.ejs",
+      "anatomy/assets/images/images.ejs",
+      "anatomy/assets/js/js.ejs",
+      "anatomy/assets/styles/styles.ejs",
+      "anatomy/assets/templates/templates.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "favicon.ico.ejs",
+    "fullPathAndFileName": "anatomy/assets/favicon.ico.ejs",
+    "data": {
+      "displayName": "favicon.ico",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/assets/assets.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "gitkeep.ejs",
+    "fullPathAndFileName": "anatomy/assets/images/gitkeep.ejs",
+    "data": {
+      "displayName": ".gitkeep",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/assets/images/images.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "images.ejs",
+    "fullPathAndFileName": "anatomy/assets/images/images.ejs",
+    "realPath": "anatomy/assets/images/",
+    "data": {
+      "displayName": "images",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/assets/assets.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/assets/images/gitkeep.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "dependencies.ejs",
+    "fullPathAndFileName": "anatomy/assets/js/dependencies/dependencies.ejs",
+    "realPath": "anatomy/assets/js/dependencies/",
+    "data": {
+      "displayName": "dependencies",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/assets/js/js.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/assets/js/dependencies/sails.io.js.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "sails.io.js.ejs",
+    "fullPathAndFileName": "anatomy/assets/js/dependencies/sails.io.js.ejs",
+    "data": {
+      "displayName": "sails.io.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/assets/js/dependencies/dependencies.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "js.ejs",
+    "fullPathAndFileName": "anatomy/assets/js/js.ejs",
+    "realPath": "anatomy/assets/js/",
+    "data": {
+      "displayName": "js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/assets/assets.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/assets/js/dependencies/dependencies.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "robots.txt.ejs",
+    "fullPathAndFileName": "anatomy/assets/robots.txt.ejs",
+    "data": {
+      "displayName": "robots.txt",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/assets/assets.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "importer.less.ejs",
+    "fullPathAndFileName": "anatomy/assets/styles/importer.less.ejs",
+    "data": {
+      "displayName": "importer.less",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/assets/styles/styles.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "styles.ejs",
+    "fullPathAndFileName": "anatomy/assets/styles/styles.ejs",
+    "realPath": "anatomy/assets/styles/",
+    "data": {
+      "displayName": "styles",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/assets/assets.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/assets/styles/importer.less.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "gitkeep.ejs",
+    "fullPathAndFileName": "anatomy/assets/templates/gitkeep.ejs",
+    "data": {
+      "displayName": ".gitkeep",
+      "lastModified": 1482352702000
+    },
+    "parent": "anatomy/assets/templates/templates.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "templates.ejs",
+    "fullPathAndFileName": "anatomy/assets/templates/templates.ejs",
+    "realPath": "anatomy/assets/templates/",
+    "data": {
+      "displayName": "templates",
+      "lastModified": 1483239524000
+    },
+    "parent": "anatomy/assets/assets.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/assets/templates/gitkeep.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "blueprints.js.ejs",
+    "fullPathAndFileName": "anatomy/config/blueprints.js.ejs",
+    "data": {
+      "displayName": "blueprints.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "bootstrap.js.ejs",
+    "fullPathAndFileName": "anatomy/config/bootstrap.js.ejs",
+    "data": {
+      "displayName": "bootstrap.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "config.ejs",
+    "fullPathAndFileName": "anatomy/config/config.ejs",
+    "realPath": "anatomy/config/",
+    "data": {
+      "displayName": "config",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/config/blueprints.js.ejs",
+      "anatomy/config/connections.js.ejs",
+      "anatomy/config/csrf.js.ejs",
+      "anatomy/config/bootstrap.js.ejs",
+      "anatomy/config/cors.js.ejs",
+      "anatomy/config/session.js.ejs",
+      "anatomy/config/sockets.js.ejs",
+      "anatomy/config/routes.js.ejs",
+      "anatomy/config/policies.js.ejs",
+      "anatomy/config/models.js.ejs",
+      "anatomy/config/local.js.ejs",
+      "anatomy/config/i18n.js.ejs",
+      "anatomy/config/log.js.ejs",
+      "anatomy/config/http.js.ejs",
+      "anatomy/config/globals.js.ejs",
+      "anatomy/config/views.js.ejs",
+      "anatomy/config/env/env.ejs",
+      "anatomy/config/locales/locales.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "connections.js.ejs",
+    "fullPathAndFileName": "anatomy/config/connections.js.ejs",
+    "data": {
+      "displayName": "connections.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "cors.js.ejs",
+    "fullPathAndFileName": "anatomy/config/cors.js.ejs",
+    "data": {
+      "displayName": "cors.js",
+      "lastModified": 1484581559000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "csrf.js.ejs",
+    "fullPathAndFileName": "anatomy/config/csrf.js.ejs",
+    "data": {
+      "displayName": "csrf.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "env.ejs",
+    "fullPathAndFileName": "anatomy/config/env/env.ejs",
+    "realPath": "anatomy/config/env/",
+    "data": {
+      "displayName": "env",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/config/env/production.js.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "production.js.ejs",
+    "fullPathAndFileName": "anatomy/config/env/production.js.ejs",
+    "data": {
+      "displayName": "production.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/config/env/env.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "globals.js.ejs",
+    "fullPathAndFileName": "anatomy/config/globals.js.ejs",
+    "data": {
+      "displayName": "globals.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "http.js.ejs",
+    "fullPathAndFileName": "anatomy/config/http.js.ejs",
+    "data": {
+      "displayName": "http.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "i18n.js.ejs",
+    "fullPathAndFileName": "anatomy/config/i18n.js.ejs",
+    "data": {
+      "displayName": "i18n.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "local.js.ejs",
+    "fullPathAndFileName": "anatomy/config/local.js.ejs",
+    "data": {
+      "displayName": "local.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "de.json.ejs",
+    "fullPathAndFileName": "anatomy/config/locales/de.json.ejs",
+    "data": {
+      "displayName": "de.json",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/config/locales/locales.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "en.json.ejs",
+    "fullPathAndFileName": "anatomy/config/locales/en.json.ejs",
+    "data": {
+      "displayName": "en.json",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/config/locales/locales.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "es.json.ejs",
+    "fullPathAndFileName": "anatomy/config/locales/es.json.ejs",
+    "data": {
+      "displayName": "es.json",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/config/locales/locales.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "fr.json.ejs",
+    "fullPathAndFileName": "anatomy/config/locales/fr.json.ejs",
+    "data": {
+      "displayName": "fr.json",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/config/locales/locales.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "locales.ejs",
+    "fullPathAndFileName": "anatomy/config/locales/locales.ejs",
+    "realPath": "anatomy/config/locales/",
+    "data": {
+      "displayName": "locales",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/config/locales/fr.json.ejs",
+      "anatomy/config/locales/de.json.ejs",
+      "anatomy/config/locales/es.json.ejs",
+      "anatomy/config/locales/en.json.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "log.js.ejs",
+    "fullPathAndFileName": "anatomy/config/log.js.ejs",
+    "data": {
+      "displayName": "log.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "models.js.ejs",
+    "fullPathAndFileName": "anatomy/config/models.js.ejs",
+    "data": {
+      "displayName": "models.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "policies.js.ejs",
+    "fullPathAndFileName": "anatomy/config/policies.js.ejs",
+    "data": {
+      "displayName": "policies.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "routes.js.ejs",
+    "fullPathAndFileName": "anatomy/config/routes.js.ejs",
+    "data": {
+      "displayName": "routes.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "session.js.ejs",
+    "fullPathAndFileName": "anatomy/config/session.js.ejs",
+    "data": {
+      "displayName": "session.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "sockets.js.ejs",
+    "fullPathAndFileName": "anatomy/config/sockets.js.ejs",
+    "data": {
+      "displayName": "sockets.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "views.js.ejs",
+    "fullPathAndFileName": "anatomy/config/views.js.ejs",
+    "data": {
+      "displayName": "views.js",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "gitignore.ejs",
+    "fullPathAndFileName": "anatomy/gitignore.ejs",
+    "data": {
+      "displayName": ".gitignore",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "package.json.ejs",
+    "fullPathAndFileName": "anatomy/package.json.ejs",
+    "data": {
+      "displayName": "package.json",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "sailsrc.ejs",
+    "fullPathAndFileName": "anatomy/sailsrc.ejs",
+    "data": {
+      "displayName": ".sailsrc",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "README.md.ejs",
+    "fullPathAndFileName": "anatomy/tasks/README.md.ejs",
+    "data": {
+      "displayName": "README.md",
+      "lastModified": 1482353687000
+    },
+    "parent": "anatomy/tasks/tasks.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "clean.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/clean.js.ejs",
+    "data": {
+      "displayName": "clean.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "coffee.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/coffee.js.ejs",
+    "data": {
+      "displayName": "coffee.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "concat.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/concat.js.ejs",
+    "data": {
+      "displayName": "concat.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "config.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/config.ejs",
+    "realPath": "anatomy/tasks/config/",
+    "data": {
+      "displayName": "config",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/tasks.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/tasks/config/clean.js.ejs",
+      "anatomy/tasks/config/watch.js.ejs",
+      "anatomy/tasks/config/uglify.js.ejs",
+      "anatomy/tasks/config/sync.js.ejs",
+      "anatomy/tasks/config/jst.js.ejs",
+      "anatomy/tasks/config/sails-linker.js.ejs",
+      "anatomy/tasks/config/less.js.ejs",
+      "anatomy/tasks/config/copy.js.ejs",
+      "anatomy/tasks/config/concat.js.ejs",
+      "anatomy/tasks/config/cssmin.js.ejs",
+      "anatomy/tasks/config/coffee.js.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "copy.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/copy.js.ejs",
+    "data": {
+      "displayName": "copy.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "cssmin.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/cssmin.js.ejs",
+    "data": {
+      "displayName": "cssmin.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "jst.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/jst.js.ejs",
+    "data": {
+      "displayName": "jst.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "less.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/less.js.ejs",
+    "data": {
+      "displayName": "less.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "sails-linker.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/sails-linker.js.ejs",
+    "data": {
+      "displayName": "sails-linker.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "sync.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/sync.js.ejs",
+    "data": {
+      "displayName": "sync.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "uglify.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/uglify.js.ejs",
+    "data": {
+      "displayName": "uglify.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "watch.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/config/watch.js.ejs",
+    "data": {
+      "displayName": "watch.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/config/config.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "pipeline.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/pipeline.js.ejs",
+    "data": {
+      "displayName": "pipeline.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/tasks.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "build.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/build.js.ejs",
+    "data": {
+      "displayName": "build.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/register/register.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "buildProd.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/buildProd.js.ejs",
+    "data": {
+      "displayName": "buildProd.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/register/register.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "compileAssets.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/compileAssets.js.ejs",
+    "data": {
+      "displayName": "compileAssets.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/register/register.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "default.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/default.js.ejs",
+    "data": {
+      "displayName": "default.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/register/register.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "linkAssets.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/linkAssets.js.ejs",
+    "data": {
+      "displayName": "linkAssets.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/register/register.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "linkAssetsBuild.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/linkAssetsBuild.js.ejs",
+    "data": {
+      "displayName": "linkAssetsBuild.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/register/register.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "linkAssetsBuildProd.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/linkAssetsBuildProd.js.ejs",
+    "data": {
+      "displayName": "linkAssetsBuildProd.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/register/register.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "prod.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/prod.js.ejs",
+    "data": {
+      "displayName": "prod.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/register/register.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "register.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/register.ejs",
+    "realPath": "anatomy/tasks/register/",
+    "data": {
+      "displayName": "register",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/tasks/tasks.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/tasks/register/build.js.ejs",
+      "anatomy/tasks/register/buildProd.js.ejs",
+      "anatomy/tasks/register/compileAssets.js.ejs",
+      "anatomy/tasks/register/default.js.ejs",
+      "anatomy/tasks/register/linkAssetsBuild.js.ejs",
+      "anatomy/tasks/register/linkAssets.js.ejs",
+      "anatomy/tasks/register/prod.js.ejs",
+      "anatomy/tasks/register/syncAssets.js.ejs",
+      "anatomy/tasks/register/linkAssetsBuildProd.js.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "syncAssets.js.ejs",
+    "fullPathAndFileName": "anatomy/tasks/register/syncAssets.js.ejs",
+    "data": {
+      "displayName": "syncAssets.js",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/tasks/register/register.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "tasks.ejs",
+    "fullPathAndFileName": "anatomy/tasks/tasks.ejs",
+    "realPath": "anatomy/tasks/",
+    "data": {
+      "displayName": "tasks",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/tasks/README.md.ejs",
+      "anatomy/tasks/pipeline.js.ejs",
+      "anatomy/tasks/config/config.ejs",
+      "anatomy/tasks/register/register.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "403.ejs.ejs",
+    "fullPathAndFileName": "anatomy/views/403.ejs.ejs",
+    "data": {
+      "displayName": "403.ejs",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/views/views.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "404.ejs.ejs",
+    "fullPathAndFileName": "anatomy/views/404.ejs.ejs",
+    "data": {
+      "displayName": "404.ejs",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/views/views.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "500.ejs.ejs",
+    "fullPathAndFileName": "anatomy/views/500.ejs.ejs",
+    "data": {
+      "displayName": "500.ejs",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/views/views.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "homepage.ejs.ejs",
+    "fullPathAndFileName": "anatomy/views/homepage.ejs.ejs",
+    "data": {
+      "displayName": "homepage.ejs",
+      "lastModified": 1483231589000
+    },
+    "parent": "anatomy/views/views.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "layout.ejs.ejs",
+    "fullPathAndFileName": "anatomy/views/layout.ejs.ejs",
+    "data": {
+      "displayName": "layout.ejs",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/views/views.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "views.ejs",
+    "fullPathAndFileName": "anatomy/views/views.ejs",
+    "realPath": "anatomy/views/",
+    "data": {
+      "displayName": "views",
+      "lastModified": 1482175288000
+    },
+    "parent": "anatomy/anatomy.ejs",
+    "isChild": true,
+    "children": [
+      "anatomy/views/403.ejs.ejs",
+      "anatomy/views/homepage.ejs.ejs",
+      "anatomy/views/404.ejs.ejs",
+      "anatomy/views/500.ejs.ejs",
+      "anatomy/views/layout.ejs.ejs"
+    ],
+    "isParent": true
+  }
+]

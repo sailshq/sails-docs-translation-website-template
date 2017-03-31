@@ -1,0 +1,105 @@
+<h1 id="dominance">Dominance</h1>
+<h2 id="example-ontology" permalink="example-ontology">Example Ontology</h2>
+<pre><code class="javascript">// User.js
+module.exports = {
+  connection: &apos;ourMySQL&apos;,
+  attributes: {
+    email: &apos;string&apos;,
+    wishlist: {
+      collection: &apos;product&apos;,
+      via: &apos;wishlistedBy&apos;
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<pre><code class="javascript">// Product.js
+module.exports = {
+  connection: &apos;ourRedis&apos;,
+  attributes: {
+    name: &apos;string&apos;,
+    wishlistedBy: {
+      collection: &apos;user&apos;,
+      via: &apos;wishlist&apos;
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="the-problem" permalink="the-problem">The Problem</h3>
+<p>It&apos;s easy to see what&apos;s going on in this cross-adapter relationship.  There&apos;s a many-to-many ( <code>N-&gt;...</code> ) relationship between users and products.  In fact, you can imagine a few other relationships (e.g. purchases) which might exist, but since those are probably better-represented using a middleman model, I went for something simple in this example.</p>
+<p>Anyways, that&apos;s all great... but where does the relationship resource live?  &quot;ProductUser&quot;, if you&apos;ll pardon with the SQL-oriented nomenclature.  We know it&apos;ll end up on one side or the other, but what if we want to control which database it ends up in? </p>
+<blockquote>
+<p><strong>IMPORTANT NOTE</strong></p>
+<p>This is <em>only a problem because both sides of the association have a <code>via</code> modifier specified</em>!!
+In the absence of <code>via</code>, a collection attribute always behaves as <code>dominant: true</code>.
+See the FAQ below for more information.</p>
+</blockquote>
+<h2 id="the-solution" permalink="the-solution">The Solution</h2>
+<p>Eventually, it may even be possible to specify a 3rd connection/adapter to use for the join table.  For now, we&apos;ll focus on choosing one side or the other.</p>
+<p>We address this through the concept of &quot;dominance.&quot;  In any cross-adapter model relationship, one side is assumed to be dominant.  It may be helpful to think about the analogy of a child with multinational parents who must choose one country or the other for her <a href="http://en.wikipedia.org/wiki/Japanese_nationality_law" target="_blank">citizenship</a></p>
+<p>Here&apos;s the ontology again, but this time we&apos;ll indicate the MySQL database as the &quot;dominant&quot;.  This means that the &quot;ProductUser&quot; relationship &quot;table&quot; will be stored as a MySQL table.</p>
+<pre><code class="javascript">// User.js
+module.exports = {
+  connection: &apos;ourMySQL&apos;,
+  attributes: {
+    email: &apos;string&apos;,
+    wishlist: {
+      collection: &apos;product&apos;,
+      via: &apos;wishlistedBy&apos;,
+      dominant: true
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<pre><code class="javascript">// Product.js
+module.exports = {
+  connection: &apos;ourRedis&apos;,
+  attributes: {
+    name: &apos;string&apos;,
+    wishlistedBy: {
+      collection: &apos;user&apos;,
+      via: &apos;wishlist&apos;
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="choosing-a-dominant-" permalink="choosing-a-dominant">Choosing a &quot;dominant&quot;</h2>
+<p>Several factors may influence your decision:</p>
+<ul>
+<li>If one side is a SQL database, placing the relationship table on that side will allow your queries to be more efficient, since the relationship table can be joined before the other side is communicated with.  This reduces the number of total queries required from 3 to 2.</li>
+<li>If one connection is much faster than the other, all other things being equal, it probably makes sense to put the connection on that side.</li>
+<li>If you know that it is much easier to migrate one of the connections, you may choose to set that side as <code>dominant</code>.  Similarly, regulations or compliance issues may affect your decision as well.  If the relationship contains sensitive patient information (for instance, a relationship between <code>Patient</code> and <code>Medicine</code>) you want to be sure that all relevant data is saved in one particular database over the other (in this case, <code>Patient</code> is likely to be <code>dominant</code>).</li>
+<li>Along the same lines, if one of your connections is read-only (perhaps <code>Medicine</code> in the previous example is connected to a read-only vendor database), you won&apos;t be able to write to it, so you&apos;ll want to make sure your relationship data can be persisted safely on the other side.</li>
+</ul>
+<h2 id="faq" permalink="faq">FAQ</h2>
+<h5 id="what-if-one-of-the-collections-doesn-t-have-via-" permalink="what-if-one-of-the-collections-doesnt-have-via">What if one of the collections doesn&apos;t have <code>via</code>?</h5>
+<blockquote>
+<p>If a <code>collection</code> association does not have a <code>via</code> property, it is automatically <code>dominant: true</code>.</p>
+</blockquote>
+<h5 id="what-if-both-collections-don-t-have-via-" permalink="what-if-both-collections-dont-have-via">What if both collections don&apos;t have <code>via</code>?</h5>
+<blockquote>
+<p>If both <code>collections</code> don&apos;t have <code>via</code>, then they are not related.  Both are <code>dominant</code>, because they are separate relationship tables!!</p>
+</blockquote>
+<h5 id="what-about-model-associations-" permalink="what-about-model-associations">What about <code>model</code> associations?</h5>
+<blockquote>
+<p>In all other types of associations, the <code>dominant</code> property is prohibited.  Setting one side to <code>dominant</code> is only necessary for associations between two models which have an attribute like: <code>{ via: &apos;...&apos;, collection: &apos;...&apos; }</code> on both sides.</p>
+</blockquote>
+<h5 id="can-a-model-be-dominant-for-one-attribute-and-not-another-" permalink="can-a-model-be-dominant-for-one-attribute-and-not-another">Can a model be dominant for one attribute and not another?</h5>
+<blockquote>
+<p>Keep in mind that a model is &quot;dominant&quot; only in the context of a particular relationship.  A model may be dominant in one or more relationships (attributes) while simultaneously NOT being dominant in other relationships (attributes).
+e.g. if a <code>User</code> has a collection of toys called <code>favoriteToys</code> via <code>favoriteToyOf</code> on the <code>Toy</code> model, and <code>favoriteToys</code> on <code>User</code> is <code>dominant: true</code>, <code>Toy</code> can still be dominant in other ways.  So <code>Toy</code> might also be associated to <code>User</code> by way of its attribute, <code>designedBy</code>, for which it is <code>dominant: true</code>.</p>
+</blockquote>
+<h5 id="can-both-models-be-dominant-" permalink="can-both-models-be-dominant">Can both models be dominant?</h5>
+<blockquote>
+<p>No. If both models in a cross-adapter/cross-connection, many-to-many association set <code>dominant: true</code>, an error is thrown before lift.</p>
+</blockquote>
+<h5 id="can-neither-model-be-dominant-" permalink="can-neither-model-be-dominant">Can neither model be dominant?</h5>
+<blockquote>
+<p>Sort of... If neither model in a cross-adapter/cross-connection, many-to-many association sets <code>dominant: true</code>, a warning is displayed before lift, and a guess will be made automatically based on the characteristics of the relationship.  For now, that just means an arbitrary decision based on alphabetical order :)</p>
+</blockquote>
+<h5 id="what-about-non-cross-adapter-associations-" permalink="what-about-noncrossadapter-associations">What about non-cross-adapter associations?</h5>
+<blockquote>
+<p>The <code>dominant</code> property is silently ignored in non-cross-adapter/cross-connection associations.  We&apos;re assuming you might be planning on breaking up the schema across multiple connections eventually, and there&apos;s no reason to prevent you from being proactive.  Plus, this reserves additional future utility for the &quot;dominant&quot; option down the road.</p>
+</blockquote>
+<docmeta name="displayName" value="Dominance">
+
+</docmeta>

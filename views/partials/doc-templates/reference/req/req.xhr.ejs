@@ -1,0 +1,19 @@
+<h1 id="req-xhr">req.xhr</h1>
+<p>A flag indicating whether the current request (<code>req</code>) appears to be an AJAX request (i.e. it was issued with its &quot;X-Requested-With&quot; header set to &quot;XMLHttpRequest&quot;.)</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.xhr;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">if (req.xhr) {
+  // Yup, it&apos;s AJAX alright.
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Whenever possible, you should prefer the <code>req.wantsJSON</code> flag.  Avoid writing custom content-negotiation negotiation logic into your app  - it makes your code more brittle and more verbose.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.xhr"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

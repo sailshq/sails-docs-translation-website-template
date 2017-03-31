@@ -1,0 +1,42 @@
+// Dependencies:
+@import '../utilities/index.less';
+@import '../styleguide/index.less';
+@import '../mixins/informational-page-heading.less';
+@import '../mixins/docs-page-mixins/docs-section.less';
+
+
+/**
+ * FAQ
+ */
+.faq() {
+
+  padding-bottom: 100px;
+  .page-header {
+    .informational-page-heading();
+  }
+
+  hr {
+    .divider();
+  }
+  .container {
+    .docs-section();
+    .container();
+    section {
+      h1 {
+        display: none;
+      }
+      hr {
+        padding-top: 50px;
+        margin-bottom: 50px;
+      }
+      padding-top: 75px;
+      padding-bottom: 75px;
+      .permalink-thing {
+        display: inline-block;
+        float: right;
+        position: relative;
+        top: -55px;
+      }
+    }
+  }
+}

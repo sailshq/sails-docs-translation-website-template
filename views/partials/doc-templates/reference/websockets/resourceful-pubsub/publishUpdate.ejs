@@ -1,0 +1,137 @@
+<h1 id="-publishupdate-">.publishUpdate()</h1>
+<p>Broadcast a conventional message indicating that the record with the specified <code>id</code> has been updated.</p>
+<pre><code class="javascript">Something.publishUpdate( id, changes )
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>Something.publishUpdate(id, changes, req);</code></li>
+<li><code>Something.publishUpdate(id, changes, req, options);</code></li>
+</ul>
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left"><code>id</code></td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble>,<bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <code>id</code> of the record whose subscribers will receive this broadcast. <br><br> e.g. <code>4</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left"><code>changes</code></td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The dictionary of changed attributes and their new values to announce.  This may consist of any JSON--serializable data you like, but must <em>at-minimum</em> contain the <code>id</code> (primary key) of the record.</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:left"><em><code>req</code></em></td>
+<td><bubble type="req?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If provided, then the requesting socket <em>will be excluded</em> from the broadcast.</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:left"><em><code>options</code></em></td>
+<td><bubble type="dictionary?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">A dictionary of additional options.  See below.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="additional-options" permalink="additional-options">Additional Options</h5>
+<p>If the <code>options</code> dictionary is provided, and it contains a <code>previous</code> property, then it is expected to be a representation of the record&apos;s values <em>before</em> they were updated.  This may be used to determine whether or not to broadcast additional messages.  See, by default if <code>options.previous</code> is provided, <code>publishUpdate()</code> will check whether any associated records were affected by the update, and possibly send out additional notifications (if a reflexive association was changed).</p>
+<p>For example, let&apos;s say a <code>Pet</code> model has an <code>owner</code> association (a <em>singular</em>, or &quot;model&quot; association) which connects each Pet record with up to one distinct User record.  Conversely, this means any User record could own several pets (or none).  So if the data sent with the call to <code>publishUpdate</code> indicates that the value of a pet&apos;s <code>owner</code> association changed (e.g. from <code>4</code> to <code>7</code>), then an additional <code>publishRemove</code> call would be made to inform client sockets subscribed to user <code>4</code> that this user has lost one of its pets.  Similarly, a <code>publishAdd</code> call would be made to inform client sockets subscribed to user <code>7</code> that this user has gained a new pet.</p>
+<p>To suppress automatic broadcasts for reflexive associations, set the <code>options.noReverse</code> flag to <code>true</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Option</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>noReverse</code></td>
+<td><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If set, automatic broadcasts for reflexive associations will be suppressed.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>previous</code></td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If provided, this dictionary will be understood as a set of previous values of updated attributes; from <em>before</em> they were updated, and it may be used to determine whether or not to broadcast additional messages as described above.  It will also be included in the message broadcasted to subscribed client sockets.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="behavior" permalink="behavior">Behavior</h5>
+<p><code>publishUpdate()</code> broadcasts to all sockets subscribed to the record (e.g. via <a href="/documentation/reference/web-sockets/resourceful-pub-sub/subscribe"><code>.subscribe()</code></a>) and uses the model&apos;s <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> as the event name.  The broadcasted event data received by the subscribed sockets will be a dictionary with the following properties:</p>
+<ul>
+<li><strong>verb</strong>  - a <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble> constant: <code>&apos;updated&apos;</code></li>
+<li><strong>id</strong> - the record&apos;s <code>id</code> which is a <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble> or <bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></li>
+<li><strong>data</strong> - the <bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble> of changed properties that was provided as <code>changes</code> when calling <code>.publishUpdate()</code> on the backend</li>
+<li><strong>previous</strong> - if present, this <bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble> contains the previous values of the now-updated attributes for convenience</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<p>In a controller+action...  Find a user by username and broadcast a message back to all of its subscribers:</p>
+<pre><code class="javascript">// Dye Bob&apos;s hair red.
+User.update({username: &apos;bob&apos;}).set({
+  hairColor: &apos;red&apos;
+}).exec(function(err, bobs){
+  if (err) return res.serverError(err);
+  if (bobs.length &gt; 1) return res.serverError(&apos;Consistency violation: somehow multiple users exist with the same username? There must be a bug elsewhere in the code base.&apos;);
+  if (bobs.length &lt; 1) return res.notFound();
+
+  // Broadcast a message telling anyone subscribed to Bob that his hair is now red.
+  // (note that we exclude the requesting socket from the broadcast, and also include Bob&apos;s previous hair color)
+  User.publishUpdate(bobs[0].id, {
+    hairColor: &apos;red&apos;
+  }, req, {
+    previous: {
+      hairColor: bobs[0].hairColor
+    }
+  });
+
+  return res.ok();
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>The endpoint will respond with a simple 200 (because of <code>res.ok()</code>), but all subscribed client sockets will receive a <code>user</code> event:</p>
+<pre><code class="javascript">// e.g. in the browser...
+io.socket.on(&apos;user&apos;, function (event){
+  switch (event.verb) {
+    case &apos;updated&apos;:
+      console.log(event);
+      // =&gt; see below
+      break;
+    default:
+      console.warn(&apos;Unrecognized socket event (`%s`) from server:&apos;,event.verb, event);
+  }
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>In this case, the logged message would look something like this:</p>
+<pre><code class="javascript">{
+  verb: &apos;updated&apos;,
+  id: 49,
+  data: {
+    hairColor: &apos;red&apos;
+  },
+  previous: {
+    hairColor: &apos;pink&apos;
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method works much in the same way as <a href="/documentation/reference/web-sockets/resourceful-pub-sub/message"><code>.message()</code></a>-- it just represents a more specific use case and has a few special features as described above.  For more conceptual background, see the overview on <a href="/documentation/reference/web-sockets/resourceful-pub-sub">resourceful pubsub</a>.</li>
+<li>It is important to understand that this method <strong>does not actually do anything to your database</strong>-- it is purely a conventional way of <em>announcing</em> that changes have occurred.  Underneath the covers, the resourceful pubsub methods are just using combinations of <code>sails.sockets</code> methods.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".publishUpdate()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

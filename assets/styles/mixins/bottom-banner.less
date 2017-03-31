@@ -1,0 +1,97 @@
+// Dependencies:
+@import '../utilities/index.less';
+@import '../styleguide/index.less';
+
+.bottom-banner() {
+  font-family: @main-font;
+  background-color: @brand-sails;
+  color: @accent-white;
+  padding-top: 125px;
+  padding-bottom: 125px;
+  a {
+    color: @tagline-blue;
+    font-weight: @bold;
+    &:hover {
+      color: @accent-white;
+      .transition(all 0.25s);
+    }
+  }
+  .container {
+    h3 {
+      .lg-section-header(@accent-white);
+      padding-bottom: 10px;
+      text-align: center;
+    }
+    p {
+      .lg-paragraph(@accent-white);
+      text-align: center;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 50px;
+    }
+    .btns {
+      .clearfix();
+      margin-left: auto;
+      margin-right: auto;
+      width: 480px;
+      text-align: center;
+      clear: both;
+      .btn {
+        .border-box();
+        width: 230px;
+        display: block;
+        float: left;
+        &.left-btn {
+          .lg-button(@black);
+          margin-right: 5px;
+          &:hover {
+            color: @brand-sails;
+          }
+        }
+        &.right-btn {
+          .lg-button(transparent);
+          margin-left: 5px;
+          &:hover {
+            color: @black;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    .container {
+      h3 {
+        font-size: 26px;
+        font-weight: @bold;
+      }
+      .btns {
+        .clearfix();
+        width: 100%;
+        .btn {
+          .border-box();
+          width: 230px;
+          margin-left: auto;
+          margin-right: auto;
+          float: none;
+          &.left-btn {
+            .lg-button(@black);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 10px;
+          }
+          &.right-btn {
+            .lg-button(transparent);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+          }
+        }
+      }
+    }
+  }
+}

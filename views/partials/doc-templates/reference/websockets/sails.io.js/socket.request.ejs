@@ -1,0 +1,98 @@
+<h1 id="io-socket-request-">io.socket.request()</h1>
+<p>Send a virtual request to a Sails server using Socket.io.</p>
+<p>This function is very similar to <a href="/documentation/reference/web-sockets/socket-client/io-socket-get"><code>io.socket.get()</code></a>, <a href="/documentation/reference/web-sockets/socket-client/io-socket-post"><code>io.socket.post()</code></a>, etc. except that it provides lower-level access to the request headers, parameters, method, and URL of the request.</p>
+<p>Using the automatically-created <a href="/documentation/reference/web-sockets/socket-client/io-socket"><code>io.socket</code></a> instance:</p>
+<pre><code class="javascript">io.socket.request(options, function (resData, jwres)){
+  // ...
+  // jwres.headers
+  // jwres.statusCode
+  // jwres.body === resData
+  // ...
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>method</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The HTTP request method; e.g. <code>&apos;GET&apos;</code>.</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The destination URL path; e.g. &quot;/checkout&quot;.</td>
+</tr>
+<tr>
+<td><em><code>data</code></em></td>
+<td style="text-align:center"><bubble type="json?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Optional. If provided, this request data will be JSON-encoded and included as the virtual HTTP body.</td>
+</tr>
+<tr>
+<td><em><code>headers</code></em></td>
+<td style="text-align:center"><bubble type="dictionary?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Optional. If provided, this dictionary of string headers will be sent as virtual request headers.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>resData</code></td>
+<td style="text-align:center"><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Data received in the response from the Sails server (=== <code>jwres.body</code>, and also equivalent to the HTTP response body.)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>jwres</code></td>
+<td style="text-align:center"><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>A <a href="https://github.com/balderdashy/sails-docs/blob/master/PAGE_NEEDED.md" target="_blank">JSON WebSocket Response</a> object.  Has <code>headers</code>, a <code>body</code>, and a <code>statusCode</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">io.socket.request({
+  method: &apos;get&apos;,
+  url: &apos;/user/3/friends&apos;,
+  data: {
+    limit: 15
+  },
+  headers: {
+    &apos;x-csrf-token&apos;: &apos;ji4brixbiub3&apos;
+  }
+}, function (resData, jwres) {
+  if (jwres.error) {
+    console.log(jwres.statusCode); // =&gt; e.g. 403
+    return;
+  }
+  console.log(jwres.statusCode); // =&gt; e.g. 200
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>A helpful analogy might be to think of the difference between <code>io.socket.get</code> and this method as the difference between JQuery&apos;s <code>$.get</code> and <code>$.ajax</code>.</li>
+<li>Remember that you can communicate with <em>any of your routes</em> using socket requests.</li>
+<li>Need to set custom headers for <em>all</em> outgoing requests?  Check out <a href="/documentation/reference/web-sockets/socket-client/io-sails"><code>io.sails.headers</code></a>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="io.socket.request()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

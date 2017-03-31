@@ -1,0 +1,286 @@
+// Dependencies:
+@import '../../utilities/index.less';
+@import '../../styleguide/index.less';
+
+/**
+ * Footer
+ */
+.footer() {
+  background-color: @black;
+  font-family: @main-font;
+
+  .navigation-footer {
+    position: relative;
+      .clearfix();
+      .container();
+      color: @accent-white;
+      padding-bottom: 60px;
+      padding-right: 600px;
+      z-index: 5;
+
+      .bottom-waves {
+      position: relative;
+      top: 0px;
+      width: 100%;
+
+      img {
+        position: absolute;
+        &.waves-left {
+          height: 30px;
+          left: -10px;
+          top: -24px;
+        }
+        &.waves-right {
+          height: 275px;
+          right: -10px;
+          top: -142px;
+        }
+      }
+    }
+    .left-column {
+      z-index: 50;
+      padding-top: 75px;
+      position: relative;
+      a {
+        color: @tagline-blue;
+        font-weight: @semibold;
+        &:hover {
+          color: @brand-sails;
+          .transition(all 0.25s);
+        }
+      }
+      h4 {
+        .border-box();
+        color: @accent-white;
+        font-family: @header-font;
+        font-size: 22px;
+        line-height: 26px;
+        font-weight: @light;
+        margin-bottom: 10px;
+      }
+      p, span {
+        .sm-paragraph(@accent-white);
+        font-weight: @light;
+        &.license-info {
+          font-size: 11px;
+          padding-top: 15px;
+          a {
+            color: inherit;
+            &:hover {
+              color: @brand-sails;
+            }
+          }
+        }
+      }
+    }
+    .sails-logo {
+      display: block;
+      width: 120px;
+      &.small-screen {
+        display: none;
+      }
+    }
+    .right-column {
+      .clearfix();
+      position: absolute;
+      width: 525px;
+      z-index: 100;
+      &.top {
+        top: 75px;
+        right: -10px;
+        .nav-list {
+          .border-box();
+          float: left;
+          h5 {
+            color: @accent-white;
+            font-family: @header-font;
+            font-size: 22px;
+            line-height: 26px;
+            font-weight: @light;
+            margin-bottom: 15px;
+            .divider {
+              display: none;
+            }
+          }
+          ul {
+            li {
+              display: block;
+              margin-bottom: 15px;
+              font-size: 15px;
+              a {
+                color: @accent-white;
+                font-weight: @light;
+                &:hover {
+                  color: @brand-sails;
+                }
+              }
+              &.small-screen {
+                display: none;
+              }
+            }
+          }
+          &.left-nav-list {
+            width: 150px;
+          }
+          &.middle-nav-list {
+            width: 175px;
+          }
+          &.right-nav-list {
+            width: 200px;
+          }
+        }
+      }
+      &.bottom {
+        z-index: 75;
+        bottom: 60px;
+        right: 10px;
+        .social-icons {
+          .clearfix();
+          width: 300px;
+          float: right;
+          i {
+            .transition(color 250ms);
+            float: left;
+            margin-right: 20px;
+            position: relative;
+            font-size: 36px;
+            color: @accent-white;
+            &:hover {
+              color:  @brand-sails;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 1000px) {
+    .navigation-footer {
+      .left-column.top {
+        display: none;
+      }
+      .left-column {
+        padding-bottom: 50px;
+      }
+      .right-column.bottom {
+        float: left;
+        left: 0px;
+        bottom: 60px;
+        .social-icons {
+          float: left;
+          i {
+            font-size: 26px;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    .navigation-footer {
+      padding-right: 0px;
+      padding-bottom: 60px;
+      .sails-logo {
+        &.wide-screen {
+          display: none;
+        }
+        &.small-screen {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          padding-top: 25px;
+          padding-bottom: 10px;
+        }
+      }
+      .left-column {
+        text-align: center;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        p.license-info {
+          padding-top: 0px;
+          text-align: center;
+          br {
+            display: none;
+          }
+        }
+      }
+      .right-column {
+        width: 100%;
+        position: static;
+        &.top {
+          padding-top: 15px;
+          padding-bottom: 0px;
+          .nav-list.left-nav-list, .nav-list.middle-nav-list, .nav-list.right-nav-list {
+            display: block;
+            width: 100%;
+            text-align: center;
+            h5 {
+              display: none;
+              font-size: 17px;
+              margin-right: 20px;
+            }
+            ul {
+              display: inline-block;
+              li {
+                display: inline-block;
+                margin-right: 24px;
+                font-size: 17px;
+                a {
+                  color: @brand-sails;
+                }
+                &.small-screen {
+                  display: inline-block;
+                }
+                &.wide-screen {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
+      }
+      .right-column.bottom {
+        position: absolute;
+        float: left;
+        left: 0px;
+        bottom: 15px;
+        .social-icons {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 230px;
+          float: none;
+          .icon {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            img {
+              width: 30px;
+              height: 30px;
+            }
+            &:last-child {
+              margin-right: 0px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    .navigation-footer {
+      .right-column {
+        &.top {
+          .nav-list.left-nav-list, .nav-list.middle-nav-list, .nav-list.right-nav-list {
+            ul {
+              li {
+                margin-right: 10px;
+                font-size: 15px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

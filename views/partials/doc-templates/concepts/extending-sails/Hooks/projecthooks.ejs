@@ -1,0 +1,24 @@
+<h1 id="creating-a-project-hook">Creating a Project Hook</h1>
+<p>Project hooks are custom Sails hooks that reside in an application&#x2019;s <code>api/hooks</code> folder.  They are typically useful when you want to take advantage of hook features like <a href="/documentation/concepts/extending-sails/Hooks/hookspec/defaults.html">defaults</a> and <a href="/documentation/concepts/extending-sails/Hooks/hookspec/routes.html">routes</a> for code that is used by multiple components in a single app.  If you wish to re-use a hook in <em>more than one</em> Sails app, see <a href="/documentation/concepts/extending-sails/Hooks/installablehooks.html">creating an installable hook</a> instead.</p>
+<p>To create a new project hook:</p>
+<ol>
+<li>Choose a name for your new hook.  It must not conflict with any of the <a href="https://github.com/balderdashy/sails/blob/master/lib/app/configuration/default-hooks.js" target="_blank">core hook names</a>.</li>
+<li>Create a folder with that name in your app&#x2019;s <code>api/hooks</code> folder.</li>
+<li>Add an <code>index.js</code> file to that folder.</li>
+<li>Write your hook code in <code>index.js</code> in accordance with the <a href="/documentation/concepts/extending-sails/hooks/hook-specification">hook specification</a>.</li>
+</ol>
+<p>Your new folder may contain other files as well, which can be loaded in your hook via <code>require</code>; only <code>index.js</code> will be read automatically by Sails.</p>
+<p>As an alternative to a folder, you may create a file in your app&#x2019;s <code>api/hooks</code> folder like <code>api/hooks/myProjectHook.js</code>.</p>
+<h4 id="testing-that-your-hook-loads-properly" permalink="testing-that-your-hook-loads-properly">Testing that your hook loads properly</h4>
+<p>To test that your hook is being loaded by Sails, lift your app with <code>sails lift --verbose</code>.  If your hook is loaded, you will see a message like:</p>
+<p><code>verbose: your-hook-name hook loaded successfully.</code></p>
+<p>in the logs.</p>
+<ul>
+<li><a href="/documentation/concepts/extending-sails/Hooks">Hooks overview</a></li>
+<li><a href="/documentation/concepts/extending-sails/Hooks/usinghooks.html">Using hooks in your app</a></li>
+<li><a href="/documentation/concepts/extending-sails/Hooks/hookspec">The hook specification</a></li>
+<li><a href="/documentation/concepts/extending-sails/Hooks/installablehooks.html">Creating an installable hook</a></li>
+</ul>
+<p><docmeta name="displayName" value="Project Hooks"></docmeta></p>
+<docmeta name="stabilityIndex" value="3">
+</docmeta>

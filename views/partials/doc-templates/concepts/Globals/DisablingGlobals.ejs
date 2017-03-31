@@ -1,0 +1,26 @@
+<h1 id="disabling-globals">Disabling Globals</h1>
+<p>Sails determines which globals to expose by looking at <a href="/documentation/reference/sails.config/sails.config.globals.html"><code>sails.config.globals</code></a>, which is conventionallly configured in <a href="/documentation/anatomy/config/globals.js.html"><code>config/globals.js</code></a>.</p>
+<p>To disable all global variables, just set the setting to <code>false</code>:</p>
+<pre><code class="javascript">// config/globals.js
+module.exports.globals = false;
+</code></pre><!-- __LANG=%%__ -->
+<p>To disable <em>some</em> global variables, specify an object instead, e.g.:</p>
+<pre><code class="javascript">// config/globals.js
+module.exports.globals = {
+  _: false,
+  async: false,
+  models: false,
+  services: false
+};
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Bear in mind that none of the globals, including <code>sails</code>, are accessible until <em>after</em> sails has loaded.  In other words, you won&apos;t be able to use <code>sails.models.user</code> or <code>User</code> outside of a function (since <code>sails</code> will not have finished loading yet.)</li>
+</ul>
+</blockquote>
+<!-- not true anymore:
+Most of this section of the docs focuses on the methods and properties of `sails`, the singleton object representing your app.
+-->
+<docmeta name="displayName" value="Disabling Globals">
+</docmeta>

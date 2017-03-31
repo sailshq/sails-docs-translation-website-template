@@ -1,0 +1,113 @@
+<h1 id="model-settings">Model Settings</h1>
+<p>In Sails, the top-level properties of model definitions are called <strong>model settings</strong>.  This includes everything from <a href="/documentation/concepts/models-and-orm/model-settings#?attributes">attribute definitions</a>, to the <a href="/documentation/concepts/models-and-orm/model-settings#?connection">database settings</a> the model will use, as well as a number of other options.</p>
+<p>The majority of this page is devoted to a complete tour of the model settings supported by Sails.  But before we begin, let&apos;s look at how to actually apply these settings in a Sails app.</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Model settings allow you to customize the behavior of the models in your Sails app.  They can be specified on a per-model basis by setting top-level properties in a <a href="/documentation/concepts/models-and-orm/models">model definition</a>, or as app-wide defaults in <a href="/documentation/reference/configuration/sails-config-models"><code>sails.config.models</code></a>.</p>
+<h5 id="changing-default-model-settings" permalink="changing-default-model-settings">Changing default model settings</h5>
+<p>To modify the <a href="/documentation/reference/configuration/sails-config-models">default model settings</a> shared by all of the models in your app, edit <a href="/documentation/anatomy/my-app/config/models-js"><code>config/models.js</code></a>.</p>
+<p>For example, if you edit <code>config/models.js</code> so that it contains <code>connection: &apos;somePostgresqlDb&apos;</code>, then, assuming you&apos;ve defined a connection named <code>somePostgresqlDb</code>, you&apos;ll set PostgreSQL as your default database.  In other words, unless overridden, all of your app&apos;s models will use that PostgreSQL datastore any time built-in model methods like <code>.create()</code> or <code>.find()</code> are executed.</p>
+<h5 id="overriding-settings-for-a-particular-model" permalink="overriding-settings-for-a-particular-model">Overriding settings for a particular model</h5>
+<p>To further customize these settings for a particular model, you can specify them as top-level properties in that model&apos;s definition file (e.g. <code>api/models/User.js</code>).  This will override default model settings with the same name.</p>
+<p>For example, if you add <code>autoUpdatedAt: false</code> to one of your model definitions (<code>api/models/UploadedFile.js</code>), then that model will no longer have an implicit <code>updatedAt</code> attribute.  But the rest of your models will be unaffected; they will still use the default setting (which is <code>autoUpdatedAt: true</code>, unless you&apos;ve changed it).</p>
+<h5 id="which-approach-should-i-use-" permalink="which-approach-should-i-use">Which approach should I use?</h5>
+<p>By convention, attribute definitions are specified in individual model files.  Most other model settings, like <code>schema</code> and <code>connection</code>, should be specified app-wide unless you need to override them for a particular model; for example, if your default datastore is PostgreSQL, but you have an <code>CachedBloodworkReport</code> model that you want to live in Redis.</p>
+<p>Now that you know what model settings are in general, and how to configure them, let&apos;s run through and have a look at each one.</p>
+<hr>
+<h3 id="-migrate-" permalink="migrate"><code>migrate</code></h3>
+<pre><code class="javascript">migrate: &apos;safe&apos;
+</code></pre><!-- __LANG=%%__ -->
+<p>The <code>migrate</code> setting controls the <strong>auto-migration strategy</strong> that Sails will run every time your app loads.  In short, this tells Sails whether or not you&apos;d like it to attempt to automatically rebuild the tables/collections/sets/etc. in your database(s).</p>
+<h5 id="database-migrations" permalink="database-migrations">Database migrations</h5>
+<p>In the course of developing an app, you will almost always need to make at least one or two <strong>breaking changes</strong> to the structure of your database.  Exactly <em>what</em> constitutes a &quot;breaking change&quot; depends on the database you&apos;re using:  For example, imagine you add a new attribute to one of your model definitions.  If that model is configured to use MongoDB, then this is no big deal; you can keep developing as if nothing happened.  But if that model is configured to use MySQL, then there is an extra step: a column must be added to the corresponding table (otherwise model methods like <code>.create()</code> will stop working.)  So for a model using MySQL, adding an attribute is a breaking change to the database schema.</p>
+<blockquote>
+<p>Even if all of your models use MongoDB, there are still some breaking schema changes to watch out for.  For example, if you add <code>unique: true</code> to one of your attributes, a <a href="https://docs.mongodb.com/manual/core/index-unique/" target="_blank">unique index</a> must be created in MongoDB.</p>
+</blockquote>
+<p>In Sails, there are two different modes of operation when it comes to <a href="https://en.wikipedia.org/wiki/Schema_migration" target="_blank">database migrations</a>:</p>
+<ol>
+<li><strong>Manual migrations</strong> - The art of updating your database tables/collections/sets/etc. by hand.  For example, writing a SQL query to <a href="http://dev.mysql.com/doc/refman/5.7/en/alter-table.html" target="_blank">add a new column</a>, or sending a <a href="https://docs.mongodb.com/manual/core/index-unique/" target="_blank">Mongo command to create a unique index</a>.  If the database contains data you care about (in production, for example), you must carefully consider whether that data needs to change to fit the new schema, and, if necessary, write scripts to migrate it.  A <a href="https://www.npmjs.com/package/sails-migrations" target="_blank">number of</a> great <a href="http://knexjs.org/#Migrations-CLI" target="_blank">open-source tools</a> exist for managing manual migration scripts, as well as hosted products like the <a href="https://aws.amazon.com/blogs/aws/aws-database-migration-service/" target="_blank">database migration service on AWS</a>.</li>
+<li><strong>Auto-migrations</strong> - A convenient, built-in feature in Sails that allows you to make iterative changes to your model definitions during development, without worrying about the reprecussions.  Auto-migrations should <em>never</em> be enabled when connecting to a database with data you care about.  Instead, use auto-migrations with fake data, or with cached data that you can easily recreate.</li>
+</ol>
+<p>Whenever you need to apply breaking changes to your <em>production database</em>, you should use manual database migrations. But otherwise, when you&apos;re developing on your laptop, or running your automated tests, auto-migrations can save you tons of time.</p>
+<h5 id="how-auto-migrations-work" permalink="how-automigrations-work">How auto-migrations work</h5>
+<p>When you lift your Sails app in a development environment (e.g. running <code>sails lift</code> in a brand new Sails app), the configured auto-migration strategy will run.  If you are using <code>migrate: &apos;safe&apos;</code>, then nothing extra will happen at all.  But if you are using <code>drop</code> or <code>alter</code>, Sails will load every record in your development database into memory, then drop and recreate the physical layer representation of the data (i.e. tables/collections/sets/etc.)  This allows any breaking changes you&apos;ve made in your model definitions, lik removing a uniqueness constraint, to be automatically applied to your development database.  Finally, if you are using <code>alter</code>, Sails will then attempt to re-seed the freshly generated tables/collections/sets with the records it saved earlier.  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Auto-migration strategy</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>safe</code></td>
+<td style="text-align:left">never auto-migrate my database(s). I will do it myself, by hand.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>alter</code></td>
+<td style="text-align:left">auto-migrate columns/fields, but attempt to keep my existing data (experimental)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>drop</code></td>
+<td style="text-align:left">wipe/drop ALL my data and rebuild models every time I lift Sails</td>
+</tr>
+</tbody>
+</table>
+<h5 id="can-i-use-auto-migrations-in-production-" permalink="can-i-use-automigrations-in-production">Can I use auto-migrations in production?</h5>
+<p>The <code>drop</code> and <code>alter</code> auto-migration strategies in Sails exist as a feature for your convenience during development, and when running automated tests.  <strong>They are not designed to be used with data you care about.</strong>  Please take care to never use <code>drop</code> or <code>alter</code> with a production dataset.  In fact, as a failsafe to help protect you from doing this inadvertently, any time you lift your app <a href="/documentation/reference/configuration/sails-config#?sailsconfigenvironment">in a production environment</a>, Sails <em>always</em> uses <code>migrate: &apos;safe&apos;</code>, no matter what you have configured.</p>
+<p>In many cases, hosting providers automatically set the <code>NODE_ENV</code> environment variable to &quot;production&quot; when they detect a Node.js app.  Even so, please don&apos;t rely only on that failsafe, and take the usual precautions to keep your users&apos; data safe.  Any time you connect Sails (or any other tool or framework) to a database with pre-existing production data, <strong>do a dry run</strong>.  Especially the very first time.  Production data is sensitive, valuable, and in many cases irreplaceable.  Customers, users, and their lawyers are not cool with it getting flushed.</p>
+<p>As a best practice, make sure to never lift or <a href="/documentation/concepts/deployment">deploy</a> your app with production database credentials unless you are 100% sure you are running in a production environment.  A popular approach for solving this organization-wide is simply to <em>never</em> push up production database credentials to your source code repository in the first place, and instead relying on <a href="/documentation/reference/configuration">environment variables</a> for all sensitive credentials.  (This is an especially good idea if your app is subject to regulatory requirements, or if a large number of people have access to your code base.) </p>
+<h5 id="are-auto-migrations-slow-" permalink="are-automigrations-slow">Are auto-migrations slow?</h5>
+<p>If you are working with a relatively large amount of development/test data, the <code>alter</code> auto-migration strategy may take a long time to complete at startup.  If you notice that a command like <code>npm test</code>, <code>sails console</code>, or <code>sails lift</code> appears to hang, consider decreasing the size of your development dataset.  (Remember: Sails auto-migrations should only be used on your local laptop/desktop computer, and only with small, development datasets.)</p>
+<h3 id="-schema-" permalink="schema"><code>schema</code></h3>
+<pre><code class="javascript">schema: true
+</code></pre><!-- __LANG=%%__ -->
+<p>A flag to toggle schemaless or schema mode in databases that support schemaless data structures. If turned off, this will allow you to store arbitrary data in a record. If turned on, only attributes defined in the model&apos;s <code>attributes</code> object will be stored.</p>
+<p>For adapters that don&apos;t require a schema, such as Mongo or Redis, the default setting is <code>schema:false</code>.</p>
+<h3 id="-connection-" permalink="connection"><code>connection</code></h3>
+<pre><code class="javascript">connection: &apos;my-local-postgresql&apos;
+</code></pre><!-- __LANG=%%__ -->
+<p>The configured database <a href="/documentation/reference/sails.config/sails.config.connections.html">connection</a> where this model will fetch and save its data.  Defaults to <code>localDiskDb</code>, the default connection that uses the <code>sails-disk</code> adapter.</p>
+<h3 id="-identity-" permalink="identity"><code>identity</code></h3>
+<pre><code class="javascript">identity: &apos;purchase&apos;
+</code></pre><!-- __LANG=%%__ -->
+<p>The lowercase unique key for this model, e.g. <code>user</code>.  By default, a model&apos;s <code>identity</code> is inferred automatically by lowercasing its filename.  You should never change this property on your models.</p>
+<h3 id="-globalid-" permalink="globalid"><code>globalId</code></h3>
+<pre><code class="javascript">globalId: &apos;Purchase&apos;
+</code></pre><!-- __LANG=%%__ -->
+<p>This flag changes the global name by which you can access your model (if the globalization of models is enabled).  You should never change this property on your models. To disable globals, see <a href="/documentation/concepts/Globals?q=disabling-globals"><code>sails.config.globals</code></a>.</p>
+<h3 id="autopk" permalink="autopk">autoPK</h3>
+<pre><code class="javascript">autoPK: true
+</code></pre><!-- __LANG=%%__ -->
+<p>A flag to toggle the automatic definition of a primary key in your model. The details of this default PK vary between adapters (e.g. MySQL uses an auto-incrementing integer primary key, whereas MongoDB uses a randomized string UUID).  In any case, the primary keys generated by autoPK will be unique. If turned off no primary key will be created by default, and you will need to define one manually, e.g.:</p>
+<pre><code class="javascript">attributes: {
+  sku: {
+    type: &apos;string&apos;,
+    primaryKey: true,
+    unique: true
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="-autocreatedat-" permalink="autocreatedat"><code>autoCreatedAt</code></h3>
+<pre><code class="javascript">autoCreatedAt: true
+</code></pre><!-- __LANG=%%__ -->
+<p>If set to <code>false</code>, this disables the automatic definition of a <code>createdAt</code> attribute in your model.  By default, <code>createdAt</code> is an attribute which will be automatically set when a record is created with the current (timezone-agnostic) timestamp.   If set to a string, that string will be used as the custom field/column name for the <code>createdAt</code> attribute.</p>
+<h3 id="-autoupdatedat-" permalink="autoupdatedat"><code>autoUpdatedAt</code></h3>
+<pre><code class="javascript">autoUpdatedAt: true
+</code></pre><!-- __LANG=%%__ -->
+<p>If set to <code>false</code>, this disables the automatic definition of an <code>updatedAt</code> attribute in your model.  By default, <code>updatedAt</code> is an attribute which will be automatically set with the current (timezone-agnostic) timestamp every time a record is updated.  If set to a string, that string will be used as the custom field/column name for the <code>updatedAt</code> attribute.</p>
+<h3 id="tablename" permalink="tablename">tableName</h3>
+<pre><code class="javascript">tableName: &apos;some_preexisting_table&apos;
+</code></pre><!-- __LANG=%%__ -->
+<p>You can define a custom name for the physical collection in your adapter by adding a <code>tableName</code> attribute. <strong>This isn&apos;t just for tables</strong>.  In MySQL, PostgreSQL, Oracle, etc. this setting refers to the name of the table, but in MongoDB or Redis, it refers to the collection, and so forth. If no tableName is specified, Waterline will use the model&apos;s <code>identity</code> as its <code>tableName</code>.</p>
+<p>This is particularly useful for working with pre-existing/legacy databases.</p>
+<!-- in WL2, this is `cid` (but is backwards-compatible) -->
+<h3 id="-attributes-" permalink="attributes"><code>attributes</code></h3>
+<pre><code class="javascript">attributes: {
+  name: { type: &apos;string&apos; },
+  email: { type: &apos;email&apos; },
+  age: { type: &apos;integer&apos; }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>See <a href="/documentation/concepts/ORM/Attributes.html">Attributes</a>.</p>
+<docmeta name="displayName" value="Model Settings">
+</docmeta>

@@ -1,0 +1,62 @@
+<h1 id="cross-origin-resource-sharing-cors-">Cross-Origin Resource Sharing (CORS)</h1>
+<!--
+Every Sails app comes ready to handle AJAX requests from a web page on the same domain.  But what if you need to handle AJAX requests 
+originating from other domains?
+-->
+<p><a href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_blank">CORS</a> is a mechanism that allows browser scripts on pages served from other domains (e.g. myothersite.com) to talk to your server (e.g. api.mysite.com).  Like <a href="https://en.wikipedia.org/wiki/JSONP" target="_blank">JSONP</a>, the goal of CORS is to circumvent the <a href="http://en.wikipedia.org/wiki/Same-origin_policy" target="_blank">same-origin policy</a>; allowing your Sails server to successfully respond to requests from client-side JavaScript code running on a page hosted from some other domain.  But unlike JSONP, it works with more than just GET requests.  And it allows you to whitelist particular origins (<code>staging.yoursite.com</code> or <code>yourothersite.net</code>) and prevent requests from others (<code>evil.com</code>).</p>
+<p>Sails can be configured to allow cross-origin requests from a list of domains you specify, or from every domain.  This can be done on a per-route basis, or globally for every route in your app.</p>
+<h3 id="enabling-cors" permalink="enabling-cors">Enabling CORS</h3>
+<p>For security reasons, CORS is disabled by default in Sails.  But enabling it is dead-simple.</p>
+<p>To allow cross-origin requests from a whitelist of trusted domains to <em>any</em> route in your app, simply enable <code>allRoutes</code> and provide an <code>origin</code> setting in <a href="/docs/reference/configuration/sails-config-cors"><code>config/cors.js</code></a>:</p>
+<pre><code class="javascript">allRoutes: true,
+origin: &apos;example.com,api.example.com,blog.example.com,foo.com&apos;
+</code></pre><!-- __LANG=%%__ -->
+<p>To allow cross-origin requests from <em>any</em> domain to <em>any</em> route in your app, use <code>origin: &apos;*&apos;</code>:</p>
+<pre><code class="javascript">allRoutes: true,
+origin: &apos;*&apos;,
+credentials: false
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<h4 id="warning-" permalink="warning">WARNING:</h4>
+<p>If you enable CORS with <code>origin: &apos;*&apos;</code>, but fail to also set <code>credentials: false</code>, your app will <strong>not</strong> be protected against attacks that exploit CORS.  To prevent third-party sites from being able to trick your logged-in users into making unauthorized requests to your app, you should either (A) set <code>origin</code> to a specific set of trusted domains, or (B) keep <code>origin: &apos;*&apos;</code> but set <code>credentials: false</code>.  Just realize that, if you choose to set <code>credentials: false</code>, affected routes will not be able to access the <a href="/docs/concepts/sessions">session</a>.</p>
+</blockquote>
+<p>See <a href="/docs/reference/configuration/sails-config-cors"><code>sails.config.cors</code></a> for a comprehensive reference of all available options.</p>
+<h3 id="configuring-cors-for-individual-routes" permalink="configuring-cors-for-individual-routes">Configuring CORS For individual routes</h3>
+<p>Besides the global CORS configuration in <code>config/cors.js</code>, you can also configure these settings on a per-route basis in <a href="/anatomy/config/routes-js"><code>config/routes.js</code></a>.</p>
+<p>If you set <code>allRoutes: true</code> in <code>config/cors.js</code>, but you want to exempt a specific route, set the <code>cors: false</code> in the route&apos;s target:</p>
+<pre><code class="javascript">&apos;POST /signup&apos;: {
+   controller: &apos;UserController&apos;,
+   action: &apos;signup&apos;,
+   cors: false
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>To enable or override global CORS configuration for a particular route, provide <code>cors</code> as a dictionary:</p>
+<pre><code class="javascript">&apos;GET /videos&apos;: {
+   controller: &apos;VideoController&apos;,
+   action: &apos;find&apos;,
+   cors: {
+     origin: &apos;example.com,api.example.com,blog.example.com,foo.com&apos;,
+     credentials: false
+   }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="security-levels" permalink="security-levels">Security levels</h3>
+<p>The browser&apos;s cross-origin policy allows requests to be sent-- it simply does not allow the browser to receive the response.  Similarly, Sails will still process all the requests that come in regardless of domain, even with CORS enabled.  But for routes with CORS enabled, it will simply set the appropriate headers on the response so that the <em>browser</em> can decide whether or not to expose the response.  For example, if you send a <code>GET</code> request to <code>/foo/bar</code> from a domain that is not in your CORS whitelist (<code>origin</code>), the <code>bar</code> action in your <code>FooController.js</code> file will still run, but the browser will throw away the result.  This may seem counterintuitive, but it is important because it allows non-browser-based clients (like <a href="https://www.getpostman.com" target="_blank">Postman</a> and <a href="http://curl.haxx.se/" target="_blank">curl</a>) to work while still blocking the kind of attacks that the <a href="http://en.wikipedia.org/wiki/Same-origin_policy" target="_blank">Same-Origin Policy</a> is meant to protect against.</p>
+<p>If you want to completely prevent Sails from processing requests from disallowed domains, you can use the <code>securityLevel</code> setting:</p>
+<pre><code class="javascript">module.exports.cors = {
+  allRoutes: true,
+  origin: &quot;http://sailsjs.com&quot;,
+  securityLevel: 1
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Security level 1 (high) will respond with a 403 status code to any request from a disallowed origin prefixed with the <code>http</code> or <code>https</code> protocol.  Security level 2 (very high) will do the same, but extended to <em>all</em> protocols (so things like Postman and curl won&apos;t work).</p>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>CORS is not supported in Internet Explorer 7.  Fortunately, it is supported in IE8 and up, as well as in all other modern browsers.</li>
+<li>Read <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS" target="_blank">more about CORS from MDN</a></li>
+<li>Read the <a href="https://www.w3.org/TR/cors/" target="_blank">CORS spec</a></li>
+</ul>
+</blockquote>
+<docmeta name="displayName" value="CORS">
+</docmeta>

@@ -1,0 +1,28 @@
+<h1 id="sailssocket-methods">SailsSocket Methods</h1>
+<p>This section describes the methods available on each SailsSocket instance.  Most of these methods can be called even before the socket connects to the server.  In the case of request methods like <code>.get()</code> and <code>.request()</code>, calls will be queued up until the socket connects, at which time they will be replayed in order.</p>
+<h3 id="basic-methods" permalink="basic-methods">Basic methods</h3>
+<p>The most common methods you will use with a SailsSocket instance are documented in the main Socket Client reference section.  These include <a href="/documentation/reference/web-sockets/socket-client/io-socket-get"><code>.get()</code></a>, <a href="/documentation/reference/web-sockets/socket-client/io-socket-put"><code>.put()</code></a>, <a href="/documentation/reference/web-sockets/socket-client/io-socket-post"><code>.post()</code></a>, <a href="/documentation/reference/web-sockets/socket-client/io-socket-delete"><code>.delete()</code></a>, <a href="/documentation/reference/web-sockets/socket-client/io-socket-request"><code>.request()</code></a>, <a href="/documentation/reference/web-sockets/socket-client/io-socket-on"><code>.on()</code></a> and <a href="/documentation/reference/web-sockets/socket-client/io-socket-off"><code>.off()</code></a>.</p>
+<h3 id="advanced-methods" permalink="advanced-methods">Advanced methods</h3>
+<p>In addition to the basic communication / event listening methods, each SailsSocket instance (including <code>io.socket</code>) exposes some additional methods for dealing with server connections.</p>
+<h5 id="-isconnected-" permalink="isconnected()">.isConnected()</h5>
+<p>Determines whether the SailsSocket instance is currently connected to a server, returning <code>true</code> if a connection has been established.</p>
+<pre><code class="javascript">io.socket.isConnected();
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="-disconnect-" permalink="disconnect()">.disconnect()</h5>
+<p>Disconnect a SailsSocket instance from the server.  Will throw an error if the socket is already disconnected.</p>
+<pre><code class="javascript">io.socket.disconnect();
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="-reconnect-" permalink="reconnect()">.reconnect()</h5>
+<p>Reconnect a SailsSocket instance to a server after being disconnected (either involuntarily or via a call to <a href="/documentation/reference/web-sockets/socket-client/sails-socket/methods#?disconnect"><code>.disconnect()</code></a>).  The instance will connect using its currently configured <a href="/documentation/reference/web-sockets/socket-client/sails-socket/properties">properties</a>.  Throws an error if the socket is already connected to a server.</p>
+<pre><code class="javascript">io.socket.reconnect();
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>While an instance is in a disconnected state, all of its properties may be changed.  This allows you to disconnect an instance from one server and reconnect it to another without losing its event bindings or queued requests.</p>
+</blockquote>
+<h5 id="-removealllisteners-" permalink="removealllisteners()">.removeAllListeners()</h5>
+<p>Stop listening for all server-related events on a SailsSocket instance.  Note that this includes <code>connect</code> and <code>disconnect</code> events!</p>
+<pre><code class="javascript">io.socket.removeAllListeners();
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="Methods">
+
+</docmeta>

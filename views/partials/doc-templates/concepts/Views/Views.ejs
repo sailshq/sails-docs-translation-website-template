@@ -1,0 +1,40 @@
+<h1 id="views">Views</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>In Sails, views are markup templates that are compiled <em>on the server</em> into HTML pages.  In most cases, views are used as the response to an incoming HTTP request, e.g. to serve your home page.</p>
+<p>Alternatively, a view can be compiled directly into an HTML string for use in your backend code (see <a href="https://github.com/balderdashy/sails-docs/blob/master/PAGE_NEEDED.md" target="_blank"><code>sails.renderView()</code></a>.)  For instance, you might use this approach to send HTML emails, or to build big XML strings for use with a legacy API.</p>
+<h5 id="creating-a-view" permalink="creating-a-view">Creating a view</h5>
+<p>By default, Sails is configured to use EJS (<a href="http://embeddedjs.com/" target="_blank">Embedded Javascript</a>) as its view engine.  The syntax for EJS is highly conventional- if you&apos;ve worked with php, asp, erb, gsp, jsp, etc., you&apos;ll immediately know what you&apos;re doing.</p>
+<p>If you prefer to use a different view engine, there are a multitude of options.  Sails supports all of the view engines compatible with <a href="https://github.com/balderdashy/sails-docs/blob/master/PAGE_NEEDED.md" target="_blank">Express</a> via <a href="https://github.com/visionmedia/consolidate.js/" target="_blank">Consolidate</a>.</p>
+<p>Views are defined in your app&apos;s <a href="/documentation/anatomy/myApp/views"><code>views/</code></a> folder by default, but like all of the default paths in Sails, they are <a href="https://github.com/balderdashy/sails-docs/blob/master/PAGE_NEEDED.md" target="_blank">configurable</a>.  If you don&apos;t need to serve dynamic HTML pages at all (say, if you&apos;re building an API for a mobile app), you can remove the directory from your app.</p>
+<h5 id="compiling-a-view" permalink="compiling-a-view">Compiling a view</h5>
+<p>Anywhere you can access the <code>res</code> object (i.e. a controller action, custom response, or policy), you can use <a href="/documentation/reference/res/res.view.html"><code>res.view</code></a> to compile one of your views, then send the resulting HTML down to the user.</p>
+<p>You can also hook up a view directly to a route in your <code>routes.js</code> file.  Just indicate the relative path to the view from your app&apos;s <code>views/</code> directory.  For example:</p>
+<pre><code class="javascript">{
+  &apos;get /&apos;: {
+    view: &apos;homepage&apos;
+  },
+  &apos;get /signup&apos;: {
+    view: &apos;signupFlow/basicInfo&apos;
+  },
+  &apos;get /signup/password&apos;: {
+    view: &apos;signupFlow/chooseAPassword&apos;
+  },
+  // and so on.
+}
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="what-about-single-page-apps-" permalink="what-about-singlepage-apps">What about single-page apps?</h5>
+<p>If you are building a web application for the browser, part (or all) of your navigation may take place on the client; i.e. instead of the browser fetching a new HTML page each time the user navigates around, the client-side code preloads some markup templates which are then rendered in the user&apos;s browser without needing to hit the server again directly.</p>
+<p>In this case, you have a couple of options for bootstrapping the single-page app:</p>
+<ul>
+<li>Use a single view, e.g. <code>views/publicSite.ejs</code>.  Advantages:<ul>
+<li>You can use the view engine in Sails to pass data from the server directly into the HTML that will be rendered on the client.  This is an easy way to get stuff like user data to your client-side javascript, without having to send AJAX/WebSocket requests from the client.</li>
+</ul>
+</li>
+<li>Use a single HTML page in your assets folder , e.g. <code>assets/index.html</code>. Advantages:<ul>
+<li>Although you can&apos;t pass server-side data directly to the client this way, this approach allows you to further decouple the client and server-side parts of your application.</li>
+<li>Anything in your assets folder can be moved to a static CDN (like Cloudfront or CloudFlare), allowing you to take advantage of that provider&apos;s geographically distributed data centers to get your content closer to your users.</li>
+</ul>
+</li>
+</ul>
+<docmeta name="displayName" value="Views">
+</docmeta>

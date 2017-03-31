@@ -1,0 +1,49 @@
+<h1 id="locales">Locales</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>The i18n hook reads JSON-formatted translation files from your project&apos;s &quot;locales&quot; directory (<code>config/locales</code> by default).  Each file corresponds with a <a href="http://en.wikipedia.org/wiki/Locale" target="_blank">locale</a> (usually a language) that your Sails backend will support.</p>
+<p>These files contain locale-specific strings (as JSON key-value pairs) that you can use in your views, controllers, etc. The name of the file should match the language that you are supporting. This allows for automatic language detection based on request headers.</p>
+<p>Here is an example locale file (<code>config/locales/es.json</code>):</p>
+<pre><code class="json">{
+    &quot;Hello!&quot;: &quot;Hola!&quot;,
+    &quot;Hello %s, how are you today?&quot;: &quot;&#xBF;Hola %s, como estas?&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Note that the keys in your stringfiles (e.g. &quot;Hello %s, how are you today?&quot;) are <strong>case sensitive</strong> and require exact matches.  There are a few different schools of thought on the best approach here, and it really depends on who/how often you&apos;ll be editing the stringfiles vs. HTML in the future.  Especially if you&apos;ll be editing the translations by hand, simpler, all-lowercase key names may be preferable for maintainability.</p>
+<p>For example, here&apos;s another way you could approach <code>config/locales/es.json</code>:</p>
+<pre><code class="json">{
+    &quot;hello&quot;: &quot;hola&quot;,
+    &quot;howAreYouToday&quot;: &quot;c&#xF3;mo est&#xE1;s&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>And here&apos;s <code>config/locales/en.json</code>:</p>
+<pre><code class="json">{
+    &quot;hello&quot;: &quot;hello&quot;,
+    &quot;howAreYouToday&quot;: &quot;how are you today&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>To represent nested strings, use <code>.</code> in keys.  For example, here&apos;s some of the strings for an app&apos;s &quot;Edit profile&quot; page:</p>
+<pre><code class="lang-json">{
+  &quot;editProfile.heading&quot;: &quot;Edit your profile&quot;,
+  &quot;editProfile.username.label&quot;: &quot;Username&quot;,
+  &quot;editProfile.username.description&quot;: &quot;Choose a new unique username.&quot;,
+  &quot;editProfile.username.placeholder&quot;: &quot;callmethep4rtysquid&quot;
+}
+</code></pre>
+<!-- __LANG=%%__ -->
+<h3 id="detecting-and-or-overriding-the-desired-locale-for-a-request" permalink="detecting-and/or-overriding-the-desired-locale-for-a-request">Detecting and/or overriding the desired locale for a request</h3>
+<p>To determine the current locale used by the request, use <a href="https://github.com/mashpie/i18n-node#getlocale" target="_blank"><code>req.getLocale()</code></a>.</p>
+<p>To override the auto-detected language/localization preference for a request, use <a href="https://github.com/mashpie/i18n-node#setlocale" target="_blank"><code>req.setLocale()</code></a>, calling it with the unique code for the new locale, e.g.:</p>
+<pre><code class="javascript">// Force the language to German for the remainder of the request:
+req.setLocale(&apos;de&apos;);
+// (this will use the strings located in `config/locales/de.json` for translation)
+</code></pre><!-- __LANG=%%__ -->
+<p>By default, node-i18n will detect the desired language of a request by examining its language headers.  Language headers are set in your users&apos; browser settings, and while they&apos;re correct most of the time, you may need the flexibility to override this detected locale and provide your own.</p>
+<p>For instance, if your app allows users to pick their preferred language, you might create a <a href="/documentation/concepts/Policies">policy</a> which checks for a custom language in the user&apos;s session, and if one exists, sets the appropriate locale for use in subsequent policies, controller actions, and views:</p>
+<pre><code class="javascript">// api/policies/localize.js
+module.exports = function(req, res, next) {
+  req.setLocale(req.session.languagePreference);
+  next();
+};
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="Locales">
+</docmeta>

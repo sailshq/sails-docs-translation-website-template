@@ -1,0 +1,79 @@
+<h1 id="config-globals-js">config/globals.js</h1>
+<p>Configuration for the global variables Sails exposes to its Node process.  See <a href="/documentation/reference/configuration/sails-config-globals"><code>sails.config.globals</code></a> for a detailed overview of all available options.</p>
+<pre><code class="javascript">/**
+ * Global Variable Configuration
+ * (sails.config.globals)
+ *
+ * Configure which global variables which will be exposed
+ * automatically by Sails.
+ *
+ * For more information on configuration, check out:
+ * http://sailsjs.com/documentation/reference/configuration/sails-config-globals
+ */
+
+module.exports.globals = {
+
+  /****************************************************************************
+  *                                                                           *
+  * Whether to expose the `lodash` installed within Sails core as a global    *
+  * variable, making it accessible throughout your app.                       *
+  *                                                                           *
+  * As of Sails v0.12.x, the built-in version of Lodash is v3.10.1.           *
+  * (see https://github.com/lodash/lodash/tree/3.10.1/doc for usage)          *
+  *                                                                           *
+  * &gt; To use your own version of Lodash, set this to `false`, and run:        *
+  * &gt; `npm install lodash --save --save-exact`.  Then, like you&apos;d import any  *
+  * &gt; other Node.js package, just include `var _ = require(&apos;lodash&apos;)` in the  *
+  * &gt; files where you need access to it.                                      *
+  *                                                                           *
+  ****************************************************************************/
+
+  // _: true,
+
+  /****************************************************************************
+  *                                                                           *
+  * Whether to expose the `async` installed within Sails core as a global     *
+  * variable, making it accessible throughout your app.                       *
+  *                                                                           *
+  * As of Sails v0.12.x, the built-in version of `async` is v1.5.0.           *
+  * (see https://github.com/caolan/async/blob/v1.5.0/README.md for usage)     *
+  *                                                                           *
+  * &gt; To use your own version of `async`, set this to `false`, and run:       *
+  * &gt; `npm install async --save --save-exact`.  Then, like you&apos;d import any   *
+  * &gt; other Node.js package, just include `var async = require(&apos;async&apos;)` in   *
+  * &gt; the files where you need access to it.                                  *
+  *                                                                           *
+  ****************************************************************************/
+
+  // async: true,
+
+  /****************************************************************************
+  *                                                                           *
+  * Whether to expose the `sails` instance representing your app as a global  *
+  * variable, making it accessible throughout your app.                       *
+  *                                                                           *
+  * &gt; If this is disabled, you can get a hold of it using `req._sails`.       *
+  *                                                                           *
+  ****************************************************************************/
+
+  // sails: true,
+
+  /****************************************************************************
+  *                                                                           *
+  * Whether to expose each of your app&apos;s models as global variables.          *
+  *                                                                           *
+  * &gt; The global var name for a model is determined using its &quot;globalId&quot;.     *
+  * &gt; For example, a model defined in `api/models/User.js` would have a       *
+  * &gt; &quot;globalId&quot; of `User`.  If this setting (`sails.config.globals.models`)  *
+  * &gt; is disabled, then you can still access your models in `sails.models`,   *
+  * &gt; keyed on their identity (e.g. `sails.models.user`.)  See the Sails docs *
+  * &gt; for more information on globalIds and identities.                       *
+  *                                                                           *
+  ****************************************************************************/
+
+  // models: true
+
+};
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="globals.js">
+</docmeta>

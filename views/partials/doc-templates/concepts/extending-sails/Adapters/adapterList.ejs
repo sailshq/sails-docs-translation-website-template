@@ -1,0 +1,98 @@
+<h1 id="available-database-adapters">Available Database Adapters</h1>
+<p>This file is meant to be an up to date, comprehensive list of all of the core adapters available for the Sails.js framework, and a reference of a few of the community adapters out there.  If you see out of date information on this page, or if you want to add an adapter you made, please just submit a pull request to this file, adding to the list of community adapters below.</p>
+<h3 id="officially-supported-database-adapters" permalink="officially-supported-database-adapters">Officially supported database adapters</h3>
+<h5 id="sails-disk" permalink="sailsdisk">sails-disk</h5>
+<p><a href="https://github.com/balderdashy/sails-disk/" target="_blank">https://github.com/balderdashy/sails-disk/</a></p>
+<p>Write to your computer&apos;s hard disk, or a mounted network drive.  Not suitable for at-scale production deployments, but great for a small project, and essential for developing in environments where you may not always have a database set up. This adapter is bundled with Sails and works out of the box with zero configuration.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+</ul>
+<h5 id="sails-memory" permalink="sailsmemory">sails-memory</h5>
+<p><a href="https://github.com/balderdashy/sails-memory/" target="_blank">https://github.com/balderdashy/sails-memory/</a></p>
+<p>Pretty much like Disk, but doesn&apos;t actually write to disk, so it&apos;s not persistent.  Not suitable for at-scale production deployments, but useful when developing on systems with little or no disk space.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+</ul>
+<h5 id="sails-mysql" permalink="sailsmysql">sails-mysql</h5>
+<p><a href="https://github.com/balderdashy/sails-mysql/" target="_blank">https://github.com/balderdashy/sails-mysql/</a></p>
+<p>MySQL is the world&apos;s most popular relational database.
+<a href="http://en.wikipedia.org/wiki/MySQL" target="_blank">http://en.wikipedia.org/wiki/MySQL</a></p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+<li>Migratable</li>
+</ul>
+<h5 id="sails-postgres" permalink="sailspostgres">sails-postgres</h5>
+<p><a href="https://github.com/balderdashy/sails-postgresql/" target="_blank">https://github.com/balderdashy/sails-postgresql/</a></p>
+<p><a href="http://en.wikipedia.org/wiki/PostgreSQL" target="_blank">PostgreSQL</a> is another popular relational database. </p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+<li>Migratable</li>
+</ul>
+<h5 id="sails-mongo" permalink="sailsmongo">sails-mongo</h5>
+<p><a href="https://github.com/balderdashy/sails-mongo/" target="_blank">https://github.com/balderdashy/sails-mongo/</a></p>
+<p><a href="http://en.wikipedia.org/wiki/MongoDB" target="_blank">MongoDB</a> is the leading NoSQL database.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+</ul>
+<h5 id="sails-redis" permalink="sailsredis">sails-redis</h5>
+<p><a href="https://github.com/balderdashy/sails-redis/" target="_blank">https://github.com/balderdashy/sails-redis/</a></p>
+<p><a href="http://redis.io/" target="_blank">Redis</a> is an open source, BSD licensed, advanced key-value store.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+</ul>
+<h3 id="can-i-contribute-to-a-core-adapter-" permalink="can-i-contribute-to-a-core-adapter">Can I contribute to a core adapter?</h3>
+<p>Definitely!  Get started by reading <a href="/documentation/contributing">the Sails project contribution guide</a>. </p>
+<h3 id="community-supported-database-adapters" permalink="community-supported-database-adapters">Community supported database adapters</h3>
+<p>Is your database not supported by one of the core adapters?  Good news!  There are many different community database adapters for Sails.js and Waterline <a href="https://www.npmjs.com/search?q=sails+adapter" target="_blank">available on NPM</a>.</p>
+<blockquote>
+<p>Learn <a href="/docs/concepts/extending-sails/adapters">how to install and configure community adapters</a>.</p>
+</blockquote>
+<p>Here are a few highlights:</p>
+<h5 id="sails-orientdb" permalink="sailsorientdb">sails-orientdb</h5>
+<p><a href="https://github.com/appscot/sails-orientdb" target="_blank">https://github.com/appscot/sails-orientdb</a></p>
+<p><a href="http://en.wikipedia.org/wiki/OrientDB" target="_blank">OrientDB</a> is an Open Source NoSQL DBMS with the features of both Document and Graph DBMSs. </p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Associations</li>
+<li>Migratable</li>
+</ul>
+<h5 id="sails-filemaker" permalink="sailsfilemaker">sails-filemaker</h5>
+<p><a href="https://github.com/geistinteractive/sails-filemaker" target="_blank">https://github.com/geistinteractive/sails-filemaker</a></p>
+<p><a href="https://en.wikipedia.org/wiki/FileMaker" target="_blank">FileMaker</a>, is cross platform relational database and development platform. It has been owned and published by Apple since 1988.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+</ul>
+<h5 id="sails-derby" permalink="sailsderby">sails-derby</h5>
+<p><a href="https://github.com/dash-/node-sails-derby" target="_blank">https://github.com/dash-/node-sails-derby</a></p>
+<p><a href="https://db.apache.org/derby/" target="_blank">Apache Derby</a> is an open source relational database implemented entirely in Java and available under the Apache License, Version 2.0.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Associations</li>
+<li>SQL</li>
+</ul>
+<h3 id="add-your-custom-adapter-to-this-list" permalink="add-your-custom-adapter-to-this-list">Add your custom adapter to this list</h3>
+<p>Have you written a Sails adapter? Submit a PR to this file and add it here!</p>
+<docmeta name="displayName" value="Available Adapters">
+</docmeta>

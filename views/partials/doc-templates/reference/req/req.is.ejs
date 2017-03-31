@@ -1,0 +1,18 @@
+<h1 id="req-is-">req.is()</h1>
+<p>Returns true if this request&apos;s declared &quot;Content-Type&quot; matches the specified media/mime <code>type</code>.</p>
+<p>Specifically, this method matches the given <code>type</code> against this request&apos;s &quot;Content-Type&quot; header.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.is(type);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>Assuming the request contains a &quot;Content-Type&quot; header, &quot;text/html; charset=utf-8&quot;:</p>
+<pre><code class="javascript">req.is(&apos;html&apos;);
+// -&gt; true
+req.is(&apos;text/html&apos;);
+// -&gt; true
+req.is(&apos;text/*&apos;);
+// -&gt; true
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="req.is()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

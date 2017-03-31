@@ -1,0 +1,23 @@
+<h1 id="sails-getbaseurl-">sails.getBaseUrl()</h1>
+<blockquote>
+<h5 id="_-this-method-is-deprecated-and-will-likely-be-removed-or-changed-in-sails-v1-0-_" permalink="this-method-is-deprecated-and-will-likely-be-removed-or-changed-in-sails-v10"><em><strong>This method is deprecated and will likely be removed or changed in Sails v1.0</strong></em></h5>
+<p>There is no reliable, cross-platform way to automatically detect the external URL of a running Sails app (or any other Node app). In mission-critical situations, you are advised to pre-determine the URL and save it in a custom <a href="/documentation/concepts/configuration#?environmentspecific-files-config-env">environment-dependent configuration value</a> (e.g. <code>sails.config.appUrl</code>) that you can reference elsewhere in the app.</p>
+</blockquote>
+<p>Return a best guess of the base URL for this app, based on a combination of user-supplied and default configuration values.</p>
+<pre><code class="javascript">sails.getBaseUrl();
+</code></pre><!-- __LANG=%%__ -->
+<p><code>getBaseUrl()</code> constructs a URL string by inspecting various configuration values and defaults.  For example, if <code>sails.config.ssl.key</code> and <code>sails.config.ssl.cert</code> both have values, the URL will start with <code>https://</code> instead of <code>http://</code>.  If <code>sails.config.explicitHost</code> is not undefined, its value will be used as the domain name; otherwise it will be <code>localhost</code>.  If <code>sails.config.port</code> is not 80 or 443, its value will be appended to the URL as well.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<p><em>This function does not accept any arguments.</em></p>
+<h4 id="returns" permalink="returns">Returns</h4>
+<p><strong>Type:</strong> <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></p>
+<pre><code class="javascript">http://localhost:1337
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>In an email template...</p>
+<pre><code class="html">For more information, visit &lt;a href=&quot;&lt;%=sails.getBaseUrl()%&gt;&quot;&gt;our web site&lt;/a&gt;.
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="sails.getBaseUrl()"></docmeta></p>
+<p><docmeta name="pageType" value="method"></docmeta></p>
+<docmeta name="isDeprecated" value="true">
+</docmeta>

@@ -1,0 +1,92 @@
+@import 'pages/index.less';
+
+html,body {
+  height: 100%;
+  .border-box();
+}
+
+/********
+* Pages
+********/
+
+// Homepage
+#sails-page_homepage {
+  .homepage();
+}
+
+// Get started
+#sails-page_get-started {
+  .get-started();
+}
+
+
+// FAQ
+#sails-page_faq {
+  .faq();
+}
+
+// About IRC
+#sails-page_about-irc {
+  .about-irc();
+}
+
+
+// Documentation (Reference/Concepts)
+#sails-page_reference-or-concepts {
+  .reference-or-concepts();
+}
+
+// Documentation (Anatomy of a Sails app)
+#sails-page_anatomy {
+  .anatomy();
+}
+
+// Security policy
+#sails-page_security {
+  .security();
+}
+
+
+// Default scrollbar styles:
+::-webkit-scrollbar {
+  .border-box();
+  width: 10px;
+  background: transparent;
+  border-left: 1px solid @border-med-gray;
+}
+
+::-webkit-scrollbar-track {
+  .border-box();
+  width: 6px;
+  background: @border-lt-gray;
+}
+
+::-webkit-scrollbar-thumb {
+  .border-box();
+  background-color: @border-med-gray;
+  border: 1px solid @border-lt-gray;
+  -webkit-box-shadow: inset 0px 0px 0px 1px darken(@border-med-gray, 10%);
+  border-radius: 10px;
+  width: 6px;
+}
+
+/*****************
+* SHARED ELEMENTS
+******************/
+
+// Header
+#header {
+  .header();
+}
+
+// Footer
+#footer {
+  .footer();
+}
+
+// Social media/news banner
+#news-banner {
+  .news-banner();
+}
+
+

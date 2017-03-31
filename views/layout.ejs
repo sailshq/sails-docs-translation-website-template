@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title><%= typeof title !== 'undefined' ? title : 'Sails.js | Realtime MVC Framework for Node.js' %></title>
+
+    <%
+    // Disable the viewport meta tag for the documentation and legal pages,
+    // because they have side nav and we don't have special mobile navigation set up for that.
+    if(typeof currentPage === 'undefined' || !(currentPage === 'documentation' || currentPage === 'legal')) { %>
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <% } %>
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Mallanna|Lato:300,300i,400,400i,700,700i" rel="stylesheet">
+
+    <meta name="google-site-verification" content="6HnJJqAkInT-Kv8bSMvtGDpaaCgKLmukQqrzJUqPAZg" />
+
+    <% if (typeof description !== 'undefined') { %>
+    <meta name="description" content="<%= description %>" />
+    <% } %>
+    <meta name="author" content="The Sails Company" />
+
+    <%
+    /* If this is sailsjs.com proper, or 1.0.sailsjs.com, then inject Google analytics.
+
+      Otherwise, don't- and instead inject a robots/noindex meta tag
+      to prevent any unwanted visits.
+    */
+    %>
+    <%
+    if (typeof req !== 'object' || ( req.host !== 'sailsjs.com' && req.host !== '1.0.sailsjs.com' ) ) {
+      %><!-- Analytics code excluded because you sort of smell a developer... (this page is being served from <%= req.host %> instead of sailsjs.com or a versioned subdomain) -->
+      <meta name="robots" content="noindex"><%
+    }
+    else {
+    %>
+    <% /* GOOGLE ANALYTICS */ %>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-64534106-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <%
+    }
+    %>
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/importer.css">
+    <!--STYLES END-->
+
+    <!-- IE8 style overrides -->
+    <!--[if lt IE 9]>
+    <style>
+    #header .version-nav { display: none!important; }
+    #header .docs-nav i { display: none!important; }
+    #header .nav-container .nav .docs-nav #docs-menu { display: none!important; }
+    #header #unsupported-browser-banner { display: block; }
+    </style>
+    <![endif]-->
+
+    <!-- setup for FB like buttons -->
+    <script>(function() {
+      var _fbq = window._fbq || (window._fbq = []);
+      if (!_fbq.loaded) {
+        var fbds = document.createElement('script');
+        fbds.async = true;
+        fbds.src = '//connect.facebook.net/en_US/fbds.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(fbds, s);
+        _fbq.loaded = true;
+      }
+      _fbq.push(['addPixelId', '600838656713699']);
+    })();
+    window._fbq = window._fbq || [];
+    window._fbq.push(['track', 'PixelInitialized', {}]);
+    </script>
+    <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=600838656713699&amp;ev=PixelInitialized" /></noscript>
+    <!-- /FB Buttons -->
+
+    <!-- for Twitter buttons -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- /Twitter buttons -->
+  </head>
+
+  <body ng-app="page" ng-controller="afterRender">
+
+    <%- body %>
+
+    <% /* Expose view locals as window.SAILS_LOCALS */ %>
+    <%- exposeLocalsToBrowser() %>
+
+    <!--SCRIPTS-->
+    <script src="/dependencies/jquery.js"></script>
+    <script src="/dependencies/angular.js"></script>
+    <script src="/dependencies/lodash.js"></script>
+    <script src="/dependencies/negotiate-keyboard-event/index.js"></script>
+    <script src="/dependencies/raw-component/js/index.js"></script>
+    <script src="/dependencies/raw-component/js/functions/append-component.js"></script>
+    <script src="/dependencies/raw-component/js/functions/get-component-metadata.js"></script>
+    <script src="/dependencies/raw-component/js/functions/helpers/ensure-global-state-exists.js"></script>
+    <script src="/dependencies/raw-component/js/functions/remove-all-components.js"></script>
+    <script src="/dependencies/raw-component/js/functions/remove-component.js"></script>
+    <script src="/dependencies/raw-component/js/functions/replace-with-component.js"></script>
+    <script src="/dependencies/dropdowns/js/index.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/append-dropdown.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/append-std-dropdown.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/disable-dropdown.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/enable-dropdown.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/get-dropdown-value.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/helpers/render-imminent-choice.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/helpers/render-selected-choice.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/hide-dropdown-choices.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/set-dropdown-value.js"></script>
+    <script src="/dependencies/dropdowns/js/functions/show-dropdown-choices.js"></script>
+    <script src="/dependencies/JSON2.js"></script>
+    <script src="/dependencies/bowser.min.js"></script>
+    <script src="/dependencies/highlight.js"></script>
+    <script src="/dependencies/jquery.scrollTo.min.js"></script>
+    <script src="/dependencies/moment.min.js"></script>
+    <script src="/dependencies/retina.min.js"></script>
+    <script src="/js/index.js"></script>
+    <script src="/js/directives/permalink.directive.js"></script>
+    <script src="/js/functions/private/doc-page.js"></script>
+    <script src="/js/functions/private/helpers/expand-parent-menu-item.js"></script>
+    <script src="/js/functions/private/helpers/realign-doc-page.js"></script>
+    <script src="/js/functions/private/helpers/render-bubble-innards.js"></script>
+    <script src="/js/functions/private/helpers/resize-custom-select.js"></script>
+    <script src="/js/functions/sails-website-actions.js"></script>
+    <!--SCRIPTS END-->
+
+    <script type="text/javascript">
+    // Initialize an angular module.
+    angular.module('page', ['sails']);
+    // Initialize the ctrl.
+    angular.module('page').controller('afterRender', ['sailsWebsiteActions', function (sailsWebsiteActions){
+      // Wait for one tick of the digest loop before calling on our afterRender handlers,
+      // to avoid angular trying to reference elements that don't exist and causing a
+      // "Cannot read property 'childNodes' of undefined" error.
+      // For more information, see:
+      // https://www.bennadel.com/blog/2892-typeerror-cannot-read-property-childnodes-of-undefined-in-angularjs.htm
+      setTimeout(function afterATick() {
+        // Now call upon the proper handler for the current page's events.
+        sailsWebsiteActions({
+          page: '<%= typeof currentPage !== 'undefined' ? currentPage : 'undefined' %>'
+        });
+      });
+
+    }]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<h1 id="destroy-blueprint-">Destroy (Blueprint)</h1>
+<p>Delete the record specified by <code>id</code> from the database forever and notify subscribed sockets.</p>
+<pre><code class="nohighlight">DELETE /:model/:id
+</code></pre><!-- __LANG=%%__ -->
+<p>This destroys the record which matches the <strong>id</strong> parameter and responds with a JSON dictionary representing the destroyed instance. If no model instance exists matching the specified <strong>id</strong>, a <code>404</code> is returned.</p>
+<p>Additionally, a <code>destroy</code> event will be published to all sockets subscribed to the record room.  And all sockets currently subscribed to the record will be unsubscribed from it.</p>
+<h3 id="parameters" permalink="parameters">Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> model</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> of the containing model.<br><br>e.g. <code>&apos;purchase&apos;</code> (in <code>/purchase/7</code>)</td>
+</tr>
+<tr>
+<td> id</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The desired target record&apos;s primary key value<br><br>e.g. <code>&apos;7&apos;</code> (in <code>/purchase/7</code>).</td>
+</tr>
+<tr>
+<td> id<br><em>(required)</em></td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The primary key value of the record to destroy, specified in the path.  <br>e.g. <code>&apos;7&apos;</code> (in <code>/purchase/7</code>) .</td>
+</tr>
+<tr>
+<td> <em>callback</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If specified, a JSONP response will be sent (instead of JSON). This is the name of the client-side javascript function to call, passing results as the first (and only) argument<br> <br> e.g. <code>?callback=myJSONPHandlerFn</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>Delete Pinkie Pie:</p>
+<p><code>DELETE /pony/4</code></p>
+<p><a href="https://www.getpostman.com/run-collection/96217d0d747e536e49a4" target="_blank"><img src="https://s3.amazonaws.com/postman-static/run-button.png" alt="Run in Postman"></a></p>
+<h5 id="expected-response" permalink="expected-response">Expected Response</h5>
+<pre><code class="json">{
+  &quot;name&quot;: &quot;Pinkie Pie&quot;,
+  &quot;hobby&quot;: &quot;kickin&quot;,
+  &quot;id&quot;: 4,
+  &quot;createdAt&quot;: &quot;2013-10-18T01:23:56.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2013-11-26T22:55:19.951Z&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="destroy"></docmeta></p>
+<docmeta name="pageType" value="endpoint">
+
+</docmeta>

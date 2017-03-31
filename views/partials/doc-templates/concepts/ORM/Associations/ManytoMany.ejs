@@ -1,0 +1,128 @@
+<h1 id="many-to-many">Many-to-Many</h1>
+<p><strong>AKA &quot;Has and Belongs To Many&quot;</strong></p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>A many-to-many association states that a model can be associated with many other models and vice-versa.
+Because both models can have many related models a new join table will need to be created to keep track
+of these relations.</p>
+<p>Waterline will look at your models and if it finds that two models both have collection attributes that
+point to each other, it will automatically build up a join table for you.</p>
+<p>Because you may want a model to have multiple many-to-many associations on another model a <code>via</code> key
+is needed on the <code>collection</code> attribute. This states which <code>model</code> attribute on the one side of the
+association is used to populate the records.</p>
+<p>Using the <code>User</code> and <code>Pet</code> example lets look at how to build a schema where a <code>User</code> may have many
+<code>Pet</code> records and a <code>Pet</code> may have multiple owners.</p>
+<pre><code class="javascript">// myApp/api/models/User.js
+// A user may have many pets
+module.exports = {
+  attributes: {
+    firstName: {
+      type: &apos;string&apos;
+    },
+    lastName: {
+      type: &apos;string&apos;
+    },
+
+    // Add a reference to Pet
+    pets: {
+      collection: &apos;pet&apos;,
+      via: &apos;owners&apos;,
+      dominant: true
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<pre><code class="javascript">// myApp/api/models/Pet.js
+// A pet may have many owners
+module.exports = {
+  attributes: {
+    breed: {
+      type: &apos;string&apos;
+    },
+    type: {
+      type: &apos;string&apos;
+    },
+    name: {
+      type: &apos;string&apos;
+    },
+
+    // Add a reference to User
+    owners: {
+      collection: &apos;user&apos;,
+      via: &apos;pets&apos;
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>Now that the <code>User</code> and <code>Pet</code> models have been created and the join table has been setup
+automatically, we can start associating records and querying the join table. To do this lets add a
+<code>User</code> and <code>Pet</code> and then associate them together.</p>
+<p>There are two ways of creating associations when a many-to-many association is used. You can associate
+two existing records together or you can associate a new record to the existing record. To show how
+this is done we will introduce the special methods attached to a <code>collection</code> attribute: <code>add</code> and <code>remove</code>.</p>
+<p>Both these methods are sync methods that will queue up a set of operations to be run when an instance
+is saved. If a primary key is used for the value on an <code>add</code>, a new record in the join table will be
+created linking the current model to the record specified in the primary key. However if an object
+is used as the value in an <code>add</code>, a new model will be created and then the primary key of that model
+will be used in the new join table record. You can also use an array of previous values.</p>
+<blockquote>
+<p>When using <code>.save()</code> a populate call will be performed to return the newly saved data to you. If you would prefer this not to happen you can use an optional config flag in the <code>.save()</code> command. Example: <code>.save({ populate: false }, function(err) {})</code></p>
+</blockquote>
+<h2 id="when-both-records-exist" permalink="when-both-records-exist">When Both Records Exist</h2>
+<pre><code class="javascript">// Given a User with ID 2 and a Pet with ID 20
+
+User.findOne(2).exec(function(err, user) {
+  if(err) // handle error
+
+  // Queue up a record to be inserted into the join table
+  user.pets.add(20);
+
+  // Save the user, creating the new associations in the join table
+  user.save(function(err) {});
+});
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="with-a-new-record" permalink="with-a-new-record">With A New Record</h2>
+<pre><code class="javascript">User.findOne(2).exec(function(err, user) {
+  if(err) // handle error
+
+  // Queue up a new pet to be added and a record to be created in the join table
+  user.pets.add({ breed: &apos;labrador&apos;, type: &apos;dog&apos;, name: &apos;fido&apos; });
+
+  // Save the user, creating the new pet and associations in the join table
+  user.save(function(err) {});
+});
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="with-an-array-of-existing-records" permalink="with-an-array-of-existing-records">With An Array of Existing Records</h2>
+<pre><code class="javascript">// Given a User with ID 2 and a Pet with ID 20, 24, 31
+
+User.findOne(2).exec(function(err, user) {
+  if(err) // handle error
+
+  // Queue up a record to be inserted into the join table
+  user.pets.add([ 20, 24, 31 ]);
+
+  // Save the user, creating the new pet and associations in the join table
+  user.save(function(err) {});
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>Removing associations is just as easy using the <code>remove</code> method. It works the same as the <code>add</code>
+method except it only accepts primary keys as a value. The two methods can be used together as well.</p>
+<pre><code class="javascript">User.findOne(2).exec(function(err, user) {
+  if(err) // handle error
+
+  // Queue up a new pet to be added and a record to be created in the join table
+  user.pets.add({ breed: &apos;labrador&apos;, type: &apos;dog&apos;, name: &apos;fido&apos; });
+
+  // Queue up a join table record to remove
+  user.pets.remove(22);
+
+  // Save the user, creating the new pet and syncing the associations in the join table
+  user.save(function(err) {});
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>For a more detailed description of this type of association, see the <a href="https://github.com/balderdashy/waterline-docs/blob/master/models/associations/associations.md" target="_blank">Waterline Docs</a></p>
+</blockquote>
+<docmeta name="displayName" value="Many-to-Many">
+
+</docmeta>

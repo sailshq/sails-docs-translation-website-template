@@ -1,0 +1,79 @@
+<h1 id="hosting">Hosting</h1>
+<p>Here is a non-comprehensive list of Node/Sails hosting providers and available community tutorials.</p>
+<h5 id="deploying-to-modulus-" permalink="deploying-to-modulus">Deploying to Modulus?</h5>
+<ul>
+<li><a href="http://blog.modulus.io/sails-js" target="_blank">http://blog.modulus.io/sails-js</a></li>
+</ul>
+<h5 id="deploying-to-openshift-" permalink="deploying-to-openshift">Deploying to OpenShift?</h5>
+<p>To deploy to OpenShift, you&apos;ll need to make some minor modifications to your configuration:
+Open up <code>config/local.js</code> in your app folder. In here, you&apos;ll need to add the following lines.</p>
+<pre><code class="nohighlight">port: process.env.OPENSHIFT_NODEJS_PORT,
+    host: process.env.OPENSHIFT_NODEJS_IP,
+</code></pre><!-- __LANG=%%__ -->
+<p>You will also need to install <code>grunt-cli</code> with <code>npm i --save grunt-cli</code>.</p>
+<p>After doing that, create the file <code>.openshift/action_hooks/pre_start_nodejs</code> with the following contents. (<a href="https://gist.github.com/mdunisch/4a56bdf972c2f708ccc6" target="_blank">source</a>)
+This action_hook tells OpenShift&apos;s supervisor to run all &apos;prod&apos; grunt tasks, before Sails lifted.</p>
+<pre><code class="nohighlight">#!/bin/bash
+export NODE_ENV=production
+
+if [ -f &quot;${OPENSHIFT_REPO_DIR}&quot;/Gruntfile.js ]; then
+    (cd &quot;${OPENSHIFT_REPO_DIR}&quot;; node_modules/grunt-cli/bin/grunt prod)
+fi
+</code></pre><!-- __LANG=%%__ -->
+<p>Then disable Sails Grunt integration hook. 
+To do this set the <code>grunt</code> property to <code>false</code> in <code>.sailsrc</code> hooks like this:</p>
+<pre><code class="json">{
+    &quot;hooks&quot;: {
+        &quot;grunt&quot;: false
+    }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="note-" permalink="note">NOTE:</h3>
+<p>Do not remove Gruntfile.js to disable Grunt hook, this file still using by OpenShift&apos;s supervisor.</p>
+<p>Then create the file <code>/supervisor_opts</code> with the following contents. This tells OpenShift&apos;s supervisor to ignore Sails&apos; <code>.tmp</code> directory for the hot reload functionality. (<a href="https://gist.github.com/mdunisch/4a56bdf972c2f708ccc6#comment-1318102" target="_blank">source</a>)</p>
+<pre><code class="nohighlight">-i .tmp
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="note-" permalink="note">NOTE:</h3>
+<p>This deployment guide works only on Openshift&apos;s &quot;SCALABLE&quot; gears, nodejs v0.10.
+If you&apos;re using non-scalable gear, the <code>/supervisor_opts</code> file will be ignored and Sails will not lift on it. </p>
+<p>You can now <code>git add . &amp;&amp; git commit -a -m &quot;your message&quot; &amp;&amp; git push</code> to deploy to OpenShift.</p>
+<h5 id="using-digitalocean-" permalink="using-digitalocean">Using DigitalOcean?</h5>
+<ul>
+<li><a href="https://www.digitalocean.com/community/articles/how-to-create-an-node-js-app-using-sails-js-on-an-ubuntu-vps" target="_blank">https://www.digitalocean.com/community/articles/how-to-create-an-node-js-app-using-sails-js-on-an-ubuntu-vps</a></li>
+<li><a href="https://www.digitalocean.com/community/articles/how-to-use-pm2-to-setup-a-node-js-production-environment-on-an-ubuntu-vps" target="_blank">https://www.digitalocean.com/community/articles/how-to-use-pm2-to-setup-a-node-js-production-environment-on-an-ubuntu-vps</a></li>
+<li><a href="https://www.digitalocean.com/community/articles/how-to-host-multiple-node-js-applications-on-a-single-vps-with-nginx-forever-and-crontab" target="_blank">https://www.digitalocean.com/community/articles/how-to-host-multiple-node-js-applications-on-a-single-vps-with-nginx-forever-and-crontab</a></li>
+</ul>
+<h5 id="deploying-to-heroku-" permalink="deploying-to-heroku">Deploying to Heroku?</h5>
+<ul>
+<li><a href="https://courses.platzi.com/classes/develop-apps-sails-js/" target="_blank">Platzi: Develop Apps with Sails.js: Pt 2</a>  <em>(see part 2)</em></li>
+<li><a href="http://irlnathan.github.io/sailscasts/blog/2013/11/05/building-a-sails-application-ep26-deploying-a-sails-app-to-heroku/" target="_blank">SailsCasts: Deploying a Sails App to Heroku</a></li>
+<li><a href="http://vort3x.me/sailsjs-heroku/" target="_blank">Sails.js on Heroku</a></li>
+<li><a href="https://groups.google.com/forum/#!topic/sailsjs/vgqJFr7maSY" target="_blank">https://groups.google.com/forum/#!topic/sailsjs/vgqJFr7maSY</a></li>
+<li><a href="https://github.com/chadn/heroku-sails" target="_blank">https://github.com/chadn/heroku-sails</a></li>
+<li><a href="http://dennisrongo.com/deploying-sails-js-to-heroku" target="_blank">http://dennisrongo.com/deploying-sails-js-to-heroku</a></li>
+<li><a href="http://stackoverflow.com/a/20184907/486547" target="_blank">http://stackoverflow.com/a/20184907/486547</a></li>
+</ul>
+<h5 id="deploying-to-aws-" permalink="deploying-to-aws">Deploying to AWS?</h5>
+<ul>
+<li><a href="http://blog.grio.com/2014/01/your-own-mini-heroku-on-aws.html" target="_blank">http://blog.grio.com/2014/01/your-own-mini-heroku-on-aws.html</a></li>
+<li><a href="http://serverfault.com/questions/531560/creating-an-sails-js-application-on-aws-ami-instance" target="_blank">http://serverfault.com/questions/531560/creating-an-sails-js-application-on-aws-ami-instance</a></li>
+<li><a href="http://bussing-dharaharsh.blogspot.com/2013/08/creating-sailsjs-application-on-aws-ami.html" target="_blank">http://bussing-dharaharsh.blogspot.com/2013/08/creating-sailsjs-application-on-aws-ami.html</a></li>
+<li><a href="http://cloud.dzone.com/articles/how-deploy-nodejs-apps-aws-mac" target="_blank">http://cloud.dzone.com/articles/how-deploy-nodejs-apps-aws-mac</a></li>
+</ul>
+<h5 id="using-pm2-" permalink="using-pm2">Using PM2?</h5>
+<ul>
+<li><a href="http://devo.ps/blog/goodbye-node-forever-hello-pm2/" target="_blank">http://devo.ps/blog/goodbye-node-forever-hello-pm2/</a></li>
+</ul>
+<h5 id="deploying-to-cloudcontrol-" permalink="deploying-to-cloudcontrol">Deploying to CloudControl?</h5>
+<ul>
+<li><a href="https://www.cloudcontrol.com/dev-center/Guides/NodeJS/Sailsjs" target="_blank">https://www.cloudcontrol.com/dev-center/Guides/NodeJS/Sailsjs</a></li>
+</ul>
+<h5 id="deploying-to-rosehosting-" permalink="deploying-to-rosehosting">Deploying to RoseHosting?</h5>
+<ul>
+<li><a href="https://www.rosehosting.com/blog/install-sails-js-with-apache-as-a-reverse-proxy-on-centos-7/" target="_blank">Install Sails.js with Apache as a reverse proxy on CentOS 7</a></li>
+<li><a href="https://www.rosehosting.com/blog/install-the-sails-js-framework-on-an-ubuntu-vps/" target="_blank">Install Sails.js on Ubuntu</a></li>
+<li>All hosting plans from RoseHosting are fully-managed with free 24/7 support, so you can contact their <a href="https://www.rosehosting.com/support.html" target="_blank">support team</a> and they will install and configure Sails.js for you for free</li>
+</ul>
+<docmeta name="displayName" value="Hosting">
+
+</docmeta>

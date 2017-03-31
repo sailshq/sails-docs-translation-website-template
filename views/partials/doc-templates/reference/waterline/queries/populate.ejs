@@ -1,0 +1,124 @@
+<h1 id="-populate-">.populate()</h1>
+<p>Modify a <a href="/documentation/reference/waterline-orm/queries">query instance</a> so that, when executed, it will return associated record(s) belonging to the specified association, and optionally according to the specified <code>subcriteria</code>.  Populate may be called more than once on the same query, as long as each call is for a different association.</p>
+<pre><code class="javascript">Something.find()
+.populate(association, subcriteria)
+.exec(function afterwards(err, populatedRecords){
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">association</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The name of the association to populate.  e.g. <code>snacks</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left"><em>subcriteria</em></td>
+<td><bubble type="dictionary?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Optional.  When populating <code>collection</code> associations between two models which reside in the same database, a <a href="https://github.com/balderdashy/waterline-docs/blob/master/queries/query-language.md" target="_blank">Waterline criteria</a> may be specified as a second argument to populate.  This will be used for filtering, sorting, and limiting the array of associated records (e.g. snacks) associated with each primary record.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Important:</strong> While experimental support exists, the <code>subcriteria</code> argument should only be used in production on queries involving a single database.  Do not use the <code>subcriteria</code> argument when performing cross-adapter queries involving multiple databases.</p>
+</blockquote>
+<h3 id="example" permalink="example">Example</h3>
+<h5 id="populating-a-model-association" permalink="populating-a-model-association">Populating a model association</h5>
+<p>To find any users named Finn in the database and, for each one, also populate their dad:</p>
+<pre><code class="javascript">User.find({name:&apos;Finn&apos;}).populate(&apos;dad&apos;).exec(function (err, usersNamedFinn){
+  if (err) {
+    return res.serverError(err);
+  }
+
+  sails.log(&apos;Wow, there are %d users named Finn.&apos;, usersNamedFinn.length);
+  sails.log(&apos;Check it out, some of them probably have a dad named Joshua or Martin:&apos;, usersNamedFinn);
+
+  return res.json(usersNamedFinn);
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>Might yield:</p>
+<pre><code class="javascript">[
+  {
+    id: 7392,
+    age: 13,
+    name: &apos;Finn&apos;,
+    createdAt: Wed Dec 25 2003 18:00:00 GMT-0600 (CST),
+    updatedAt: Wed Feb 12 2016 18:06:50 GMT-0600 (CST),
+    dad: {
+      id: 108,
+      age: 47,
+      name: &apos;Joshua&apos;,
+      createdAt: Wed Dec 25 1969 00:00:00 GMT-0600 (CST),
+      updatedAt: Wed Jan 10 2015 12:00:00 GMT-0600 (CST),
+      dad: null
+    }
+  },
+  // ...more users
+]
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="populating-a-collection-association" permalink="populating-a-collection-association">Populating a collection association</h5>
+<blockquote>
+<p>This example uses the optional subcriteria argument.</p>
+</blockquote>
+<p>To find any users named Finn in the database and, for each one, also populate their 3 hippest purple swords, sorted most hip to least hip:</p>
+<pre><code class="javascript">// Warning: This only works if both models are in the same database.
+// (e.g. cannot do this with the `User` model in PostgreSQL and the `Sword` model in MongoDB)
+User.find({
+  name:&apos;Finn&apos;
+}).populate(&apos;currentSwords&apos;, {
+  where: {
+    color: &apos;purple&apos;
+  },
+  limit: 3,
+  sort: &apos;hipness DESC&apos;
+}).exec(function (err, usersNamedFinn){
+  if (err) {
+    return res.serverError(err);
+  }
+
+  // Note that Finns without any swords are still included-- their `currentSwords` arrays will just be empty.
+  sails.log(&apos;Wow, there are %d users named Finn.&apos;, usersNamedFinn.length);
+  sails.log(&apos;Check it out, some of them probably have non-empty arrays of purple swords:&apos;, usersNamedFinn);
+
+  return res.json(usersNamedFinn);
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>Might yield:</p>
+<pre><code class="javascript">[
+  {
+    id: 7392,
+    age: 13,
+    name: &apos;Finn&apos;,
+    createdAt: Wed Dec 25 2003 18:00:00 GMT-0600 (CST),
+    updatedAt: Wed Feb 12 2016 18:06:50 GMT-0600 (CST),
+    dad: 108,//&lt;&lt; not populated
+    swords: [//&lt;&lt; populated
+      {
+        id: 9,
+        title: &apos;Grape Soda Sword&apos;,
+        color: &apos;purple&apos;,
+        createdAt: Wed Mar 19 2014 18:06:50 GMT-0600 (CST),
+        updatedAt: Wed Feb 11 2016 18:06:50 GMT-0600 (CST)
+      },
+      // ...more swords
+    ]
+  },
+  // ...more users
+]
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value=".populate()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

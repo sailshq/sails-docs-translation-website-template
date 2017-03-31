@@ -1,0 +1,32 @@
+<h1 id="req-allparams-">req.allParams()</h1>
+<p>Returns the value of <em>all</em> parameters sent in the request, merged together into a single dictionary (plain JavaScript object). Includes parameters parsed from the url path, the query string, and the request body. See <a href="/documentation/reference/request-req/req-param"><code>req.param()</code></a> for details.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.allParams();
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>Update the product with the specified <code>sku</code>, setting new values using the parameters which were passed in:</p>
+<pre><code class="javascript">var values = req.allParams();
+
+// Don&apos;t allow `price` or `isAvailable` to be edited.
+delete values.price;
+delete values.isAvailable;
+
+// At this point, `values` might look something like this:
+// values ==&gt; { displayName: &apos;Bubble Trouble Bubble Bath&apos; }
+
+Product.update({sku: sku})
+.set(values)
+.exec(function (err, newProduct) {
+  // ...
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method can also be called as <code>req.params.all()</code> - they are synonyms.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.allParams()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

@@ -1,0 +1,23 @@
+<h1 id="req-issocket">req.isSocket</h1>
+<p>A flag indicating whether or not this request (<code>req</code>) originated from a Socket.io connection.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.isSocket;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">if (req.isSocket){
+  // You&apos;re a socket.  Do cool socket stuff.
+}
+else {
+  // Just another HTTP request.
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Useful for allowing HTTP requests to skip calls to pubsub or WebSocket-centric methods like <code>subscribe()</code> or <code>watch()</code>  that depend on an actual Socket.io request.  This allows you to reuse backend code, using it for both WebSocket and HTTP clients.</li>
+<li>As you might expect, <code>req.isSocket</code> doesn&apos;t need to be checked before running methods which <strong>publish to other</strong> connected sockets.  Those methods don&apos;t depend on the request, so they work either way.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.isSocket"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

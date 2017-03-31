@@ -1,0 +1,47 @@
+.docs-github-message {
+  font-family: @main-font;
+  .container();
+  .clearfix();
+  display: none;
+  padding: 145px 0 25px;
+  img {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 25px;
+  }
+  a {
+    .transition(all 250ms);
+    display: block;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 25px;
+    padding: 15px;
+    font-size: 20px;
+    background-color: @bright-blue;
+    text-align: center;
+    font-family: @header-font;
+    color: @white;
+    font-family: @main-font;
+    border-radius: 4px;
+    &:hover {
+      background-color: darken(@bright-blue, 10%);
+    }
+  }
+  p {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 14px;
+    span {
+      color: @turquoise;
+      font-weight: 700;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    display: block;
+  }
+}
+

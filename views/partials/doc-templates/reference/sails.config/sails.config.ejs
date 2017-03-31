@@ -1,0 +1,23 @@
+<h1 id="configuration-sails-config-">Configuration (<code>sails.config</code>)</h1>
+<p>The <code>sails.config</code> object contains the runtime values of your app&apos;s configuration. It is assembled automatically when Sails loads your app; merging together command-line arguments, environment variables, your <code>.sailsrc</code> file, and the configuration objects exported from any and all modules in your app&apos;s <a href="/documentation/anatomy/myApp/config"><code>config/</code></a> directory.</p>
+<p>More specifically, when you load your app, whether that&apos;s using <code>node app</code>, <a href="https://github.com/balderdashy/sails-docs/blob/master/PAGE_NEEDED.md" target="_blank">programmatic usage inside of a script</a>, or <a href="/documentation/reference/cli/sailslift.html"><code>sails lift</code></a>, Sails will look in a <a href="https://github.com/dominictarr/rc#standards" target="_blank">few different places</a> for configuration.  Here they are listed in order of descending priority:</p>
+<ul>
+<li>an optional dictionary (<code>{}</code>) of configuration overrides passed-in programmatically</li>
+<li>command-line options parsed by <a href="https://github.com/substack/minimist/tree/0.0.10" target="_blank">minimist</a>; e.g. <code>sails lift --mailgun.apiToken=&apos;token would be here&apos;</code></li>
+<li><a href="https://en.wikipedia.org/wiki/Environment_variable" target="_blank">environment variables</a> prefixed with <code>sails_</code>, and using double underlines to indicate dots; e.g.: <code>sails_port=1492 sails lift</code> (<a href="https://gist.github.com/mikermcneil/92769de1e6c10f0159f97d575e18c6cf" target="_blank">A few more examples</a>)</li>
+<li>a local <code>.sailsrc</code> file in your app&apos;s directory, or the first found looking in <code>../</code>, <code>../../</code> etc.</li>
+<li>a global <code>.sailsrc</code> file in your home folder (e.g. <code>~/.sailsrc</code>)</li>
+<li>files in your app&apos;s <code>config/</code> directory (if one exists), with <code>config/local.js</code> taking priority.  Remember that, other than <code>local.js</code> (which takes priority), the file names are just for convention: the configuration you export from each file gets deep-merged together with everything else into one big dictionary (<code>sails.config</code>).</li>
+</ul>
+<blockquote>
+<h4 id="the-recommended-solution-for-setting-production-config" permalink="the-recommended-solution-for-setting-production-config">The recommended solution for setting production config</h4>
+<p>Environment variables are one of the most powerful ways to configure your Sails app.  Since you can customize just about any setting (as long as it&apos;s JSON-serializable), this approach solves a number of problems, and is our core team&apos;s recommended strategy for production deployments.  Here are a few:</p>
+<ul>
+<li>Using environment variables means you don&apos;t have to worry about checking in your production database credentials, API tokens, etc.</li>
+<li>This makes changing Postgresql hosts, Mailgun accounts, S3 credentials, and other maintenance straightforward, fast, and easy; plus you don&apos;t need to change any code or worry about merging in downstream commits from other people on your team</li>
+<li>Depending on your hosting situation, you may be able to manage your production configuration through a UI (most PaaS providers like <a href="http://heroku.com" target="_blank">Heroku</a> or <a href="https://modulus.io" target="_blank">Modulus</a> support this, as does <a href="https://azure.microsoft.com/en-us/" target="_blank">Azure Cloud</a>.)</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="Configuration"></docmeta></p>
+<docmeta name="stabilityIndex" value="3">
+</docmeta>

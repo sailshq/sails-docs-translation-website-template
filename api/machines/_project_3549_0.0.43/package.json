@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "cheerio": "0.18.0",
+    "doc-templater": "^0.4.0",
+    "lodash": "3.10.1",
+    "machinepack-fs": "7.0.0",
+    "semver": "4.3.6",
+    "fs-extra": "0.26.4"
+  },
+  "machinepack": {
+    "machines": ["build-sitemap-xml", "get-pages-for-sitemap", "Compilemarkdowndocs", "Fniddocpagetoshow", "get-environment-variable", "is-it-an-old-link", "Findparent", "MarshaldocPageMetadata", "Removepermalinkfromslug", "Reversesortbysemver"],
+    "machineVersions": {
+      "build-sitemap-xml": "0.0.10",
+      "get-pages-for-sitemap": "0.0.20",
+      "Compilemarkdowndocs": "0.0.33",
+      "Fniddocpagetoshow": "0.0.49",
+      "get-environment-variable": "0.0.4",
+      "is-it-an-old-link": "0.0.45",
+      "Findparent": "0.0.34",
+      "MarshaldocPageMetadata": "0.0.184",
+      "Removepermalinkfromslug": "0.0.4",
+      "Reversesortbysemver": "0.0.23"
+    }
+  }
+}

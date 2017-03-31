@@ -1,0 +1,95 @@
+<h1 id="sails-config-policies">sails.config.policies</h1>
+<!--
+> TODO:
+>
+> Merge most of the contents of this file into the main reference section on policies.
+> Include a simple config reference table (with only one row with property: `*`) explaining how
+> this particular config module is read.  But don't worry about trying to explain what policies are here-- instead, link to the full docs on the subject (again, to reduce duplicate content and make this all more maintainable)
+-->
+<h3 id="what-is-this-" permalink="what-is-this">What is this?</h3>
+<p>Policies are like any other system for authentication control. You can allow or deny access in fine granularity with policies.</p>
+<h3 id="description" permalink="description">Description</h3>
+<p>Your app&apos;s ACL (access control list) is located in <strong>config/policies.js</strong>.</p>
+<h5 id="to-a-specific-action" permalink="to-a-specific-action">To a Specific Action</h5>
+<p>To apply a policy to a specific action in particular, you should specify it on the right-hand side of that action:</p>
+<pre><code class="javascript">{
+  ProfileController: {
+      edit: &apos;isLoggedIn&apos;
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>Note: Mapping a policy to a blueprint action works the same way. See <a href="/docs/concepts/policies#?using-policies-with-blueprint-actions">Concepts &gt; Policies</a> for more info.</p>
+</blockquote>
+<h5 id="to-an-entire-controller" permalink="to-an-entire-controller">To an Entire Controller</h5>
+<p>To set the default policy mapping for a controller, use the <code>*</code> notation:</p>
+<blockquote>
+<p><strong>Note:</strong> Default policy mappings do not &quot;cascade&quot; or &quot;trickle down.&quot;  Specified mappings for the controller&apos;s actions will override the default mapping.  In this example, <code>isLoggedIn</code> is overriding <code>false</code>.</p>
+</blockquote>
+<pre><code class="javascript">{
+  ProfileController: {
+    &apos;*&apos;: false,
+    edit: &apos;isLoggedIn&apos;
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="globally" permalink="globally">Globally</h5>
+<blockquote>
+<p><strong>Note:</strong> Global policy mappings do not &quot;cascade&quot; or &quot;trickle down&quot; either.  Specified mappings, whether they&apos;re default controller mappings or for specific actions, will <strong>ALWAYS</strong> override the global mapping.  In this example, <code>isLoggedIn</code> is overriding <code>false</code>.</p>
+</blockquote>
+<pre><code class="javascript">{
+
+  // Anything you don&apos;t see here (the unmapped stuff) is publicly accessible
+  &apos;*&apos;: true,
+
+  ProfileController: {
+    &apos;*&apos;: false,
+    edit: &apos;isLoggedIn&apos;
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="built-in-policies" permalink="builtin-policies">Built-in policies</h5>
+<h6 id="true">true</h6>
+<blockquote>
+<p>This is the default policy mapped to all controllers and actions in a new project.  In production, it&apos;s good practice to set this to <code>false</code> to prevent access to any logic you might have inadvertently exposed.</p>
+</blockquote>
+<p>Allow public access to the mapped controller/action.  This will allow any request to get through, no matter what.</p>
+<pre><code class="javascript">module.exports = {
+  UserController: {
+
+    // login should always be accessible
+    login: true
+
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h6 id="false">false</h6>
+<p><strong>NO</strong> access to the mapped controller/action.  No requests get through.  Period.</p>
+<pre><code class="javascript">module.exports = {
+  MathController: {
+
+    // This fancy algorithm we&apos;re working on isn&apos;t done yet
+    // so we set it to false to disable it
+    someFancyAlgorithm: false
+
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="custom-policies" permalink="custom-policies">Custom policies</h5>
+<p>You can apply one or more policies to a given controller or action.  Any file in your <code>/policies</code> folder (e.g. <code>authenticated.js</code>) is referable in your ACL (<code>config/policies.js</code>) by its filename minus the extension, (e.g.  <code>&apos;authenticated&apos;</code>).</p>
+<pre><code class="javascript">module.exports = {
+  FileController: {
+    upload: [&apos;isAuthenticated&apos;, &apos;canWrite&apos;, &apos;hasEnoughSpace&apos;]
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="multiple-policies" permalink="multiple-policies">Multiple Policies</h5>
+<p>To apply two or more policies to a given action, (order matters!) you can specify an array, each referring to a specific policy.</p>
+<pre><code class="javascript">UserController: {
+    lock: [&apos;isLoggedIn&apos;, &apos;isAdmin&apos;]
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>In each of the policies, the next policy in the chain will only be run if <code>next()</code>, the third argument, is called.  When and if the last policy calls <code>next()</code>, the requested controller action is run.</p>
+<p><docmeta name="displayName" value="sails.config.policies"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

@@ -1,0 +1,62 @@
+<h1 id="one-way-association">One Way Association</h1>
+<p><strong>AKA &quot;Belongs To&quot;</strong></p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>A one way association is where a model is associated with another model.  You could query that model and populate to get the associated model.  You can&apos;t however query the associated model and populate to get the associating model.</p>
+<h3 id="one-way-example" permalink="one-way-example">One Way Example</h3>
+<p>In this example, we are associating a <code>User</code> with a <code>Pet</code> but not a <code>Pet</code> with a <code>User</code>.</p>
+<pre><code class="javascript">// myApp/api/models/Pet.js
+module.exports = {
+  attributes: {
+    name: {
+      type: &apos;string&apos;
+    },
+    color: {
+      type: &apos;string&apos;
+    }
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<pre><code class="javascript">// myApp/api/models/User.js
+module.exports = {
+  attributes: {
+    name: {
+      type: &apos;string&apos;
+    },
+    age: {
+      type: &apos;integer&apos;
+    },
+    pony:{
+      model: &apos;pet&apos;
+    }
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Now that the association is setup, you can populate the pony association.</p>
+<pre><code class="javascript">User.find({ name:&apos;Mike&apos; })
+.populate(&apos;pony&apos;)
+.exec(function(err, users) {
+
+  // The users object would look something like:
+  // [{ 
+  //  name: &apos;Mike&apos;,
+  //  age: 21,
+  //  pony: { 
+  //    name: &apos;Pinkie Pie&apos;,
+  //    color: &apos;pink&apos;,
+  //    id: 5,
+  //    createdAt: Tue Feb 11 2014 15:45:33 GMT-0600 (CST),
+  //    updatedAt: Tue Feb 11 2014 15:45:33 GMT-0600 (CST) 
+  //  },
+  //  createdAt: Tue Feb 11 2014 15:48:53 GMT-0600 (CST),
+  //  updatedAt: Tue Feb 11 2014 15:48:53 GMT-0600 (CST),
+  //  id: 1 
+  // }]
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>For a more detailed description of this type of association, see the <a href="https://github.com/balderdashy/waterline-docs/blob/master/models/associations/associations.md" target="_blank">Waterline Docs</a></p>
+<p>Because we have only formed an association on one of the models, a <code>Pet</code> has no restrictions on the number of <code>User</code> models it can belong to. If we wanted to, we could change this and associate the <code>Pet</code> with exactly one <code>User</code> and the <code>User</code> with exactly one <code>Pet</code>.</p>
+</blockquote>
+<docmeta name="displayName" value="One Way Association">
+
+</docmeta>

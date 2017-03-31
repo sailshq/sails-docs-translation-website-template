@@ -1,0 +1,55 @@
+<h1 id="sails-getroutefor-">sails.getRouteFor()</h1>
+<p>Look up the first route pointing at the specified target (e.g. <code>MeController.login</code>) and return a dictionary containing its method and URL.</p>
+<pre><code class="javascript">sails.getRouteFor(target);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>target</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The route target string; e.g. <code>MeController.login</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="returns" permalink="returns">Returns</h4>
+<p><strong>Type:</strong> <bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></p>
+<pre><code class="javascript">{
+  method: &apos;post&apos;,
+  url: &apos;/auth/login&apos;
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>In a controller action...</p>
+<pre><code class="javascript">return res.view(&apos;pages/some-page-with-a-form-on-it&apos;, {
+  formEndpoint: sails.getRouteFor(&apos;SomeotherController.someAction&apos;),
+  // ...
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>So that in the rendered view...</p>
+<pre><code class="ejs">&lt;form action=&quot;&lt;%=formEndpoint.url%&gt;&quot; method=&quot;&lt;%=formEndpoint.method%&gt;&quot;&gt;
+  &lt;!-- ... --&gt;
+&lt;/form&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This function searches the Sails app&apos;s explicitly configured routes; <a href="/documentation/reference/configuration/sails-config-routes"><code>sails.config.routes</code></a>.  Shadow routes bound by hooks (including <a href="/documentation/reference/blueprint-api#?blueprint-routes">blueprint routes</a>) will not be matched.</li>
+<li>If a matching target cannot be found, this function throws an <code>E_NOT_FOUND</code> error (i.e. if you catch the error and check its <code>code</code> property, it will be the string <code>E_NOT_FOUND</code>).</li>
+<li>If more than one route matches the specified target, the first match is returned.</li>
+<li>If you only need the URL for a route (e.g. to use as an <code>href</code> from within one of your views), you may want to use <a href="/documentation/reference/application/sails-get-url-for"><code>sails.getUrlFor()</code></a> instead of this function.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="sails.getRouteFor()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

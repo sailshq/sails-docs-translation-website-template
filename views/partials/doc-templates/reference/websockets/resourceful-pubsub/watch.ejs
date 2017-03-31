@@ -1,0 +1,64 @@
+<h1 id="-watch-">.watch()</h1>
+<p>Enroll the requesting client socket in the &quot;class room&quot; for this model, causing it to receive broadcasts every time <a href="/documentation/reference/web-sockets/resourceful-pub-sub/publish-create"><code>publishCreate()</code></a> is called on this model.  In addition, this client socket will be subscribed <em>every new record</em> it hears about automatically.</p>
+<pre><code class="javascript">Something.watch(req);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left"><code>req</code></td>
+<td style="text-align:center"><bubble type="req" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The incoming socket request (<code>req</code>).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Also see <strong>Notes</strong> below for an important reminder about security.</p>
+</blockquote>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">User.find({
+  limit: req.param(&apos;limit&apos;),
+  skip: req.param(&apos;skip&apos;),
+  sort: &apos;name ASC&apos;
+}).exec(function(err, users) {
+  if (err) return res.serverError(err);
+
+  if (req.isSocket) {
+    // If this code is running, it&apos;s made it past the `isAdmin` policy, so we can safely
+    // watch for `.publishCreate()` calls about this model and inform this socket, since we&apos;re
+    // confident it belongs to a logged-in administrator.
+    User.watch( req );
+  }
+
+  // If this is request wants JSON (i.e. AJAX), then send a JSON response.
+  if (req.wantsJSON) {
+    return res.json(users);
+  }
+
+  // Otherwise serve an HTML page.
+  return res.view(&apos;admin/user-dashboard&apos;, {
+    users: users
+  });
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Much like the default blueprint API, <code>.watch()</code> should be used with care.  Client sockets allowed to <code>.watch()</code> will receive broadcasted messages <em>every time <code>publishCreate()</code> is called</em>, and then be subscribed to future notifications (like <a href="/documentation/reference/web-sockets/resourceful-pub-sub/publish-update"><code>publishUpdate()</code></a>) about those new records.  This method is a great fit for use cases where access control is &quot;all or nothing&quot;-- e.g. something like an admin dashboard, or a publicly-available endpoint.</li>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code> to refer to the requesting socket.  The provided <code>req</code> must be from a socket request, not just any old HTTP request.</li>
+<li><code>watch()</code> will only work when the request is made over a socket connection (e.g. using <a href="/documentation/reference/web-sockets/socket-client/io-socket-get"><code>io.socket.get()</code></a>), <em>not</em> over HTTP (e.g. using <a href="https://api.jquery.com/jquery.get/" target="_blank"><code>jQuery.get()</code></a>).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".watch()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

@@ -1,0 +1,45 @@
+<div id="news-banner">
+    <div class="banner-container">
+
+      <% if(typeof data !== 'undefined' && !_.isUndefined(data.latestCommit)) { %>
+
+      <p>
+        Latest commit by
+        <% if(data.latestCommit.author.profileUrl) { %>
+          <a class="committer" target="_blank" href="<%= data.latestCommit.author.profileUrl %>">@<%=data.latestCommit.author.username %></a>
+        <% } else { %>
+          <span class="committer"><%= data.latestCommit.author.name %></span>
+        <% }%>
+        <a class="commit" target="_blank" href="<%= data.latestCommit.commitUrl %>"><%= data.latestCommit.timeAgo %></a>
+      </p>
+
+      <% }
+      // If for some reason fetching the commits doesn't work,
+      // just link to the GitHub repo.
+      else { %>
+      <p class="fallback">
+        Check out the latest developments in the <a target="_blank" href="https://github.com/balderdashy/sails">GitHub repo</a>.
+      </p>
+      <% } %>
+
+      <!-- other news can go here.... -->
+
+      <!-- e.g.: -->
+      <!-- <p ng-hide="options.error">Latest update on Github <a target="_blank" href="{{options.latestCommit.url}}">{{options.latestCommit.date | date: 'short'}}</a></p> -->
+
+      <div class="sharing">
+        <div>
+          <iframe src="http://ghbtns.com/github-btn.html?user=balderdashy&amp;repo=sails&amp;type=watch&amp;count=true"
+          allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+        </div>
+
+        <div>
+          <iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fsailsjs&amp;width=75&amp;layout=button_count&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:86px; height:21px;" allowTransparency="true"></iframe>
+        </div>
+
+        <a href="https://twitter.com/share" class="twitter-share-button" data-text="#sailsjs, the realtime MVC framework for Node.js:" data-url="http://sailsjs.com" data-lang="en">Tweet</a>
+
+        <a href="https://twitter.com/sailsjs" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @sailsjs</a>
+      </div> <!-- sharing -->
+    </div>
+</div> <!-- white bar -->

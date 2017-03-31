@@ -1,0 +1,260 @@
+<h1 id="custom-generators">Custom Generators</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Sails is all about automating repetitive tasks to make your programming easier and <strong>Generators</strong> are no exception.  <em>Generators</em> are command line utilities within Sails that automate the generation of files through templates within your Sails projects.  In fact, Sails core uses <em>generators</em> to create Sails projects.  So when you type...</p>
+<pre><code class="bash">~/ $ sails new myProject
+</code></pre><!-- __LANG=%%__ -->
+<p>...sails is using <em>generators</em> to build up the initial folder structure of a Sails app like this:</p>
+<pre><code class="javascript">myProject
+       |_api
+       |_assets
+       |_config
+       |_node_modules
+       |_tasks
+       |_views                
+.gitignore
+.sailsrc
+app.js
+Gruntfile.js
+package.json
+README.md
+</code></pre><!-- __LANG=%%__ -->
+<p>Other examples of <em>generators</em> in Sails core (meaning they are built into Sails) include:</p>
+<ul>
+<li>sails-generate-adapter</li>
+<li>sails-generate-backend</li>
+<li>sails-generate-controller</li>
+<li>sails-generate-frontend</li>
+<li>sails-generate-model</li>
+<li>sails-generate-new</li>
+<li>sails-generate-views</li>
+<li>sails-generate-views-jade</li>
+<li>Although not a stand-alone module there&apos;s one other <em>generator</em> accessed via <code>sails generate api</code></li>
+</ul>
+<p>To begin the process of generating a generator you can use <code>sails-generate-generator</code>. </p>
+<blockquote>
+<p><strong>Note:</strong> The idea of creating a <em>generator</em> by invoking a <em>generator</em> may seem like some kind of demented infinite loop but trust us it will not create a worm hole to an evil alternate universe. </p>
+</blockquote>
+<h3 id="creating-a-generator" permalink="creating-a-generator">Creating a Generator</h3>
+<p>First we need a Sails project.  If you haven&apos;t already created one go to your terminal and type:</p>
+<pre><code class="bash">~/ $ sails new myProject
+</code></pre><!-- __LANG=%%__ -->
+<p><code>cd</code> into <code>myProject</code> or from any existing Sails project and create a <em>generator</em> from the terminal named <strong>awesome</strong> by typing:</p>
+<pre><code class="bash">~/ $ sails generate generator awesome
+</code></pre><!-- __LANG=%%__ -->
+<p>You&apos;ll know the generator was created if you see the message: <code>info: Created a new generator!</code>.</p>
+<h3 id="enabling-the-generator" permalink="enabling-the-generator">Enabling the Generator</h3>
+<p>To enable the <em>generator</em> you need to tell Sails about it via <code>\myProject\.sailsrc</code>. If you were using an existing generator you would link to an npm module in <code>.sailsrc</code> and then just install it with <code>npm install</code>.  Since you&apos;re developing a generator, you&apos;ll link to it directly.  To create the link go back to the terminal and <code>cd</code> into the <code>awesome</code> <em>generator</em> folder and type:</p>
+<pre><code class="bash">~/ $  pwd
+</code></pre><!-- __LANG=%%__ -->
+<p>The <code>pwd</code> command will return a fully resolved path to the <em>generator</em> (e.g. <code>/Users/irl/sails_projects/myProject/awesome</code>).</p>
+<p>Copy the path and then open <code>myProject/.sailsrc</code>.  Within the <code>modules</code> property add an <code>awesome</code> key and paste the path to the <code>awesome</code> <em>generator</em> as the value. </p>
+<blockquote>
+<p><strong>Note:</strong> you can name the <em>generator</em> anything you want, for now let&apos;s stick with <code>awesome</code>:</p>
+</blockquote>
+<pre><code class="javascript">{
+  &quot;generators&quot;: {
+    &quot;modules&quot;: {
+        &quot;awesome&quot;: &quot;/Users/irl/sails_projects/myProject/awesome&quot;
+    }
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>Note:</strong> Whatever name you give your <em>generator</em> in the <code>.sailsrc</code> file will be the name you&apos;ll use from the terminal command-line to execute it.</p>
+</blockquote>
+<p>Lastly, you&apos;ll need to do an <code>npm install</code> from the terminal in order to install the necessary modules that were added to the generator&apos;s <code>package.json</code> file.</p>
+<h3 id="using-the-generator" permalink="using-the-generator">Using the Generator</h3>
+<p>Back at the terminal type: <code>sails generate awesome example</code>. Let&apos;s take a look at what was generated.</p>
+<h4 id="what-did-the-generator-create-" permalink="what-did-the-generator-create">What did the Generator create?</h4>
+<p>Open up your project in a text editor you&apos;ll notice that a folder called <code>hey_look_a_folder</code> was created and a file named <code>example</code> was also created: </p>
+<pre><code class="javascript">/**
+ * This is just an example file created at Wed Jun 04 2014 17:35:59 GMT-0500 (CDT).
+ *
+ * You can use underscore templates, see?
+ */
+
+module.exports = function () {
+  // ...
+};
+</code></pre><!-- __LANG=%%__ --> 
+<p>The folder and file illustrate the power of the <em>generator</em> not only to create elements but to use <code>arguments</code> from the command-line to influence their content. For example, the file name, <code>example</code>, used an element from the command line argument <code>sails generate awesome example</code>.</p>
+<h3 id="basic-generator-configuration" permalink="basic-generator-configuration">Basic generator configuration</h3>
+<p>All of the configuration for the <code>awesome</code> <em>generator</em> is contained in <code>\myProjects\awesome\Generator.js</code>.  The main parts of <code>Generator.js</code> are the <code>before()</code> function and the <code>targets</code> dictionary.</p>
+<blockquote>
+<p><strong>Note:</strong> We refer to the JavaScript object that uses <code>{}</code> as a dictionary.</p>
+</blockquote>
+<h3 id="configuring-the-before-function" permalink="configuring-the-before()-function">Configuring the <code>before()</code> function</h3>
+<p>Let&apos;s take a closer look at <code>myProject/awesome/Generator.js</code>:</p>
+<pre><code class="javascript">...
+before: function (scope, cb) {
+
+    // scope.args are the raw command line arguments.
+    if (!scope.args[0]) {
+      return cb( new Error(&apos;Please provide a name for this awesome.&apos;) );
+    }
+
+    // scope.rootPath is the base path for this generator
+    if (!scope.rootPath) {
+      return cb( INVALID_SCOPE_VARIABLE(&apos;rootPath&apos;) );
+    }
+
+    // Attach defaults
+    _.defaults(scope, {
+      createdAt: new Date()
+    });
+
+    // Decide the output filename for use in targets below:
+    scope.filename = scope.args[0];
+
+    // Add other stuff to the scope for use in our templates:
+    scope.whatIsThis = &apos;an example file created at &apos;+scope.createdAt;
+
+    // When finished, we trigger a callback with no error
+    // to begin generating files/folders as specified by
+    // the `targets` below.
+    cb();
+  },
+  ...
+</code></pre><!-- __LANG=%%__ -->
+<p>Each <em>generator</em> has access to the <code>scope</code> dictionary, which is useful when you want to obtain the arguments that were entered when the <em>generator</em> was executed.</p>
+<p>In your default <code>awesome</code> <em>generator</em> a new key, <code>createdAt:</code> was created in the scope.  We&apos;ll take a look at this dictionary within a template momentarily.</p>
+<pre><code class="javascript">...
+// Attach defaults
+    _.defaults(scope, {
+      createdAt: new Date()
+    });
+...
+</code></pre><!-- __LANG=%%__ -->
+<p>Next, the arguments used when executing the awesome <em>generator</em> (e.g. <code>sails generate awesome &lt;theargument&gt;</code>) are available in an array from <code>scope.args</code>.  In our default <code>awesome</code> <em>generator</em> a <code>filename</code> property was added to the scope and assigned the value of the first element of the <code>scope.args</code> array (e.g. example):</p>
+<pre><code class="javascript">...
+scope.filename = scope.args[0];
+...
+</code></pre><!-- __LANG=%%__ -->
+<p>Finally, another property (e.g. scope.whatIsThis) was added to the scope dictionary.</p>
+<pre><code class="javascript">...
+scope.whatIsThis = &apos;an example file created at &apos;+scope.createdAt;
+...
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="configuring-the-targets-dictionary" permalink="configuring-the-targets-dictionary">Configuring the targets dictionary</h4>
+<p>Now, let&apos;s take a look at the <code>targets</code> dictionary in <code>myProject\awesome\Generator.js</code> to better understand how the folder (e.g. hey_look_a_folder) and file (e.g. example) were generated. </p>
+<pre><code class="javascript">...
+targets: {
+
+    // Usage:
+    // &apos;./path/to/destination.foo&apos;: { someHelper: opts }
+
+    // Creates a dynamically-named file relative to `scope.rootPath`
+    // (defined by the `filename` scope variable).
+    //
+    // The `template` helper reads the specified template, making the
+    // entire scope available to it (uses underscore/JST/ejs syntax).
+    // Then the file is copied into the specified destination (on the left).
+    &apos;./:filename&apos;: { template: &apos;example.template.js&apos; },
+
+    // Creates a folder at a static path
+    &apos;./hey_look_a_folder&apos;: { folder: {} }
+
+  },
+...
+</code></pre><!-- __LANG=%%__ -->
+<p>The <code>template</code> and <code>folder</code> helpers look a lot like routes.  These helpers perform the actions that their names indicate.</p>
+<h5 id="the-_template_-helper" permalink="the-template-helper">The <em>template</em> helper</h5>
+<p>Not surprisingly the <em>template</em> helper creates files based upon a template.  Remember, that the scope dictionary is accessible to the templates.</p>
+<pre><code class="javascript">...
+&apos;./:filename&apos;: { template: &apos;example.template.js&apos; },
+...
+</code></pre><!-- __LANG=%%__ -->
+<p>The left-hand side specifies the path and filename where as the right dictates which template the <em>generator</em> will use to create the file.  Notice you&apos;re using the <code>filename</code> from the <code>scope.filename</code> assignment that was based upon the the first element of <code>scope.args</code> in the <code>before()</code> function.  The templates can be found in <code>myProject\awesome\templates</code>.  In the awesome <em>generator</em> you&apos;re using <code>example.template.js</code>:</p>
+<pre><code class="javascript">/**
+ * This is just &lt;%= whatIsThis %&gt;.
+ *
+ * You can use underscore templates, see?
+ */
+
+module.exports = function () {
+  // ...
+};
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>Note:</strong> the scope property <code>whatIsThis</code> which as you may recall uses the createdAt: property created in the <code>before</code> function.</p>
+</blockquote>
+<h5 id="the-_folder_-helper" permalink="the-folder-helper">The <em>folder</em> helper</h5>
+<p>The <em>folder</em> helper generates folders.  </p>
+<pre><code class="javascript">...
+&apos;./hey_look_a_folder&apos;: { folder: {} }
+...
+</code></pre><!-- __LANG=%%__ -->
+<p>The left-hand side specifies the path and name of the folder.  The right-hand side specifies any optional parameters. For example, by default, if a folder already exists at that location an error will be displayed:
+<code>Something else already exists at ::&lt;path of folder&gt;</code>.  If you want the <em>generator</em> to overwrite an existing folder you have two options.  You can alter the <em>folder</em> helper to overwrite the existing folder by specifying <code>force: true</code> in the options parameters:</p>
+<pre><code class="javascript">...
+&apos;./hey_look_a_folder&apos;: { folder: { force: true} }
+...
+</code></pre><!-- __LANG=%%__ -->
+<p>You can also use the <code>--force</code> parameter from the command-line when executing the <em>generator</em> which will configure all helpers to overwrite:</p>
+<pre><code class="bash">~/ $ sails generate awesome test --force
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="using-a-generator-within-a-generator" permalink="using-a-generator-within-a-generator">Using a generator within a generator</h3>
+<p>To leverage the work of other programmers, <em>generators</em> were designed to be used by other <em>generators</em>.  This is where the scope dictionary being passed down to all <em>generators</em> becomes really powerful. </p>
+<p>For example, Sails core has a <em>generator</em> called <code>sails-generate-model</code>.  Since it&apos;s built into Sails core, there&apos;s no installation necessary.  To add it to our awesome <em>generator</em> example is simple.  Within the <code>myProject\awesome\Generator.js</code> include it by inserting <code>./&apos;: [&apos;model&apos;],</code></p>
+<pre><code class="javascript">...
+targets: {
+
+    // &apos;./:filename&apos;: { template: &apos;example.template.js&apos; },
+
+    &apos;./&apos;: [&apos;model&apos;],
+
+    // &apos;./hey_look_a_folder&apos;: { folder: {} }
+
+  },
+...
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>Note:</strong> By using <code>./</code> as the path, any models will be placed in the <code>\api\models</code> folder from whatever folder the generator was executed.</p>
+</blockquote>
+<p>That&apos;s it!  Now let&apos;s create a model from within the awesome <em>generator</em>.  From the terminal type:</p>
+<pre><code class="bash">~/ $ sails generate awesome user name:string email:email
+</code></pre><!-- __LANG=%%__ -->
+<p>If you take a look in <code>myProject\api\models</code> you&apos;ll see a new file named <code>User.js</code> has been created that contains the model attributes specified earlier.</p>
+<pre><code class="javascript">/**
+* User
+*
+* @description :: TODO: You might write a short summary of how this model works and what it represents here.
+* @docs        :: http://sailsjs.com/#!documentation/models
+*/
+
+module.exports = {
+
+  attributes: {
+
+    name : { type: &apos;string&apos; },
+
+    email : { type: &apos;email&apos; }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="bonus-publishing-your-generator-to-npmjs-org" permalink="bonus-publishing-your-generator-to-npmjsorg">Bonus: Publishing your generator to npmjs.org</h3>
+<p>To publish the awesome <em>generator</em> to npmjs.org go into the <code>myProject\awesome\package.json</code> file and change the name, author and any other meta information (e.g. licensing).</p>
+<p>From within the <code>myProject\awesome</code> folder at the terminal type:</p>
+<pre><code class="bash">~/ $ npm publish
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>Note:</strong>  If you don&apos;t already have an NPM account, go to <a href="https://www.npmjs.org/" target="_blank">npmjs.org</a> and create one.</p>
+</blockquote>
+<p>To unpublish the module, type: </p>
+<pre><code class="bash">~/ $  npm unpublish --force
+</code></pre><!-- __LANG=%%__ -->
+<p>Change the <code>myProject\.sailsrc</code> to:</p>
+<pre><code class="javascript">{
+  &quot;generators&quot;: {
+    &quot;modules&quot;: {
+      &quot;awesome&quot;: &quot;whatever you named the module in package.json&quot;
+    }
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>From the awesome <em>generator</em> folder within the terminal type:</p>
+<pre><code class="bash">~/ $ npm install
+</code></pre><!-- __LANG=%%__ -->
+<p>And you&apos;re all set!</p>
+<docmeta name="displayName" value="Custom Generators">
+</docmeta>

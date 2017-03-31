@@ -1,0 +1,45 @@
+<h1 id="sails-sockets-socketrooms-">sails.sockets.socketRooms()</h1>
+<blockquote>
+<p><em><strong>This method is deprecated</strong>.  Please keep track of your rooms in app-level code.</em></p>
+</blockquote>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>Get the list of rooms a socket is subscribed to</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<h4 id="parameters" permalink="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Accepted Data Types</th>
+<th>Required ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Socket</td>
+<td><code>object</code></td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<pre><code class="javascript">// Controller action
+
+getMyRooms: function(req, res) {
+    var roomNames = JSON.stringify(sails.sockets.socketRooms(req.socket));
+    res.json({
+      message: &apos;I am subscribed to: &apos;+roomNames
+    });
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>The phrase &quot;request socket&quot; here refers to an application-layer WebSocket/Socket.io connection.  <code>req.socket</code> also exists for HTTP requests, but it refers to the underlying TCP socket at the transport layer, which is different.  Be sure and ensure <code>req.isSocket == true</code> before using <code>req.socket</code> with this method.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="sails.sockets.socketRooms()"></docmeta></p>
+<docmeta name="isDeprecated" value="true">
+</docmeta>

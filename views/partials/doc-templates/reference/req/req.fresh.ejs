@@ -1,0 +1,21 @@
+<h1 id="req-fresh">req.fresh</h1>
+<p>A flag indicating the user-agent sending this request (<code>req</code>) wants &quot;fresh&quot; data (as indicated by the &quot;<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.26" target="_blank">if-none-match</a>&quot;, &quot;<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9" target="_blank">cache-control</a>&quot;, and/or &quot;<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.25" target="_blank">if-modified-since</a>&quot; request headers.)</p>
+<p>If the request wants &quot;fresh&quot; data, usually you&apos;ll want to <code>.find()</code> fresh data from your models and send it back to the client.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.fresh;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">if (req.fresh) {
+  // The user-agent is asking for a more up-to-date version of the requested resource.
+  // Let&apos;s hit the database to get some stuff and send it back.
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>See the <a href="https://github.com/visionmedia/node-fresh" target="_blank"><code>node-fresh</code></a> module for details specific to the implementation in Sails/Express/Koa/Connect.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.fresh"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

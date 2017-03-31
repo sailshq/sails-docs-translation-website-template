@@ -1,0 +1,49 @@
+<h1 id="res-notfound-">res.notFound()</h1>
+<p>Sends a <a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#4xx_Client_Error" target="_blank">404</a> (&quot;Not Found&quot;) response using either <a href="/documentation/reference/res/res.json.html">res.json()</a> or <a href="/documentation/reference/res/res.view.html">res.view()</a>. Called automatically when Sails receives a request which doesn&apos;t match any of its explicit routes or route blueprints (i.e. serves the 404 page).</p>
+<p>When called manually from your app code, this method is normally used to indicate that the user-agent tried to find, update, or delete something that doesn&apos;t exist.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">return res.notFound();
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>return res.notFound(data);</code></li>
+<li><code>return res.notFound(data, pathToView);</code></li>
+</ul>
+<h3 id="details" permalink="details">Details</h3>
+<p>Like the other built-in custom response modules, the behavior of this method is customizable.</p>
+<p>By default, it works as follows:</p>
+<ul>
+<li>If the request &quot;<a href="/documentation/reference/req/req.wantsJSON.html">wants JSON</a>&quot; (e.g. the request originated from AJAX, WebSockets, or a REST client like cURL), Sails will send the provided error <code>data</code> as JSON.  If no <code>data</code> is provided a default response body will be sent (the string <code>&quot;Not Found&quot;</code>).</li>
+<li>If the request <em>does not</em> &quot;want JSON&quot; (e.g. a URL typed into a web browser), Sails will attempt to serve one of your views.<ul>
+<li>If a specific <code>pathToView</code> was provided, Sails will attempt to use that view.</li>
+<li>Alternatively if <code>pathToView</code> was <em>not</em> provided, Sails will try to guess an appropriate view (see <a href="/documentation/reference/res/res.view.html"><code>res.view()</code></a> for details).  If Sails cannot guess a workable view, it will just send JSON.</li>
+<li>If Sails serves a view, the <code>data</code> argument will be accessible as a <a href="/documentation/concepts/Views/Locals.html">view local</a>: <code>data</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<p>Using the default view:</p>
+<pre><code class="javascript">return res.notFound();
+</code></pre><!-- __LANG=%%__ -->
+<p>With a custom view:</p>
+<pre><code class="javascript">Pet.findOne()
+.where(name: &apos;fido&apos;)
+.exec(function(err, fido) {
+  if (err) return res.serverError(err);
+  if (!fido) return res.notFound(undefined,&apos;pet/sorry-that-pet-has-moved&apos;);
+  // ...
+})
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method is <strong>terminal</strong>, meaning it is generally the last line of code your app should run for a given request (hence the advisory usage of <code>return</code> throughout these docs).</li>
+<li><code>res.notFound()</code> (like other userland response methods) can be overridden or modified.  It runs the response method defined in <code>/responses/notFound.js</code>, which is bundled automatically in newly generated Sails apps.  If a <code>notFound.js</code> response method does not exist in your app, Sails will implicitly use the default behavior.</li>
+<li>If <code>pathToView</code> refers to a missing view, this method will respond as if the request &quot;wants JSON&quot;.
++By default, the specified error (<code>err</code>) will be excluded if the app is running in the &quot;production&quot; environment (i.e. <code>process.env.NODE_ENV === &apos;production&apos;</code>).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="res.notFound()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

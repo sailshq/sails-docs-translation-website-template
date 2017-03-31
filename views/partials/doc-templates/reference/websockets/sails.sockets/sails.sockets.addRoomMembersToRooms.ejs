@@ -1,0 +1,55 @@
+<h1 id="-addroommemberstorooms-">.addRoomMembersToRooms()</h1>
+<p>Subscribe all members of a room to one or more additional rooms.</p>
+<pre><code class="javascript">sails.sockets.addRoomMembersToRooms(sourceRoom, destRooms, cb);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>sourceRoom</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The room to retrieve members from.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>destRooms</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The room or rooms to subscribe the members of <code>sourceRoom</code> to.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><em><code>cb</code></em></td>
+<td style="text-align:center"><bubble type="function?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">An optional callback which will be called when the operation is complete on the current server (see notes below for more information), or if fatal errors were encountered.  In the case of errors, it will be called with a single argument (<code>err</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>In a controller action:</p>
+<pre><code class="javascript">subscribeFunRoomMembersToFunnerRooms: function(req, res) {
+  sails.sockets.addRoomMembersToRooms(&apos;funRoom&apos;, [&apos;greatRoom&apos;, &apos;awesomeRoom&apos;], function(err) {
+    if (err) {return res.serverError(err);}
+    res.json({
+      message: &apos;Subscribed all members of `funRoom` to `greatRoom` and `awesomeRoom`!&apos;
+    });
+  });
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>In a multi-server environment, the callback function (<code>cb</code>) will be executed when the <code>.addRoomMembersToRooms()</code> call completes <em>on the current server</em>.  This does not guarantee that other servers in the cluster have already finished running the operation.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".addRoomMembersToRooms()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

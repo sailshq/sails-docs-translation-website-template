@@ -1,0 +1,30 @@
+<h1 id="the-sails-app-lifecycle">The Sails app lifecycle</h1>
+<p>The Sails core has been iterated upon several times to make it easier to maintain and extend. As a result, it has a very particular loading order, which its hooks depend on heavily. This process is summarized below.</p>
+<h3 id="-1-load-configuration-overrides-" permalink="(1)-load-configuration-overrides">(1) Load Configuration &quot;Overrides&quot;</h3>
+<p>Gather the set of configuration values passed in on the command line, in environment variables, and in programmatic configuration (i.e. options passed to <a href="/documentation/reference/application/sails-load"><code>sails.load</code></a> or <a href="/documentation/reference/application/sails-lift"><code>sails.lift</code></a>.).  When an app is started via the command-line interface (i.e. by typing <code>sails lift</code> or <code>sails console</code>), the values of any <code>.sailsrc</code> files will also be merged into the config overrides.  These override values will take precedence over any user configuration encountered in the next step.</p>
+<h3 id="-2-load-user-configuration" permalink="(2)-load-user-configuration">(2) Load User Configuration</h3>
+<p>Unless the <code>userconfiguration</code> hook is explicitly disabled, Sails will next load the configuration files in the <code>config</code> folder (and subfolders) underneath the current working directory.  See <a href="/documentation/concepts/configuration"><strong>Concepts &gt; Configuration</strong></a> for more details about user configuration.  Configuration settings from step 1 will be merged on top of these values to form the <code>sails.config</code> object.</p>
+<h3 id="-3-load-hooks" permalink="(3)-load-hooks">(3) Load Hooks</h3>
+<p>Next, Sails will load the other hooks.  <a href="/documentation/concepts/extending-sails/hooks#?types-of-hooks">Core hooks</a> will load first, followed by user hooks and installable hooks.  Note that hooks typically include configuration of their own which will be used as <em>default values</em> in <code>sails.config</code>.  For example, if no <code>port</code> setting is configured by this point, the <code>http</code> hook&apos;s default value of 1337 will be used.</p>
+<h3 id="-4-assemble-router" permalink="(4)-assemble-router">(4) Assemble Router</h3>
+<p>Sails prepares the core Router, then emit multiple events on the <code>sails</code> object informing hooks that they can safely bind routes.</p>
+<h3 id="-5-expose-global-variables" permalink="(5)-expose-global-variables">(5) Expose global variables</h3>
+<p>After all hooks have initialized, Sails exposes global variables (by default: <code>sails</code> object, models, services, <code>_</code>, and <code>async</code>)</p>
+<h3 id="-6-initialize-app-runtime" permalink="(6)-initialize-app-runtime">(6) Initialize App Runtime</h3>
+<blockquote>
+<p>This step does not run when <code>sails.load()</code> is used programmatically.
+To also run the initialization step, use <code>sails.lift()</code> instead.</p>
+</blockquote>
+<ul>
+<li>Run the bootstrap function (<code>sails.config.bootstrap</code>)</li>
+<li>Start attached servers (by default: Express and Socket.io)</li>
+</ul>
+<h3 id="faq" permalink="faq">FAQ</h3>
+<ul>
+<li>What is the difference between <code>sails.lift()</code> and <code>sails.load()</code>?<ul>
+<li><code>lift()</code> === <code>load()</code> + <code>initialize()</code>.  It does everything <code>load()</code> does, plus it starts any attached servers (e.g. HTTP) and logs a picture of a boat.</li>
+</ul>
+</li>
+</ul>
+<docmeta name="displayName" value="Lifecycle">
+</docmeta>

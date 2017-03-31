@@ -1,0 +1,142 @@
+<h1 id="upgrading-to-sails-v0-11">Upgrading to Sails v0.11</h1>
+<p><strong>tldr;</strong></p>
+<p>v0.11 comes with many minor improvements, as well as some internal cleanup in core.  The biggest change is that Sails core is now using Socket.io v1.</p>
+<p>Almost none of this should affect the existing code in project, but there are a few important differences and new features to be aware of.  We&apos;ve listed them below.</p>
+<h2 id="differences" permalink="differences">Differences</h2>
+<h4 id="upgrade-the-socket-io-sails-io-browser-client" permalink="upgrade-the-socketio-/-sailsio-browser-client">Upgrade the Socket.io / Sails.io browser client</h4>
+<p>Old v0.9 socket.io client will no longer work, so consequently you&apos;ll need to upgrade your sails.io.js client from v0.9 or v0.10 to v0.11.</p>
+<p>To do this, just remove your sails.io.js client and install the new one.  We&apos;ve bundled a helper generator that will do this for you, assuming your sails.io.js client is in the conventional location at <code>assets/js/dependencies/sails.io.js</code> (i.e. if you haven&apos;t moved or renamed it):</p>
+<pre><code class="bash">sails generate sails.io.js --force
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-onconnect-lifecycle-callback" permalink="onconnect-lifecycle-callback"><code>onConnect</code> lifecycle callback</h4>
+<blockquote>
+<p><strong>tldr;</strong></p>
+<p>Remove your <code>onConnect</code> function from <code>config/sockets.js</code>.</p>
+</blockquote>
+<p>The <code>onConnect</code> lifecycle callback has been deprecated.  Instead, if you need to do something when a new socket is connected, send a request from the newly-connected client to do so.  The purpose of <code>onConnect</code> was always for optimizing performance (eliminating the need to do this initial extra round-trip with the server), yet its use can lead to confusion and race conditions. If you desperately need to eliminate the server roundtrip, you can bind a handler directly on <code>sails.io.on(&apos;connect&apos;, function (newlyConnectedSocket){})</code> in your bootstrap function (<code>config/bootstrap.js</code>). However, note that this is discouraged.  Unless you&apos;re facing <em>true</em> production performance issues, you should use the strategy mentioned above for your &quot;on connection&quot; logic (i.e. send an initial request from the client after the socket connects).  Socket requests are lightweight, so this doesn&apos;t add any tangible overhead to your application, and it will help make your code more predictable.</p>
+<h4 id="-ondisconnect-lifecycle-callback" permalink="ondisconnect-lifecycle-callback"><code>onDisconnect</code> lifecycle callback</h4>
+<p>The <code>onDisconnect</code> lifecycle callback has been deprecated in favor of <code>afterDisconnect</code>.</p>
+<p>If you were using <code>onDisconnect</code> previously, you might have had to change the <code>session</code>, then call <code>session.save()</code> manually.  In v0.11, this works in almost exactly the same way, except that <code>afterDisconnect</code> receives an additional 3rd argument: a callback function.  This way, you can just call the provided callback when your <code>afterDisconnect</code> logic has finished, so that Sails can persist any changes you&apos;ve made to the session automatically.  Finally, as you might expect, you won&apos;t need to call <code>session.save()</code> manually anymore- it is now taken care of for you (just like <code>req.session</code> in a normal route, action, or policy.)</p>
+<blockquote>
+<p><strong>tldr;</strong>
+Rename your <code>onDisconnect</code> function in <code>config/sockets.js</code> with the following:</p>
+<pre><code class="nohighlight">afterDisconnect: function (session, socket, cb) {
+   // Be sure to call the callback
+   return cb();
+ }
+</code></pre><!-- __LANG=%%__ -->
+</blockquote>
+<h4 id="other-configuration-in-config-sockets-js-" permalink="other-configuration-in-config/socketsjs">Other configuration in <code>config/sockets.js</code></h4>
+<p>Many of the configuration options in Socket.io v1 have changed, so you&apos;ll want to update your <code>config/sockets.js</code> file accordingly.</p>
+<ul>
+<li>if you haven&#x2019;t customized any of the options in <code>config/sockets.js</code> for your app, you can safely remove or comment out the entire file and let the Sails defaults do their magic.  Otherwise, refer to the new <a href="/#!/documentation/reference/sails.config/sails.config.sockets.html">Sails sockets  documentation</a> to ensure that your configuration is still valid and avoid unwanted hair loss.</li>
+<li>if you are scaling to multiple servers in an environment that does <em>not support sticky sessions</em> (this includes Heroku), you&apos;ll need to set your <code>transports</code> to <code>[&apos;websocket&apos;]</code> in both <code>config/socket.js</code> and your client--see <a href="/#!/documentation/concepts/Deployment/Scaling.html?q=configuring-your-app-for-a-clustered-deployment">our Scaling doc</a> for more info.</li>
+<li>if you were using a custom <code>authorization</code> function to restrict socket connections, you&apos;ll now want to use <code>beforeConnect</code>.  <code>authorization</code> was deprecated by Socket.io v1, but <code>beforeConnect</code> (which maps to the <code>allowRequest</code> option from Engine.io) works just the same way.</li>
+<li>if you were using other low-level socket configuration that was passed directly to socket.io v1, be sure and check out the <a href="/#!/documentation/reference/sails.config/sails.config.sockets.html">reference page on sailsjs.com</a> where all of the new configuration options are covered in detail.</li>
+</ul>
+<h4 id="the-firehose-" permalink="the-firehose">The &quot;firehose&quot;</h4>
+<p>The &quot;firehose&quot; feature for testing with sockets has been deprecated.  If you don&apos;t know what that means, you have nothing to worry about. The basic usage will continue to work for a while, but it will soon be removed from core and should not be relied upon in your app.  This also applies to the following methods:</p>
+<ul>
+<li>sails.sockets.subscribeToFirehose()</li>
+<li>sails.sockets.unsubscribeFromFirehose()</li>
+<li>sails.sockets.drink()</li>
+<li>sails.sockets.spit()</li>
+<li>sails.sockets.squirt()</li>
+</ul>
+<blockquote>
+<p>If you want the &quot;firehose&quot; back, let <a href="http://twitter.com/mikermcneil" target="_blank">Mike know on twitter</a> (it can be brought back as a separate hook).</p>
+</blockquote>
+<h4 id="config-files-in-subfolders" permalink="config-files-in-subfolders">Config files in subfolders</h4>
+<p>It has always been the intention that files in the Sails <code>config</code> folder have no precedence over each other, and that the filenames and subfolders (with the exception of <code>local.js</code> and the <code>env</code> and <code>locale</code> subfolders) be used merely for organization.  However, in previous Sails versions, saving config files in subfolders would have the effect that the filename would be added as a key in <code>sails.config</code>, so that if you saved some config in <code>config/foo/bar.js</code>, then that config would be namespaced under <code>sails.config.bar</code>.  This was unintentional and potentially confusing as 1) the directory name is ignored, and 2) moving the file would change the config key.  This has been fixed in v0.11.x: config files in subfolders will be treated the same as those in the root <code>config</code> folder.  If you are for some reason relying on the old behavior, you may set <code>dontFlattenConfig</code> to <code>true</code> in your <code>.sailsrc</code> file, but we would strongly recommend that you instead just namespace the config yourself by setting the desired key on <code>module.exports</code>; for example <code>module.exports.foo = {...}</code>.  See <a href="https://github.com/balderdashy/sails/issues/2544" target="_blank">issue #2544</a> for more details.</p>
+<h4 id="waterline-now-uses-bluebird" permalink="waterline-now-uses-bluebird">Waterline now uses Bluebird</h4>
+<p>As of v0.11, Waterline now supports Bluebird (instead of q) for promises.  If you are using <code>.exec()</code> you won&apos;t be affected-- only if you are using <code>.then()</code>.  See <a href="https://github.com/balderdashy/sails/issues/1186" target="_blank">https://github.com/balderdashy/sails/issues/1186</a> for more information.</p>
+<h2 id="new-features" permalink="new-features">New features</h2>
+<p>Sails v0.11 also comes with some new stuff that we thought you&apos;d like to know about:</p>
+<h4 id="user-level-hooks" permalink="userlevel-hooks">User-level hooks</h4>
+<p>Hooks can now be installed directly from NPM.</p>
+<p>This means you can now install hooks with a single command in your terminal.  For instance, consider the <a href="https://github.com/sgress454/sails-hook-autoreload" target="_blank"><code>autoreload</code> hook</a> by <a href="https://twitter.com/sgress454" target="_blank">@sgress454</a>, which watches for changes to your backend code so you don&apos;t need to kill and re-lift the server every time you change your controllers, routes, models, etc.</p>
+<p>To install the <code>autoreload</code> hook, run:</p>
+<pre><code class="bash">npm install sails-hook-autoreload
+</code></pre><!-- __LANG=%%__ -->
+<p>This is just one example of what&apos;s possible.  As you might already know, hooks are the lowest-level pluggable abstraction in Sails.  They allow authors to tap into the lift process, listen for events, inject custom &quot;shadow&quot; routes, and, in general, take advantage of raw access to the <code>sails</code> runtime.
+Most of the features you&apos;re familiar with in Sails have actually already been implemented as &quot;core&quot; hooks for over a year, including:</p>
+<ul>
+<li><code>blueprints</code> <em>(which provides the blueprint API)</em></li>
+<li><code>sockets</code>    <em>(which provides socket.io integration)</em></li>
+<li><code>grunt</code>      <em>(which provides Grunt integration)</em></li>
+<li><code>orm</code>        <em>(which provides integration with the Waterline ORM, and imports your projects adapters, models, etc.)</em></li>
+<li><code>http</code>       <em>(which provides an HTTP server)</em></li>
+<li>and 16 others.</li>
+</ul>
+<p>You can read more about how to write your own hooks in the <a href="/#!/documentation/concepts/extending-sails">new and improved &quot;Extending Sails&quot; documentation</a> on <a href="">http://sailsjs.com</a>.</p>
+<h4 id="socket-io-v1-x" permalink="socketio-v1x">Socket.io v1.x</h4>
+<p>The upgrade to Socket.io v1.0 shouldn&apos;t actually affect your app-level code, provided you are using the layer of abstraction provided by Sails itself; everything from the <code>sails.sockets.*</code> wrapper methods and &quot;up&quot; (resourceful pubsub, blueprints)
+If you are using underlying socket.io methods in your apps, or are just curious about what changed in Socket.io v1.0, be sure and check out the <a href="http://socket.io/docs/migrating-from-0-9/" target="_blank">complete Socket.io 1.0 migration guide</a> from Guillermo and the socket.io team.</p>
+<h4 id="ever-increasing-modularity" permalink="everincreasing-modularity">Ever-increasing modularity</h4>
+<p>As part of the upgrade to Socket.io v1.0, we pulled out the core <code>sockets</code> hook into a separate repository.  This allowed us to write some modular, hook-specific tests for the socket.io interpreter, which will make things easier to maintain, customize, and override.
+This also allows the hook to grow at its own pace, and puts related issues in one place.</p>
+<p>Consider this a test of the pros and cons of pulling other hooks out of the sails core repo over the next few months.  This will make Sails core lighter, faster, and more extensible, with fewer core dependencies, shorter &quot;lift&quot; time for most apps, and faster <code>npm install</code>s.</p>
+<h4 id="testing-the-virtual-request-interpreter-and-the-sails-request-method" permalink="testing,-the-virtual-request-interpreter,-and-the-sailsrequest()-method">Testing, the &quot;virtual&quot; request interpreter, and the <code>sails.request()</code> method</h4>
+<p>In the process of pulling the <code>sockets</code> hook <em>out</em> of core, the logic which interprets requests has been normalized and is now located <em>in</em> Sails core.  As a result, the <code>sails.request()</code> method is much more powerful.</p>
+<p>This method allows you to communicate directly with the request interpreter in Sails without lifting your server onto a port.  It&apos;s the same mechanism that Sails uses to map incoming messages from Socket.io to &quot;virtual requests&quot; that have the familiar <code>req</code> and <code>res</code> streams.</p>
+<p>The primary use case for <code>sails.request()</code> is in writing faster-running unit and integration tests, but it&apos;s also handy for proxying to mounted apps (or &quot;sub-apps&quot;).</p>
+<p>For instance, here is an example (using mocha) of how you might test one of your app&apos;s routes:</p>
+<pre><code class="javascript">var assert = require(&apos;assert&apos;);
+var Sails = require(&apos;sails&apos;).Sails;
+
+before(function beforeRunningAnyTests (done){
+
+  // Load the app (no need to &quot;lift&quot; to a port)
+  sails.load({
+    log: {
+      level: &apos;warn&apos;
+    },
+    hooks: {
+      grunt: false
+    }
+  }, function whenAppIsReady(err){
+    if (err) return done(err);
+
+    // At this point, the `sails` global is exposed, although we
+    // could have disabled it above with our config overrides to
+    // `sails.load()`. In fact, you can actually use this technique
+    // to set any configuration setting you like.
+    return done();
+  });
+});
+
+after(function afterTestsFinish (done) {
+  sails.lower(done);
+});
+
+describe(&apos;GET /hotpockets&apos;, function (){
+
+  it(&apos;should respond with a 200 status code&apos;, function (done){
+
+    sails.request({
+      method: &apos;get&apos;,
+      url: &apos;/hotpockets&apos;,
+      params: {
+        limit: 10,
+        sort: &apos;price ASC&apos;
+      }
+    }, function (err, clientRes, body) {
+      if (err) return done(err);
+
+      assert.equal(clientRes.statusCode, 200);
+      return done();
+    });
+
+  });
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-config-env-subfolders" permalink="config/env/-subfolders"><code>config/env/</code> subfolders</h4>
+<p>In v0.10.x, we added the <code>config/env</code> folder (thanks to <a href="https://github.com/clarkorz" target="_blank">@clarkorz</a>), where you can add config files that will be loaded only in the appropriate environment (e.g. <code>config/env/production.js</code> for production environment, <code>config/env/development</code> for development, etc.).  In v0.11.x we&apos;ve added the ability to specify whole subfolders per-environment.  For example, <em>all</em> config files saved to the <code>config/env/production</code> will be loaded and merged on top of other configuration when the environment is set to <code>production</code>.  Note that if both a <code>config/env/production</code> folder and a <code>config/env/production.js</code> file are present, the <code>config/env/production.js</code> settings will take precedence.  And, as always, <code>local.js</code> is merged on top of all other files, and <code>.sailsrc</code> rules them all.</p>
+<h2 id="questions-" permalink="questions">Questions?</h2>
+<p>As always, if you run into issues upgrading, or if any of the notes above don&apos;t make sense, let us know and we&apos;ll do what we can to clarify.</p>
+<p>Finally, to those of you that have contributed to the project since the v0.10 release in August: we can&apos;t stress enough how much we value your continued support and encouragement.  There is a pretty massive stream of issues, pull requests, documentation tweaks, and questions, but it always helps to know that we&apos;re in this together :)</p>
+<p>Thanks.</p>
+<p>-<a href="https://github.com/mikermcneil/" target="_blank">@mikermcneil</a>, <a href="https://github.com/sgress454/" target="_blank">@sgress454</a> and <a href="https://github.com/particlebanana/" target="_blank">@particlebanana</a></p>
+<p><docmeta name="displayName" value="To v0.11"></docmeta></p>
+<docmeta name="version" value="0.11.0">
+</docmeta>

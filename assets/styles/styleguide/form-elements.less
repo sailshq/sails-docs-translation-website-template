@@ -1,0 +1,33 @@
+.form-field-text(@line-height: 28px) {
+  color: @text-normal;
+  font-family: @main-font;
+  font-size: 14px;
+  line-height: @line-height;
+  font-weight: @light;
+}
+
+.form-input(@line-height: 28px) {
+  .form-field-text(@line-height);
+  .border-box();
+  .transition(border-color 250ms);
+  font-weight: @light;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid @border-med-gray;
+  background-color: @accent-white;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  color: @text-dark;
+  &:focus, &.focused {
+    border-color: @brand-sails;
+  }
+  &.errored {
+    border-color: @accent-red;
+    background-color: #ffdbe4;
+  }
+  &:disabled {
+    opacity: 0.7;
+  }
+}

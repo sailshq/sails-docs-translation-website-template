@@ -1,0 +1,19 @@
+<h1 id="res-status-">res.status()</h1>
+<p>Set the status code of this response.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">res.status(200);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">res.status(404);
+res.send(&apos;oops&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>The status code may be set up until the response is sent.</li>
+<li><code>res.status()</code> is effectively just a chainable alias of node&apos;s &apos;<code>res.statusCode=</code>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="res.status()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

@@ -1,0 +1,80 @@
+<h1 id="sails-load-">sails.load()</h1>
+<p>Load a Sails app into memory-- but without lifting an HTTP server.</p>
+<p><em>Useful for writing tests, command-line scripts, and scheduled jobs.</em></p>
+<pre><code class="javascript">sailsApp.load(configOverrides, function (err) {
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>sailsApp.load(function (err) {...});</code></li>
+</ul>
+<h4 id="usage" permalink="usage">Usage</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">configOverrides</td>
+<td><bubble type="dictionary?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">A dictionary of config that will override any conflicting options present on the command line, in environment variables, or in configuration files.  If provided, this will be merged on top of <a href="/documentation/reference/configuration"><code>sails.config</code></a>.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">err</td>
+<td><bubble type="Error?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">An error encountered while loading, or <code>undefined</code> if there were no errors.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">var Sails = require(&apos;sails&apos;).constructor;
+var sailsApp = new Sails();
+
+sailsApp.load({
+  log: {
+    level: &apos;error&apos;
+  }
+}, function (err) {
+  if (err) {
+    console.log(&apos;Error occurred loading Sails app:&apos;, err);
+    return;
+  }
+
+  // --&#x2022;
+  console.log(&apos;Sails app loaded successfully!&apos;);
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This takes care of loading configuration files, initializing hooks (including the ORM), and binding routes.  It <strong>does not</strong> run the bootstrap, and it <strong>does not</strong> start listening for HTTP requests and WebSocket connections.</li>
+<li>More specifically, the difference between <a href="/documentation/reference/application/sails-lift"><code>.lift()</code></a> and <a href="/documentation/reference/application/sails-load"><code>.load()</code></a> is that <code>.lift()</code> takes the additional steps of (1) running the app&apos;s <a href="/documentation/reference/configuration/sails-config-bootstrap">bootstrap</a> (if any), and (2) emitting the <code>ready</code> event.  The core <code>http</code> hook will typically respond to the <code>ready</code> event by starting an HTTP server on the port configured via <code>sails.config.port</code> (1337 by default).</li>
+<li>Even though a &quot;loaded-but-not-lifted&quot; Sails app does not listen for requests on an HTTP port, you can make &quot;virtual&quot; requests to it using <a href="/documentation/reference/application/sails-request"><code>sails.request</code></a></li>
+<li>For an example of this in practice, see <a href="https://github.com/treelinehq/machine-as-script/blob/ec8972137489afd24562bdf0b6a10ada11e540cc/index.js#L778-L791" target="_blank">machine-as-script</a>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="sails.load()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

@@ -1,0 +1,262 @@
+// Dependencies:
+@import '../utilities/index.less';
+@import '../styleguide/index.less';
+@import '../pages/shared-elements/header.less';
+@import 'side-nav-base.less';
+@import 'docs-page-mixins/docs-section.less';
+@import 'docs-page-mixins/docs-toc.less';
+
+.docs-page() {
+
+  @header-nav-height: 217px;
+  @docs-min-width: 1100px;
+
+  .border-box();
+  .stretch-page();
+  min-width: @docs-min-width;
+  font-family: @main-font;
+  position: relative;
+  padding-top: @header-nav-height + 50;
+  position: relative;
+  .docs-main-header {
+    .border-box();
+    .transition(all 250ms);
+    height: @header-nav-height;
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+    left: 0px;
+    top: 0px;
+    background-color: @accent-white;
+    min-width: @docs-min-width;
+    padding-top: @header-height;
+    // #header {
+    //   .transition(all 250ms);
+    // }
+    h2 {
+      .sm-page-header();
+      padding-top: 50px;
+      text-align: center;
+    }
+    .docs-header-nav {
+      .border-box();
+      .docs-container();
+      .nav-items {
+        .border-box();
+        text-align: center;
+        border-bottom: 1px solid @border-lt-gray;
+        padding-top: 27px;
+        a {
+          .border-box();
+          .transition(all 250ms);
+          display: inline-block;
+          margin-left: 20px;
+          margin-right: 20px;
+          padding-left: 2px;
+          padding-right: 2px;
+          padding-bottom: 23px;
+          font-family: @header-font;
+          font-weight: @normal;
+          border-bottom: 3px solid transparent;
+          color: @text-normal;
+          &.current {
+            color: @brand-sails;
+            border-bottom-color: @brand-sails;
+          }
+          &:hover {
+            color: @brand-sails;
+          }
+        }
+        .divider {
+          color: @border-lt-gray;
+        }
+      }
+    }
+    &.short {
+      top: -75px;
+      // #header {
+      //   top: 75px;
+      // }
+    }
+  }
+
+  .side-nav {
+    .side-nav-base();
+    .border-box();
+    background-color: @accent-white;
+    padding-top: @header-nav-height;
+    position: absolute;
+    height: 100%;
+    z-index: 50;
+    left: 0px;
+    top: 0px;
+    border-right: 1px solid @border-lt-gray;
+  }
+
+  // // If fixed position (aka scrolly docs):
+  // .side-nav {
+  //   .side-nav-base();
+  //   .border-box();
+  //   background-color: @accent-white;
+  //   padding-top: @header-nav-height;
+  //   height: 100%;
+  //   position: fixed;
+  //   z-index: 50;
+  //   left: 0px;
+  //   top: 0px;
+  //   border-right: 1px solid @border-lt-gray;
+  // }
+
+  #footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    left: 0px;
+    z-index: 75;
+  }
+
+
+  .docs-section {
+    .docs-section();
+    padding-left: 50px;
+    padding-bottom: 100px;
+    position: relative;
+
+    .pencil {
+      .border-box();
+      .transition(all 250ms);
+      position: absolute;
+      right: 0px;
+      top: 0px;
+
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      background-color: @bg-off-white;
+      border: 1px solid @border-med-gray;
+      padding-top: 4px;
+      padding-bottom: 3px;
+      padding-left: 7px;
+      padding-right: 7px;
+      border-radius: 4px;
+
+      font-size: 13px;
+      font-family: @header-font;
+      color: @brand-sails;
+
+      // Pencil is hidden by default
+      opacity: 0;
+      pointer-events: none;
+      i {
+        font-size: 0.8em;
+        margin-left: 2px;
+      }
+      &:hover {
+        background-color: darken(@bg-off-white, 2%);
+        color: @text-dark;
+      }
+      &:active {
+        background-color: darken(@bg-off-white, 5%);
+        border-color: darken(@border-med-gray, 10%);
+        color: @text-dark;
+      }
+    }
+
+    // Pencil is shown any time parent is hovered over.
+    &:hover {
+      .pencil {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
+
+
+    .table-of-contents {
+      .docs-toc();
+    }
+    .permalink-thing {
+      display: inline-block;
+      float: right;
+      position: relative;
+      top: -55px;
+    }
+
+    .table-wrapper {
+      .border-box();
+      overflow-x: auto;
+      margin-bottom: 25px;
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-button {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: @lt-turquoise;
+        border: 1px solid @dark-turquoise;
+        border-radius: 50px;
+      }
+      ::-webkit-scrollbar-track {
+        background: @ltest-gray ;
+        border: 0px none @ltest-gray;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+    }
+  }
+
+  // Scrollbars:
+  ::-webkit-scrollbar {
+    .border-box();
+    width: 10px;
+    background: transparent;
+    border-left: 1px solid transparent;
+  }
+
+  ::-webkit-scrollbar-track {
+    .border-box();
+    width: 6px;
+    background: @accent-white;
+    border-top: 10px solid @accent-white;
+    border-bottom: 10px solid @accent-white;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    .border-box();
+    background-color: @border-lt-gray;
+    border: 1px solid @accent-white;
+    -webkit-box-shadow: inset 0px 0px 0px 1px darken(@border-lt-gray, 10%);
+    border-radius: 10px;
+    width: 6px;
+  }
+
+
+  // Contribution message
+  .contribution-message {
+    .docs-section();
+    padding-left: 50px;
+    padding-top: 20px;
+    border-top: 1px solid @border-lt-gray;
+    padding-bottom: 100px;
+  }
+
+  // Class that transitions opacity more smoothly
+  .fade-in {
+    .transition(opacity 300ms);
+  }
+
+  // Class to keep the page contents hidden until everything's been nicely rendered.
+  .invisible {
+    opacity: 0!important;
+  }
+
+  @media screen and (max-width: 1100px) {
+    .docs-main-header {
+      position: absolute;
+    }
+  }
+}

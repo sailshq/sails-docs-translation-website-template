@@ -1,0 +1,102 @@
+<h1 id="sails-config-http">sails.config.http</h1>
+<p>Configuration for your app&apos;s underlying HTTP server.  These properties are conventionally specified in the <a href="/documentation/anatomy/myApp/config/http.js.html"><code>config/http.js</code></a> configuration file.</p>
+<h3 id="properties" permalink="properties">Properties</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Property</th>
+<th style="text-align:center">Type</th>
+<th>Default</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"> <code>middleware</code></td>
+<td style="text-align:center"><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>See <a href="/documentation/concepts/Middleware?q=conventional-defaults">conventional defaults for HTTP middleware</a></td>
+<td style="text-align:left">A dictionary of all HTTP middleware functions your app will run on every incoming HTTP request.<br><a href="https://gist.github.com/mikermcneil/9cbd68c95839da480e97" target="_blank">Example</a></td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>middleware.order</code></td>
+<td style="text-align:center"><bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>See <a href="https://github.com/balderdashy/sails/blob/master/lib/hooks/http/index.js#l51-66" target="_blank">conventional defaults for HTTP middleware order</a></td>
+<td style="text-align:left">An array of middleware names (strings) indicating the order in which middleware should be run for all incoming HTTP requests.</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>cache</code></td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td><code>cache: 31557600000</code> <em>(1 year)</em></td>
+<td style="text-align:left">The number of milliseconds to cache static assets when your app is running in a <a href="/documentation/reference/configuration/sails-config#?sailsconfigenvironment">&apos;production&apos; environment</a>.<br>These are any flat files like images, scripts, stylesheets, etc. that are served by Express&apos; static middleware (by default,  these files are served from <code>.tmp/public</code>, a hidden folder compiled by Grunt).</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>serverOptions</code></td>
+<td style="text-align:center"><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td><code>{}</code></td>
+<td style="text-align:left"><em>SSL only</em>: options to send directly to the <a href="https://nodejs.org/dist/latest-v4.x/docs/api/https.html" target="_blank">Node <code>https</code> module</a> when creating the server.  These will be merged with your <a href="/documentation/reference/configuration/sails-config#?sailsconfigssl">SSL settings</a>, if any.  See the <a href="https://nodejs.org/dist/latest-v4.x/docs/api/https.html#https_https_createserver_options_requestlistener" target="_blank">createServer docs</a> for more info.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="configuring-skipper" permalink="configuring-skipper">Configuring Skipper</h3>
+<p>To customize Skipper, the default body parser and file uploader, you can uncomment the direct call to <code>require(&apos;skipper&apos;)(...)</code>:</p>
+<pre><code class="javascript">// bodyParser: require(&apos;skipper&apos;)({strict: true})
+</code></pre><!-- __LANG=%%__ -->
+<p>Then pass in any of the following options from the table below.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Property</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"> <code>maxWaitTimeBeforePassingControlToApp</code></td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>500</code></td>
+<td style="text-align:left">The maximum number of miliseconds to wait when processing an incoming multipart request before passing control to your app&apos;s policies and controllers.  If this number of miliseconds goes by, and no incoming file uploads have arrived yet, and the request hasn&apos;t finished sending other data like text parameters (i.e. the form emits &quot;close&quot;), then control will be passed without further delay.  For apps running behind particular combinations of load balancers, proxies, and/or SSL, it may be necessary to increase this delay (see <a href="https://github.com/balderdashy/skipper/issues/71#issuecomment-217556631" target="_blank">https://github.com/balderdashy/skipper/issues/71#issuecomment-217556631</a>).</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>maxTimeToWaitForFirstFile</code></td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>10000</code></td>
+<td style="text-align:left">The maximum number of miliseconds to wait for the first file upload to arrive in any given upstream before triggering <code>.upload()</code>&apos;s callback.  If the first file upload on a given upstream does not arrive before this number of miliseconds have elapsed, then an <code>ETIMEOUT</code> error will fire.</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>maxTimeToBuffer</code></td>
+<td style="text-align:center"><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>4500</code></td>
+<td style="text-align:left">The maximum number of miliseconds to wait for any given live <a href="https://github.com/balderdashy/skipper#what-are-upstreams" target="_blank">upstream</a> to be plugged in to a receiver after it begins receiving an incoming file upload.  Skipper pauses upstreams to allow custom code in your app&apos;s policies and controller actions to run (e.g. doing database lookups) before you &quot;plug in&quot; the incoming file uploads (e.g. <code>req.file(&apos;avatar&apos;).upload(...)</code>) into your desired upload target (local disk, S3, gridfs, etc).  Incoming bytes are managed using <a href="https://howtonode.org/streams-explained" target="_blank">a combination of buffering and TCP backpressure</a> built in to Node.js streams.  The max buffer time is a configurable layer of defense to protect against denial of service attacks that attempt to flood servers with pending file uploads.  If the timeout is exceeded, an EMAXBUFFER error will fire.  The best defense against these types of attacks is to plug incoming file uploads into receivers as early as possible at the top of your controller actions.</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>strict</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">When enabled, only arrays and dictionaries (i.e. JavaScript objects) will be interpeted and parsed as JSON when sent in the HTTP request body.  Other values (including <code>null</code>, <code>true</code>, <code>false</code>, numbers, and double-quote-wrapped strings) which are technically JSON compatible, but uncommon in practice, are not interpreted as JSON.  Enabled by default.</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>extended</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">Whether or not to understand multiple text parameters in square bracket notation in the URL-encoded request body (e.g. <code>courseId[]=ARY%20301&amp;courseId[]=PSY%20420</code>) encoded  the HTTP body as an array (e.g. <code>courseId: [&apos;ARY 301&apos;, &apos;PSY 420&apos;], ...</code>).  Enabled by default.  See <a href="https://github.com/expressjs/body-parser#extended" target="_blank">https://github.com/expressjs/body-parser#extended</a> for more details.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note that for performance tuning and other advanced configuration, the options you pass in to Skipper this way are also passed through to the underlying Express body parser.  See the <a href="https://github.com/expressjs/body-parser" target="_blank">body-parser repo</a> for a full list of options.</p>
+</blockquote>
+<h3 id="compatibility" permalink="compatibility">Compatibility</h3>
+<p>Most middleware compatible with <a href="https://github.com/expressjs/" target="_blank">Express</a>, <a href="https://github.com/senchalabs/connect" target="_blank">Connect</a>, <a href="http://krakenjs.com/" target="_blank">Kraken</a>, <a href="https://github.com/strongloop/loopback" target="_blank">Loopback</a>, or <a href="https://pillarjs.github.io/" target="_blank">Pillar</a> can also be used in a Sails app.</p>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Note that this HTTP middleware stack configured in <code>sails.config.http.middleware</code> is only applied to true HTTP requests-- it is ignored when handling virtual requests (e.g. sockets)</li>
+<li>The middleware named <code>router</code> is what handles all of your app&apos;s explicit routes (i.e. <code>sails.config.routes</code>) as well as shadow routes that are injected for blueprints, policies, etc.</li>
+<li>You cannot define a custom middleware function with the key <code>order</code> (since <code>sails.config.http.middleware.order</code> has special meaning)</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="sails.config.http"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

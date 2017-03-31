@@ -1,0 +1,57 @@
+<h1 id="res-ok-">res.ok()</h1>
+<p>Send a 200 (&quot;OK&quot;) response back down to the client.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">return res.ok();
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>return res.ok(data);</code></li>
+<li><code>return res.ok(data, pathToView);</code></li>
+</ul>
+<h3 id="details" permalink="details">Details</h3>
+<p>Like the other built-in custom response modules, the behavior of this method is customizable.</p>
+<p>By default, it works as follows:</p>
+<ul>
+<li>If the request &quot;<a href="/documentation/reference/req/req.wantsJSON.html">wants JSON</a>&quot; (e.g. the request originated from AJAX, WebSockets, or a REST client like cURL), Sails will send the provided <code>data</code> as JSON by calling <a href="/documentation/reference/res/res.json.html"><code>res.json()</code></a>.  If no <code>data</code> is provided a default response body will be sent (the string <code>&quot;OK&quot;</code>).</li>
+<li>If the request <em>does not</em> &quot;want JSON&quot; (e.g. a URL typed into a web browser), Sails will attempt to serve one of your views.<ul>
+<li>If a specific <code>pathToView</code> was provided, Sails will attempt to use that view.</li>
+<li>Alternatively if <code>pathToView</code> was <em>not</em> provided, Sails will try to guess an appropriate view (see <a href="/documentation/reference/res/res.view.html"><code>res.view()</code></a> for details).  If Sails cannot guess a workable view, it will fall back and send JSON.</li>
+<li>If Sails serves a view, the <code>data</code> argument will be accessible as a <a href="/documentation/concepts/Views/Locals.html">view local</a>: <code>data</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">return res.ok({
+  name: &apos;Lo&#xEF;c&apos;,
+  occupation: &apos;developer&apos;
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>If the request originated from a socket or AJAX request, the response sent from the usage above would contain the following JSON:</p>
+<pre><code class="json">{
+  &quot;name&quot;: &quot;Lo&#xEF;c&quot;,
+  &quot;occupation&quot;: &quot;developer&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Alternatively, if the code that calls <code>res.ok()</code> was located somewhere where a view file could be guessed, that view would be served, with with Lo&#xEF;c available as the <code>data</code> local.  For example if <code>res.ok()</code> was called in <code>UserController.update</code>, then we might create the following view as <code>views/user/update.ejs</code>:</p>
+<pre><code class="html">&lt;input type=&quot;text&quot; placeholder=&quot;Name&quot; value=&quot;&lt;%= data.name %&gt;&quot;/&gt;
+&lt;input type=&quot;text&quot; placeholder=&quot;Occupation&quot; value=&quot;&lt;%= data.occupation %&gt;&quot;/&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p>If the code that calls <code>res.ok()</code> is not in a controller action, a conventional view cannot be guessed, so Sails will just send back JSON instead.</p>
+<p>Finally, if a custom <code>pathToView</code> is provided as the second argument, Sails will always use that view instead of guessing, e.g. the following usage will compile and respond with a view located in <code>views/user/detail.ejs</code>:</p>
+<pre><code class="javascript">return res.ok({
+  name: &apos;Lo&#xEF;c&apos;,
+  occupation: &apos;developer&apos;
+}, &apos;user/detail&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method is <strong>terminal</strong>, meaning it is generally the last line of code your app should run for a given request (hence the advisory usage of <code>return</code> throughout these docs).</li>
+<li><code>res.ok()</code> (like other userland response methods) can be overridden or modified.  It runs the response method defined in <a href="/documentation/anatomy/myApp/api/responses/ok.js.html"><code>api/responses/ok.js</code></a>, which is bundled automatically in newly generated Sails apps.  If an <code>ok.js</code> response method does not exist in your app, Sails will implicitly use the default behavior.</li>
+<li>This method is used by <a href="/documentation/reference/blueprint-api?q=blueprint-actions">blueprint actions</a> to send a success response.  Therefore as you might expect, it is a great place to marshal response data for clients which expect data in a specific format, i.e. to convert data to XML, or it wrap in an additional dictionary (for Ember clients).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="res.ok()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

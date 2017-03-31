@@ -1,0 +1,17 @@
+<h1 id="assets-js-dependencies">assets/js/dependencies</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This directory allows grunt to load javascript files in index.ejs before the rest of the javascript files in the js directory.</p>
+<pre><code>js/
+| main.js
+| apple.js
+| dependencies/
+| | sails.io.js
+</code></pre><p>This setup will create</p>
+<pre><code>&lt;!--SCRIPTS--&gt;
+&lt;script src=&quot;/js/dependencies/sails.io.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/js/apple.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/js/main.js&quot;&gt;&lt;/script&gt;
+&lt;!--SCRIPTS END--&gt;
+</code></pre><docmeta name="displayName" value="dependencies">
+
+</docmeta>

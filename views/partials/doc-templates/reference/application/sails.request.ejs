@@ -1,0 +1,118 @@
+<h1 id="sails-request-">sails.request()</h1>
+<p>Make a virtual request to a running Sails instance.</p>
+<pre><code class="javascript">sails.request(request);
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>sails.request(url, body)</code></li>
+<li><code>sails.request(url, callback)</code></li>
+<li><code>sails.request(url, body, callback)</code></li>
+</ul>
+<p>This method can be used on a instances that have been started with <a href="/documentation/reference/application/sails-load"><code>sails.load()</code></a>, which are not actively listening for HTTP requests on a server port.  This makes it useful for testing scenarios where running <a href="/documentation/reference/application/sails-lift"><code>sails.lift()</code></a> is not necessary.  However, it should be noted that the data may not be processed in exactly the same way as an HTTP request; in particular, a much simpler body parser will be employed, and Express middleware such as the static asset server will not be used.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th>Type</th>
+<th style="text-align:center">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>request (or url)</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble> -or- <bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:center">The virtual request to make.  If specified as a string, this should be an address containing an optional method and a path, e.g. <code>/foo</code> or <code>PUT /user/friend</code>.  If specified as an object, it should have one or more of the properties described in the &quot;request argument&quot; section below.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>body</em></td>
+<td><bubble type="json?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:center">(optional) A JSON-serializable value to use as the request body.  This argument will override the <code>data</code> property of the <code>request</code> argument, if provided.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><em>callback</em></td>
+<td><bubble type="function?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:center">(optional) A callback to be called with the virtual response.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="request-object" permalink="request-object">Request object</h4>
+<p>If the <code>request</code> argument is specified as an object, it can have the following properties:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Example</th>
+<th style="text-align:center">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td><code>&quot;/foo&quot;</code>, <code>&quot;PUT /user/friend&quot;</code></td>
+<td style="text-align:center">(required) The route in the Sails app to make a request to, with an optional HTTP method prefix</td>
+</tr>
+<tr>
+<td>method</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td><code>&quot;GET&quot;</code>, <code>&quot;POST&quot;</code></td>
+<td style="text-align:center">(optional) The HTTP method to use in the request.  This will override any method supplied as part of the <code>url</code> property.</td>
+</tr>
+<tr>
+<td>headers</td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td><code>{content-type: &apos;application/json&apos;}</code></td>
+<td style="text-align:center">(optional) Dictionary of headers to use in the virtual request.</td>
+</tr>
+<tr>
+<td>data</td>
+<td><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td><code>{foo:&apos;bar&apos;}</code>, <code>12345</code></td>
+<td style="text-align:center"><bubble type="optional" class="colors"><span is="bubble-heart"></span></bubble> Data to send along with the request.  For <code>GET</code>, <code>HEAD</code> and <code>DELETE</code> requests, the data will be serialized into a querystring and added to the URL.  Otherwise, it will be sent as-is as the request body.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="callback" permalink="callback">Callback</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>err</td>
+<td><bubble type="Error" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If the response was unsuccessful (status code was not in the 200-399 range) this will be an object containing <code>status</code> and <code>body</code> properties.  If the response was successful, this will be <code>null</code>.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>response</td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If the response was successful, this will be an object containing the full server response.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>body</td>
+<td><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If the response was successful, this will be the value of <code>response.body</code>.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="returns" permalink="returns">Returns</h4>
+<p><strong>Type:</strong> <bubble type="stream" class="colors"><span is="bubble-heart"></span></bubble></p>
+<p>The full virtual request stream object.  This is a readable stream.</p>
+<p><docmeta name="displayName" value="sails.request()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

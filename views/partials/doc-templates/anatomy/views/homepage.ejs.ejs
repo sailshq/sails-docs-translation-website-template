@@ -1,0 +1,84 @@
+<h1 id="views-homepage-ejs">views/homepage.ejs</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This is the actual template that is rendered by default when a user visits the base URL of your lifted app.  Notice the file extension?  It stands for <a href="http://embeddedjs.com/" target="_blank">Embedded JavaScript</a>.  EJS is what Sails uses by default to render server side HTML views.  This can be changed in <code>config/views.js</code>.</p>
+<p>If a new view you&apos;ve created isn&apos;t rendering, make sure you&apos;ve hooked it up in your <code>config/routes.js</code>.</p>
+<p>If you&apos;re used to putting all your HTML in a single file, this might look funny.  You might be thinking &quot;Where are the head and body tags&quot;?  The answer is, <code>views/layout.ejs</code>.</p>
+<docmeta name="displayName" value="homepage.ejs">
+
+<pre><code class="html">&lt;!-- Default home page --&gt;
+&lt;link type=&quot;text/css&quot; href=&apos;http://sailsjs.com/styles/fonts.css&apos; rel=&apos;stylesheet&apos;/&gt;
+&lt;style&gt;
+    /* Styles included inline since you&apos;ll probably be deleting this page anyway */
+    html,body{text-align:left;font-size:1em}html,body,img,form,textarea,input,fieldset,div,p,div,ul,li,ol,dl,dt,dd,h1,h2,h3,h4,h5,h6,pre,code{margin:0;padding:0}ul,li{list-style:none}img{display:block}a img{border:0}a{text-decoration:none;font-weight:normal;font-family:inherit}*:active,*:focus{outline:0;-moz-outline-style:none}h1,h2,h3,h4,h5,h6{font-weight:normal}div.clear{clear:both}.clearfix:after{clear:both;content:&quot;.&quot;;display:block;font-size:0;height:0;line-height:0;visibility:hidden}body{font-family:&quot;Open Sans&quot;,Arial,sans-serif;font-weight:300;}.top-bar {width: 100%; background-color: #e4f0f1; padding: 15px 0;}.top-bar .container img {float: left;}.top-bar .container ul {float: right; padding-top: 25px;}.top-bar .container li {float: left; width: 125px; text-align: center; font-size: 15px; color:#000; font-weight: 600;}.top-bar .container a li:hover {color: #118798; -webkit-transition:color 200ms; -moz-transition:color 200ms; -o-transition:color 200ms;transition:color 200ms;}.container{width: 80%; max-width: 1200px; margin: auto;}div.header {-webkit-transition: 6s; -moz-transition: 6s; -o-transition: 6s;transition: 6s; background: rgba(4, 36, 41, 0.89) url(http://sailsjs.com/images/img_sailsShadow.png) no-repeat 42% bottom; padding: 100px 0 65px;}.header h1#main-title{color: #fff; font-weight: 300; font-size: 2.5em;}.header h3{color: #b1eef7; font-style: italic; font-weight: 300;}.header h3 code{font-style: normal!important; background-color: rgba(255,255,255,0.5); font-weight: 300; color:#0e6471; margin: 0px 5px;}div.main.container{padding: 50px 0;}h1 {color: #118798; font-weight: 300;}code {font-size: inherit; font-family: &apos;Consolas&apos;, &apos;Monaco&apos;, monospace; padding:4px 5px 1px; background-color: #f3f5f7}a{color: #118798; font-weight: 300; text-decoration: underline;}a:hover {color: #0e6471; -webkit-transition:color 200ms; -moz-transition:color 200ms; -o-transition:color 200ms;transition:color 200ms;}p{line-height: 1.5em;}blockquote{background-color: #e4f0f1; padding: 25px; line-height: 1.5em; margin: 15px 0;}blockquote span{font-weight: 600; padding-right: 5px;}ul.getting-started{padding: 25px 75px 25px 0; width: 70%; float: left; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}ul.getting-started li{padding: 25px 0;}ul.getting-started li h3 {padding-bottom: 10px; font-size: 25px; font-weight: 300;}.sprite{background:url(http://sailsjs.com/images/newapp.sprite.png) no-repeat; position: absolute; left: 0; top:0;}.getting-started .sprite{margin-left:10px;padding-left:60px;height:42px;width:0; float: left;}.getting-started .one{background-position:0 0}.getting-started .two{background-position:0 -42px}.getting-started .three{background-position:0 -83px}div.step {position: relative; padding-left: 70px; opacity: 0.9;}div.step:hover{ opacity: 1;}div.links {float: left; width: 30%; max-width: 325px; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; background-color: #f3f5f7; border: 1px solid #ebebeb; padding: 25px 45px 35px;}div.links h3 {color: #727272; text-align: center; font-size: 28px; font-weight: 300;}div.links h4 {color: #727272; font-size: 17px; font-weight: 600; padding: 15px 0 10px;}div.links .link-list a {text-decoration: none; font-weight: 400;}div.links .link-list a li {padding: 0px 0px 5px 10px;}div.default-page{min-width: 1200px;}.pocket{display:none;}
+&lt;/style&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+setTimeout(function sunrise () {
+    document.getElementsByClassName(&apos;header&apos;)[0].style.backgroundColor = &apos;#118798&apos;;
+}, 0);
+&lt;/script&gt;
+
+&lt;div class=&quot;default-page&quot;&gt;
+    &lt;div class=&quot;header&quot;&gt;
+        &lt;h1 id=&quot;main-title&quot; class=&quot;container&quot;&gt;&lt;%= __(&apos;A brand new app.&apos;) %&gt;&lt;/h1&gt;
+        &lt;h3 class=&quot;container&quot;&gt;You&apos;re looking at: &lt;code&gt;&lt;%= view.pathFromApp + &apos;.&apos; +view.ext %&gt;&lt;/code&gt;&lt;/h3&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;main container clearfix&quot;&gt;
+        &lt;!-- &lt;h1&gt;Getting started&lt;/h1&gt;
+        &lt;p&gt;Don&apos;t worry, we&apos;ve got your back.&lt;/p&gt; --&gt;
+        &lt;ul class=&quot;getting-started&quot;&gt;
+            &lt;li class=&quot;clearfix&quot;&gt;
+                &lt;div class=&quot;step&quot;&gt;
+                    &lt;div class=&quot;sprite one&quot;&gt;&lt;/div&gt;
+                    &lt;h3&gt;Generate a REST API.&lt;/h3&gt;
+                    &lt;p&gt;
+                        Run &lt;code&gt;sails generate api user&lt;/code&gt;.  This will create two files: a &lt;a href=&quot;http://sailsjs.com/documentation/concepts/models-and-orm/models&quot;&gt;model&lt;/a&gt; &lt;code class=&quot;pocket&quot;&gt;api/models/User.js&lt;/code&gt; and a &lt;a href=&quot;http://sailsjs.com/documentation/concepts/controllers&quot;&gt;controller&lt;/a&gt;&lt;code class=&quot;pocket&quot;&gt;api/controllers/UserController.js&lt;/code&gt;.
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;clearfix&quot;&gt;
+                &lt;div class=&quot;step&quot;&gt;
+                    &lt;div class=&quot;sprite two&quot;&gt;&lt;/div&gt;
+                    &lt;h3&gt;
+                        Lift your app.
+                    &lt;/h3&gt;
+                    &lt;p&gt;
+                        Run &lt;code&gt;sails lift&lt;/code&gt; to start up your app server.  If you visit &lt;a target=&quot;_blank&quot; href=&quot;http://localhost:1337/user&quot;&gt;&lt;code&gt;http://localhost:1337/user&lt;/code&gt;&lt;/a&gt; in your browser, you&apos;ll see a &lt;a href=&quot;http://sailsjs.com/documentation/concepts/blueprints&quot;&gt;WebSocket-compatible&lt;/a&gt; user API.
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;clearfix&quot;&gt;
+                &lt;div class=&quot;step&quot;&gt;
+                    &lt;div class=&quot;sprite three&quot;&gt;&lt;/div&gt;
+                    &lt;h3&gt;
+                        Dive in.
+                    &lt;/h3&gt;
+                    &lt;p&gt;Blueprints are just the beginning.  You&apos;ll probably also want to learn how to customize your app&apos;s &lt;a href=&quot;http://sailsjs.com/documentation/concepts/routes&quot;&gt;routes&lt;/a&gt;, set up &lt;a href=&quot;http://sailsjs.com/documentation/concepts/policies&quot;&gt;security policies&lt;/a&gt;, configure your &lt;a href=&quot;http://sailsjs.com/documentation/reference/configuration/sails-config-connections&quot;&gt;data sources&lt;/a&gt;, and build custom &lt;a target=&quot;_blank&quot; href=&quot;http://sailsjs.com/documentation/concepts/controllers&quot;&gt;controller actions&lt;/a&gt;. For more help getting started, check out the links on this page.&lt;/p&gt;
+
+                &lt;/div&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div class=&quot;links&quot;&gt;
+            &lt;!-- &lt;h3&gt;Links&lt;/h3&gt; --&gt;
+            &lt;ul class=&quot;link-list&quot;&gt;
+
+                &lt;h4&gt;Docs&lt;/h4&gt;
+                &lt;a target=&quot;_blank&quot; href=&quot;http://sailsjs.com/documentation/anatomy&quot;&gt;&lt;li&gt;App Structure&lt;/li&gt;&lt;/a&gt;
+                &lt;a target=&quot;_blank&quot; href=&quot;http://sailsjs.com/documentation/reference&quot;&gt;&lt;li&gt;Reference&lt;/li&gt;&lt;/a&gt;
+                &lt;a target=&quot;_blank&quot; href=&quot;http://sailsjs.com/documentation/concepts/deployment/faq&quot;&gt;&lt;li&gt;FAQ&lt;/li&gt;&lt;/a&gt;
+                &lt;a target=&quot;_blank&quot; href=&quot;http://sailsjs.com&quot;&gt;&lt;li&gt;Supported Databases&lt;/li&gt;&lt;/a&gt;
+
+                &lt;h4&gt;Tutorials&lt;/h4&gt;
+                &lt;a target=&quot;_blank&quot; href=&quot;https://github.com/sails101&quot;&gt;&lt;li&gt;Sails 101&lt;/li&gt;&lt;/a&gt;
+
+                &lt;h4&gt;Community&lt;/h4&gt;
+                &lt;a target=&quot;_blank&quot; href=&quot;http://stackoverflow.com/search?q=sails.js&quot;&gt;&lt;li&gt;StackOverFlow&lt;/li&gt;&lt;/a&gt;
+                &lt;a target=&quot;_blank&quot; href=&quot;https://github.com/balderdashy/sails&quot;&gt;&lt;li&gt;GitHub&lt;/li&gt;&lt;/a&gt;
+                &lt;a target=&quot;_blank&quot; href=&quot;https://groups.google.com/forum/#!forum/sailsjs&quot;&gt;&lt;li&gt;Google Group&lt;/li&gt;&lt;/a&gt;
+                &lt;a target=&quot;_blank&quot; href=&quot;http://webchat.freenode.net/&quot;&gt;&lt;li&gt;IRC (#sailsjs on freenode)&lt;/li&gt;&lt;/a&gt;
+
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre><!-- __LANG=%%__ -->
+</docmeta>

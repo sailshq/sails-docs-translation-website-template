@@ -1,0 +1,21 @@
+<h1 id="associations">Associations</h1>
+<p>With Sails and Waterline, you can associate models across multiple data stores. This means that even if your users live in <a href="http://www.postgresql.org/" target="_blank">PostgreSQL</a> and their photos live in <a href="http://www.mongodb.com/" target="_blank">MongoDB</a>, you can interact with the data as if they lived together in the same database. You can also have associations that span different <a href="/documentation/reference/sails.config/sails.config.connections.html">connections</a> (i.e. datastores/databases) using the same adapter.  This comes in handy if, for example, your app needs to access/update legacy recipe data stored in a <a href="http://www.mysql.com/" target="_blank">MySQL</a> database in your company&apos;s data center, but also store/retrieve ingredient data from a brand new MySQL database in the cloud.</p>
+<blockquote>
+<p><strong>IMPORTANT NOTE</strong></p>
+<p>In the examples used throughout the associations concepts guide, note that all references to Sails model classes are in <em>lowercase</em>.  For example, in:</p>
+<pre><code class="javascript">// User.js
+module.exports = {
+  connection: &apos;ourMySQL&apos;,
+  attributes: {
+    email: &apos;string&apos;,
+    wishlist: {
+      collection: &apos;product&apos;,
+      via: &apos;wishlistedBy&apos;
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>the <code>collection</code> key is set to <code>product</code>--this is the <em>identity</em> of the Sails model called <code>Product</code>.  Whenever models are referenced in <code>collection</code>, <code>via</code>, <code>model</code> or <code>through</code> keys, their lowercased identity names should be used.</p>
+</blockquote>
+<docmeta name="displayName" value="Associations">
+</docmeta>

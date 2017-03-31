@@ -1,0 +1,63 @@
+<h1 id="sails-lower-">sails.lower()</h1>
+<p>Shut down a lifted Sails app and have it cease listening for / responding to any future requests.</p>
+<pre><code class="javascript">sails.lower(callback);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th>Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em><code>callback</code></em></td>
+<td><bubble type="function?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Optional. A function to call when lowering is complete (or if an error occurs)</td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em><code>err</code></em></td>
+<td style="text-align:center"><bubble type="Error?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>An error instance will be sent as the first argument of the callback if any fatal errors occurred while lowering.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">sailsApp.lower(
+  function (err) {
+    if (err) {
+      return console.log(&quot;Error occurred lowering Sails app: &quot;, err);
+    }
+    console.log(&quot;Sails app lowered successfully!&quot;);
+  }
+)
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>After an app is successfully lowered, it will emit the <code>lowered</code> event.</li>
+<li>Lowered apps cannot be lifted again.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="sails.lower()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

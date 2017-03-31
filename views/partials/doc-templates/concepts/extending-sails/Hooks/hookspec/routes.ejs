@@ -1,0 +1,36 @@
+<h1 id="-routes-"><code>.routes</code></h1>
+<p>The <code>routes</code> feature allows a custom hook to easily bind new routes to a Sails app at load time.  If implemented, <code>routes</code> should be an object with either a <code>before</code> key, an <code>after</code> key, or both.  The values of those keys should in turn be objects whose keys are <a href="/documentation/concepts/Routes/RouteTargetSyntax.html?q=route-address">route addresses</a>, and whose values are route-handling functions with the standard <code>(req, res, next)</code> parameters.  Any routes specified in the <code>before</code> object will be bound <em>before</em> custom user routes (as defined in <a href="/documentation/reference/sails.config/sails.config.routes.html">sails.config.routes</a>) and <a href="/documentation/reference/blueprint-api?q=blueprint-routes">blueprint routes</a>.  Conversely, routes specified in the <code>after</code> object will be bound <em>after</em> custom and blueprint routes.  For example, consider the following <code>count-requests</code> hook:</p>
+<pre><code class="javascript">module.exports = function (sails) {
+
+   return {
+
+      initialize: function(cb) {
+         this.numRequestsSeen = 0;
+         this.numUnhandledRequestsSeen = 0;
+         return cb();
+      },
+
+      routes: {
+         before: {
+            &apos;GET /*&apos;: function (req, res, next) {
+               this.numRequestsSeen++;
+               return next();
+            }
+         },
+         after: {
+            &apos;GET /*&apos;: function (req, res, next) {
+               this.numUnhandledRequestsSeen++;
+               return next();
+            }
+         }
+      }
+   };
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>This hook will process all requests via the function provided in the <code>before</code> object, and increment its <code>numRequestsSeen</code> variable.  It will also process any <em>unhandled</em> requests via the function provided in the <code>after</code> object&#x2014;that is, any routes that aren&apos;t bound in the app via a custom route configuration or a blueprint.  </p>
+<blockquote>
+<p>The two variables set up in the hook will be available to other modules in the Sails app as <code>sails.hooks[&quot;count-requests&quot;].numRequestsSeen</code> and <code>sails.hooks[&quot;count-requests&quot;].numUnhandledRequestsSeen</code></p>
+</blockquote>
+<p><docmeta name="displayName" value=".routes"></docmeta></p>
+<docmeta name="stabilityIndex" value="3">
+</docmeta>

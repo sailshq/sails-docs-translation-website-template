@@ -1,0 +1,23 @@
+<h1 id="http-strict-transport-security">HTTP Strict Transport Security</h1>
+<p>Strict Transport Security (STS) is an opt-in security enhancement that forces usage of <code>HTTPS</code> instead of <code>HTTP</code> (in modern browsers, anyway.)</p>
+<h3 id="enabling-sts" permalink="enabling-sts">Enabling STS</h3>
+<p>Implementing STS is actually very simple and <a href="https://github.com/krakenjs/lusca/blob/master/lib/hsts.js" target="_blank">only takes a few lines of code</a>.  But better yet, a few different open-source modules exist that bring support for this feature to Express and Sails.  To use one of these modules, install it from npm using the directions below, then open <code>config/http.js</code> in your project and <a href="/documentation/concepts/Middleware">configure it as a custom middleware</a>.  The example(s) below cover basic usage and configuration.  For more guidance and advanced usage details, be sure and follow the link to the docs.</p>
+<h5 id="using-lusca-https-github-com-krakenjs-lusca-luscahstsoptions-" permalink="using-lusca">Using <a href="https://github.com/krakenjs/lusca#luscahstsoptions" target="_blank">lusca</a></h5>
+<blockquote>
+<p><code>lusca</code> is open-source under the <a href="https://github.com/krakenjs/lusca/blob/master/LICENSE.txt" target="_blank">Apache license</a></p>
+</blockquote>
+<pre><code class="bash"># In your sails app
+npm install lusca --save
+</code></pre><!-- __LANG=%%__ -->
+<p>Then in the <code>middleware</code> config object in <code>config/http.js</code>:</p>
+<pre><code class="javascript">// ...
+  // maxAge ==&gt; Number of seconds strict transport security will stay in effect.
+  strictTransportSecurity: require(&apos;lusca&apos;).hsts({ maxAge: 31536000 })
+  // ...
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="additional-resources" permalink="additional-resources">Additional Resources</h3>
+<ul>
+<li><a href="https://www.owasp.org/index.php/HTTP_Strict_Transport_Security" target="_blank">HTTP Strict Transport Security (OWasp)</a></li>
+</ul>
+<docmeta name="displayName" value="Strict Transport Security">
+</docmeta>

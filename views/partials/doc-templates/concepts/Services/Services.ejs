@@ -1,0 +1,11 @@
+<h1 id="services">Services</h1>
+<p><strong>Services</strong> are stateless libraries of functions (called <strong>helpers</strong>) that you can use from anywhere in your Sails app.  For example, you might have an <code>EmailService</code> which tidily wraps up one or more helper functions so you can use them in more than one place within your application.  Services and their helpers are the best and simplest way to build reusable code in a Sails app.</p>
+<p>Another benefit of using services in Sails is that they are <em>globalized</em>--you don&apos;t have to use <code>require()</code> to access them (although you can if you prefer.  And you can disable the automatic exposure of global variables in your app&apos;s configuration.)   By default, you can access a service and call its helpers (e.g. <code>EmailService.sendHtmlEmail()</code> or <code>EmailService.sendPasswordRecoveryEmail()</code>) from anywhere: within controller actions, from inside other services, in custom model methods, or even from command-line scripts.</p>
+<h3 id="building-a-service" permalink="building-a-service">Building a service</h3>
+<p>Services are simple to work with, and you can do almost anything with them.  To help keep code maintainable, Sails apps use a set of strong conventions.  To learn more about service and helpers, <strong><a href="/documentation/concepts/services/creating-a-service">start here</a></strong>.</p>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>For additional reference, also check out <a href="https://blog.sergiocruz.me/sailsjs-services-how-to-use-them-in-your-controllers/" target="_blank">this blog post</a>.</p>
+</blockquote>
+<docmeta name="displayName" value="Services">
+</docmeta>

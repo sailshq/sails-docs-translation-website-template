@@ -1,0 +1,56 @@
+<h1 id="generating-controllers">Generating controllers</h1>
+<p>You can use the <a href="/documentation/reference/command-line-interface">Sails command line tool</a> to quickly generate a controller, by typing:</p>
+<pre><code class="bash">$ sails generate controller &lt;controller name&gt; [action names separated by spaces...]
+</code></pre><!-- __LANG=%%__ -->
+<p>For example, if you run the following command:</p>
+<pre><code class="bash">$ sails generate controller comment create destroy tag like
+info: Generated a new controller `comment` at api/controllers/CommentController.js!
+</code></pre><!-- __LANG=%%__ -->
+<p>Sails will generate <code>api/controllers/CommentController.js</code>:</p>
+<pre><code class="javascript">/**
+ * CommentController.js
+ *
+ * @description :: Server-side logic for managing comments.
+ */
+
+module.exports = {
+
+  /**
+   * CommentController.create()
+   */
+  create: function (req, res) {
+    return res.json({
+      todo: &apos;Not implemented yet!&apos;
+    });
+  },
+
+  /**
+   * CommentController.destroy()
+   */
+  destroy: function (req, res) {
+    return res.json({
+      todo: &apos;Not implemented yet!&apos;
+    });
+  },
+
+  /**
+   * CommentController.tag()
+   */
+  tag: function (req, res) {
+    return res.json({
+      todo: &apos;Not implemented yet!&apos;
+    });
+  },
+
+  /**
+   * CommentController.like()
+   */
+  like: function (req, res) {
+    return res.json({
+      todo: &apos;Not implemented yet!&apos;
+    });
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="Generating Controllers">
+</docmeta>

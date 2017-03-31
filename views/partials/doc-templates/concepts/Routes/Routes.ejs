@@ -1,0 +1,50 @@
+<h1 id="routes">Routes</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>The most basic feature of any web application is the ability to interpret a request sent to a URL, then send back a response.  In order to do this, your application has to be able to distinguish one URL from another.</p>
+<p>Like most web frameworks, Sails provides a router: a mechanism for mapping URLs to controllers and views.  <strong>Routes</strong> are rules that tell Sails what to do when faced with an incoming request.  There are two main types of routes in Sails: <strong>custom</strong> (or &quot;explicit&quot;) and <strong>automatic</strong> (or &quot;implicit&quot;).</p>
+<h3 id="custom-routes" permalink="custom-routes">Custom Routes</h3>
+<p>Sails lets you design your app&apos;s URLs in any way you like- there are no framework restrictions.</p>
+<p>Every Sails project comes with <a href="/documentation/reference/sails.config/sails.config.routes.html"><code>config/routes.js</code></a>, a simple <a href="http://nodejs.org/api/modules.html" target="_blank">Node.js module</a> that exports an object of custom, or &quot;explicit&quot; <strong>routes</strong>. For example, this <code>routes.js</code> file defines six routes; some of them point to a controller&apos;s action, while others route directly to a view.</p>
+<pre><code class="javascript">// config/routes.js
+module.exports.routes = {
+  &apos;get /signup&apos;: { view: &apos;conversion/signup&apos; },
+  &apos;post /signup&apos;: &apos;AuthController.processSignup&apos;,
+  &apos;get /login&apos;: { view: &apos;portal/login&apos; },
+  &apos;post /login&apos;: &apos;AuthController.processLogin&apos;,
+  &apos;/logout&apos;: &apos;AuthController.logout&apos;,
+  &apos;get /me&apos;: &apos;UserController.profile&apos;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Each <strong>route</strong> consists of an <strong>address</strong> (on the left, e.g. <code>&apos;get /me&apos;</code>) and a <strong>target</strong> (on the right, e.g. <code>&apos;UserController.profile&apos;</code>)  The <strong>address</strong> is a URL path and (optionally) a specific <a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods" target="_blank">HTTP method</a>. The <strong>target</strong> can be defined a number of different ways (<a href="/documentation/concepts/Routes/RouteTargetSyntax.html">see the expanded concepts section on the subject</a>), but the two different syntaxes above are the most common.  When Sails receives an incoming request, it checks the <strong>address</strong> of all custom routes for matches.  If a matching route is found, the request is then passed to its <strong>target</strong>.</p>
+<p>For example, we might read <code>&apos;get /me&apos;: &apos;UserController.profile&apos;</code> as:</p>
+<blockquote>
+<p>&quot;Hey Sails, when you receive a GET request to <code>http://mydomain.com/me</code>, run the <code>profile</code> action of <code>UserController</code>, would&apos;ya?&quot;</p>
+</blockquote>
+<p>What if I want to change the view layout within the route itself?  No problem we could:</p>
+<pre><code class="javascript">&apos;get /privacy&apos;: {
+    view: &apos;users/privacy&apos;,
+    locals: {
+      layout: &apos;users&apos;
+    }
+  },
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="notes" permalink="notes">Notes</h4>
+<ul>
+<li>Just because a request matches a route address doesn&apos;t necessarily mean it will be passed to that route&apos;s target <em>directly</em>.  For instance, HTTP requests will usually pass through some <a href="/documentation/concepts/Middleware">middleware</a> first.  And if the route points to a controller <a href="/documentation/concepts/Controllers?q=actions">action</a>, the request will need to pass through any configured <a href="/documentation/concepts/Policies">policies</a> first.  Finally, there are a few special <a href="/documentation/concepts/Routes/RouteTargetSyntax.html?q=route-target-options">route options</a> which allow a route to be &quot;skipped&quot; for certain kinds of requests.</li>
+<li>The router can also programmatically <strong>bind</strong> a <strong>route</strong> to any valid route target, including canonical Node middleware functions (i.e. <code>function (req, res, next) {}</code>).  However, you should always use the conventional <a href="/documentation/concepts/Routes/RouteTargetSyntax.html">route target syntax</a> when possible- it streamlines development, simplifies training, and makes your app more maintainable.</li>
+</ul>
+<h3 id="automatic-routes" permalink="automatic-routes">Automatic Routes</h3>
+<p>In addition to your custom routes, Sails binds many routes for you automatically.  If a URL doesn&apos;t match a custom route, it may match one of the automatic routes and still generate a response.  The main types of automatic routes in Sails are:</p>
+<ul>
+<li><a href="/documentation/reference/blueprint-api?q=blueprint-routes">Blueprint routes</a>, which provide your <a href="/documentation/concepts/Controllers">controllers</a> and <a href="/documentation/concepts/ORM/Models.html">models</a> with a full REST API.</li>
+<li><a href="/documentation/concepts/Assets">Assets</a>, such as images, Javascript and stylesheet files.</li>
+<li><a href="/documentation/concepts/Security/CSRF.html">CSRF</a>, if turned on, provides a <strong>/csrfToken</strong> route to your app that can be used to retrieve the CSRF token.</li>
+</ul>
+<h3 id="supported-protocols" permalink="supported-protocols">Supported Protocols</h3>
+<p>The Sails router is &quot;protocol-agnostic&quot;; it knows how to handle both <a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol" target="_blank">HTTP requests</a> and messages sent via <a href="http://en.wikipedia.org/wiki/Websockets" target="_blank">WebSockets</a>. It accomplishes this by listening for Socket.io messages sent to reserved event handlers in a simple format, called JWR (JSON-WebSocket Request/Response).  This specification is implemented and available out of the box in the <a href="/documentation/reference/websockets/sails.io.js">client-side socket SDK</a>.</p>
+<h4 id="notes" permalink="notes">Notes</h4>
+<ul>
+<li>Advanced users may opt to circumvent the router entirely and send low-level, completely customizable WebSocket messages directly to the underlying Socket.io server.  You can bind socket events directly in your app&apos;s <a href="/documentation/reference/sails.config/sails.config.sockets.html?q=commonlyused-options"><code>onConnect</code></a> function (located in <a href="/documentation/anatomy/myApp/config/sockets.js.html"><code>config/sockets.js</code></a>.)  But bear in mind that, in most cases, you are better off leveraging the request interpreter for socket communication - maintaining consistent routes across HTTP and WebSockets helps keep your app maintainable.</li>
+</ul>
+<docmeta name="displayName" value="Routes">
+</docmeta>

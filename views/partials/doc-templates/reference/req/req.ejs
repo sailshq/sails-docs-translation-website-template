@@ -1,0 +1,202 @@
+<h1 id="request-req-">Request (<code>req</code>)</h1>
+<p>Sails is built on <a href="https://github.com/balderdashy/sails-docs/blob/master/PAGE_NEEDED.md" target="_blank">Express</a>, and uses <a href="http://nodejs.org/api/http.html" target="_blank">Node&apos;s HTTP server</a> conventions.  Because of this, you can access all of the Node and Express methods and properties on the <code>req</code> object whereever it is accessible (i.e. in your controllers, policies, and custom responses.)</p>
+<p>A nice side effect of this compatibility is that, in many cases, you can paste existing Node.js code into a Sails app and it will work.  And since Sails implements a transport-agnostic request interpreter, the code in your Sails app is WebSocket-compatible as well.</p>
+<p>Sails adds a few methods and properties of its own to the <code>req</code> object, like <a href="/documentation/reference/req/req.wantsJSON.html"><code>req.wantsJSON</code></a> and <a href="/documentation/reference/req/req.allParams.html"><code>req.allParams()</code></a>.  These features are syntactic sugar on top of the underlying implementation, and also support both HTTP and WebSockets.</p>
+<h3 id="protocol-support" permalink="protocol-support">Protocol Support</h3>
+<p>The chart below describes support for the methods and properties on the Sails <a href="/documentation/reference/req">Request</a> object (<code>req</code>) across multiple transports:</p>
+<!-- TODO: add SPDY -->
+<table>
+<thead>
+<tr>
+<th></th>
+<th>HTTP</th>
+<th>WebSockets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>req.file()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.param()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.route</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.cookies</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.signedCookies</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.get()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.accepts()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.accepted</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.is()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.ip</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.ips</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.path</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.host</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.fresh</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.stale</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.xhr</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.protocol</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.secure</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.session</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.subdomains</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.method</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.originalUrl</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.acceptedLanguages</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.acceptedCharsets</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.acceptsCharset()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.acceptsLanguage()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>req.isSocket</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.params.all()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.socket.id</td>
+<td><i class="sails-icon icon-times"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.socket.join</td>
+<td><i class="sails-icon icon-times"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.socket.leave</td>
+<td><i class="sails-icon icon-times"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.socket.broadcast</td>
+<td><i class="sails-icon icon-times"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.transport</td>
+<td><i class="sails-icon icon-minus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.url</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>req.wantsJSON</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+</tbody>
+</table>
+<h3 id="legend" permalink="legend">Legend</h3>
+<ul>
+<li><i class="sails-icon icon-plus"></i> - fully supported</li>
+<li><i class="sails-icon icon-minus"></i> - feature not yet implemented</li>
+<li><i class="sails-icon icon-times"></i> - unsupported due to protocol restrictions</li>
+</ul>
+<p><docmeta name="displayName" value="Request (`req`)"></docmeta></p>
+<docmeta name="stabilityIndex" value="3">
+</docmeta>

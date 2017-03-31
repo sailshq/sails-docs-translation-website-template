@@ -1,0 +1,46 @@
+<h1 id="io-socket-off-">io.socket.off()</h1>
+<p>Unbind the specified event handler (opposite of <a href="/documentation/reference/web-sockets/socket-client/io-socket-on"><code>.on()</code></a>).</p>
+<pre><code class="javascript">io.socket.off(eventIdentity, handlerFn);
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>This method is here for completeness, but most apps should not need to use it.</strong>  See below for more information.</p>
+</blockquote>
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>eventIdentity</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The unique event identity associated with a server-sent message, e.g. &quot;recipe&quot;</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>handlerFn</code></td>
+<td style="text-align:center"><bubble type="function" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The event handler function to unbind from the specified event.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>If you decide to use this method, be careful!  <code>io.socket.off()</code> <strong>does not</strong> stop the this client-side socket from receiving any server-sent messages-- it just prevents the specified event handler from firing.  Usually, the desired effect is to prevent messages <em>from being sent altogether</em>, which is critical if your server-sent messages contain private data. This happens automatically when a socket disconnects, but there are also rarer use cases where it is necessary to unsubscribe sockets from rooms while they are still connected.  For example, consider a scenario where an admin user is banned from your system while viewing a realtime dashboard, and your app needs to prevent them from receiving all subsequent realtime updates. To force a client socket to stop receiving broadcasted messages, <strong>do not use this method</strong>.  Instead, unsubscribe the socket in your server-side code:<ul>
+<li>If the room was joined using <code>sails.sockets.join()</code>, call <code>sails.sockets.leave()</code>.</li>
+<li>If the room was joined using resourceful pubsub methods, call <code>.unsubscribe()</code> or <code>.unwatch()</code>, whichever is appropriate.</li>
+</ul>
+</li>
+<li>In order to use <code>.off()</code>, you will need to store the <code>handlerFn</code> argument you passed in to <a href="/documentation/reference/web-sockets/socket-client/io-socket-on"><code>.on()</code></a> in a variable.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="io.socket.off()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

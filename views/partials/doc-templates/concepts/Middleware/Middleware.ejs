@@ -1,0 +1,107 @@
+<h1 id="middleware">Middleware</h1>
+<p>Sails is fully compatible with Express / Connect middleware - in fact, it&apos;s all over the place!  Much of the code you&apos;ll write in Sails is effectively middleware; most notably <a href="/documentation/concepts/Controllers?q=actions">controller actions</a> and <a href="/documentation/concepts/Policies">policies</a>.</p>
+<h3 id="http-middleware" permalink="http-middleware">HTTP Middleware</h3>
+<p>Sails also utilizes an additional <a href="/documentation/concepts/Middleware#adding-or-overriding-http-middleware">configurable middleware stack</a> just for handling HTTP requests.  Each time your app receives an HTTP request, the configured HTTP middleware stack runs in order.</p>
+<p>Read about the default middleware stack <a href="/documentation/concepts/middleware/conventional-defaults">here</a>.</p>
+<blockquote>
+<p>Note that this HTTP middleware stack is only used for &quot;true&quot; HTTP requests-- it is ignored for <strong>virtual requests</strong> (e.g. requests from a live Socket.io connection.)</p>
+</blockquote>
+<h4 id="adding-or-overriding-http-middleware" permalink="adding-or-overriding-http-middleware">Adding or Overriding HTTP Middleware</h4>
+<p>To configure a custom HTTP middleware function, define a new HTTP key <code>sails.config.http.middleware.foobar</code> and set it to the configured middleware function, then add the string name (&quot;foobar&quot;) to your <code>sails.config.http.middleware.order</code> array wherever you&apos;d like it to run in the middleware chain (a good place to put it might be right before &quot;cookieParser&quot;):</p>
+<p>E.g. in <code>config/http.js</code>:</p>
+<pre><code class="javascript">// ...
+  middleware: {
+
+    // Define a custom HTTP middleware fn with the key `foobar`:
+    foobar: function (req,res,next) { /*...*/ next(); },
+
+    // Define another couple of custom HTTP middleware fns with keys `passportInit` and `passportSession`
+    // (notice that this time we&apos;re using an existing middleware library from npm)
+    passportInit    : require(&apos;passport&apos;).initialize(),
+    passportSession : require(&apos;passport&apos;).session(),
+
+    // Override the conventional cookie parser:
+    cookieParser: function (req, res, next) { /*...*/ next(); },
+
+
+    // Now configure the order/arrangement of our HTTP middleware
+    order: [
+      &apos;startRequestTimer&apos;,
+      &apos;cookieParser&apos;,
+      &apos;session&apos;,
+      &apos;passportInit&apos;,            // &lt;==== passport HTTP middleware should run after &quot;session&quot;
+      &apos;passportSession&apos;,         // &lt;==== (see https://github.com/jaredhanson/passport#middleware)
+      &apos;bodyParser&apos;,
+      &apos;compress&apos;,
+      &apos;foobar&apos;,                  // &lt;==== we can put this stuff wherever we want
+      &apos;methodOverride&apos;,
+      &apos;poweredBy&apos;,
+      &apos;$custom&apos;,
+      &apos;router&apos;,
+      &apos;www&apos;,
+      &apos;favicon&apos;,
+      &apos;404&apos;,
+      &apos;500&apos;
+    ]
+  },
+
+  customMiddleware: function(app){
+     //Intended for other middleware that doesn&apos;t follow &apos;app.use(middleware)&apos; convention
+     require(&apos;other-middleware&apos;).initialize(app);
+  }
+  // ...
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="express-middleware-in-sails" permalink="express-middleware-in-sails">Express Middleware In Sails</h3>
+<p>One of the really nice things about Sails apps is that they can take advantage of the wealth of already-existing Express/Connect middleware out there.  But a common question that arises when people <em>actually</em> try to do this is:</p>
+<blockquote>
+<p><em>&quot;Where do I <code>app.use()</code> this thing?&quot;</em>.</p>
+</blockquote>
+<p>In most cases, the answer is to install the Express middleware as a custom HTTP middleware in <a href="/documentation/reference/sails.config/sails.config.http.html"><code>sails.config.http.middleware</code></a>.  This will trigger it for ALL HTTP requests to your Sails app, and allow you to configure the order in which it runs in relation to other HTTP middleware.</p>
+<blockquote>
+<p>You should never override or remove the <code>router</code> HTTP middleware.  It is built-in to Sails, and without it, your app&apos;s explicit routes and blueprint routes will not work.</p>
+</blockquote>
+<h3 id="express-routing-middleware-in-sails" permalink="express-routing-middleware-in-sails">Express Routing Middleware In Sails</h3>
+<p>You can also include Express middleware as a policy- just configure it in <a href="/documentation/reference/sails.config/sails.config.policies.html"><code>config/policies.js</code></a>.  You can either require and setup the middleware in an actual wrapper policy (usually a good idea) or just require it directly in your policies.js file.  The following example uses the latter strategy for brevity:</p>
+<pre><code class="javascript">var auth = require(&apos;http-auth&apos;);
+var basic = auth.basic({
+  realm: &apos;admin area&apos;
+}, function (username, password, onwards) {
+  return onwards(username === &apos;Tina&apos; &amp;&amp; password === &apos;Bullock&apos;);
+});
+
+//...
+module.exports.policies = {
+  &apos;*&apos;: true,
+
+  ProductController: {
+
+    // Prevent end users from doing CRUD operations on products reserved for admins
+    // (uses HTTP basic auth)
+    &apos;*&apos;: auth.connect(basic),
+
+    // Everyone can view product pages
+    show: true
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<!--
+
+  TODO:
+
+### Advanced Express Middleware In Sails
+
+You can actually do this in a few different ways, depending on your needs.
+
+
+
+Generally, the following best-practices apply:
+
+If you want a middleware function
+
++ If you want a piece of middleware to run only when your app's explicit or blueprint routes are matched, you should include it as a policy.
++ this will run passport for all incoming http requests, including images, css, etc.
+
+If you want a middleware function to run for all you should include it at the top of your `config/routes.js` as a wildcard route.  for your controller (both HTTP and virtual) requests
+-->
+<docmeta name="displayName" value="Middleware">
+</docmeta>

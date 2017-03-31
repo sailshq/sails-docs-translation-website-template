@@ -1,0 +1,24 @@
+<h1 id="-defaults-"><code>.defaults</code></h1>
+<p>The <code>defaults</code> feature can be implemented either as an object or a function which takes a single argument (see &#x201C;using <code>defaults</code> as a function&#x201D; below) and returns an object.  The object you specify will be used to provide default configuration values for Sails.  You should use this feature to specify default settings for your hook.  For example, if you were creating a hook that communicates with a remote service, you may want to provide a default domain and timeout length:</p>
+<pre><code class="nohighlight">{
+   myapihook: {
+      timeout: 5000,
+      domain: &quot;www.myapi.com&quot;
+   }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>If a <code>myapihook.timeout</code> value is provided via a Sails configuration file, that value will be used; otherwise it will default to <code>5000</code>.</p>
+<h5 id="namespacing-your-hook-configuration" permalink="namespacing-your-hook-configuration">Namespacing your hook configuration</h5>
+<p>For <a href="/documentation/concepts/extending-sails/Hooks?q=types-of-hooks">project hooks</a>, you should namespace your hook&#x2019;s configuration under a key that uniquely identifies that hook (e.g. <code>myapihook</code> above).  For <a href="/documentation/concepts/extending-sails/Hooks?q=types-of-hooks">installable hooks</a>, you should use the special <code>__configKey__</code> key to allow end-users of your hook to <a href="/documentation/concepts/extending-sails/Hooks/usinghooks.html?q=changing-the-way-sails-loads-an-installable-hook">change the configuration key</a> if necessary.  The default key for a hook using <code>__configKey__</code> is the hook name.  For example, if you create a hook called <code>sails-hooks-myawesomehook</code> which includes the following <code>defaults</code> object:</p>
+<pre><code class="nohighlight">{
+   __configKey__: {
+      name: &quot;Super Bob&quot;
+   }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>then it will, by default, provide default settings for the <code>sails.config.myawesomehook.name</code> value.  If the end-user of the hook overrides the hook name to be <code>foo</code>, then the <code>defaults</code> object will provide a default value for <code>sails.config.foo.name</code>.</p>
+<h5 id="using-defaults-as-a-function" permalink="using-defaults-as-a-function">Using <code>defaults</code> as a function</h5>
+<p>If you specify a function for the <code>defaults</code> feature instead of a plain object, it takes a single argument (<code>config</code>) which receives any Sails configuration overrides.  Configuration overrides can be made by passing settings to the command line when lifting Sails (e.g. <code>sails lift --prod</code>), by passing an object as the first argument when programmatically lifting or loading Sails (e.g. <code>Sails.lift({port: 1338}, ...)</code>) or by using a <a href="/documentation/anatomy/sailsrc.html"><code>.sailsrc</code></a> file.  The <code>defaults</code> function should return a plain object representing configuration defaults for your hook.</p>
+<p><docmeta name="displayName" value=".defaults"></docmeta></p>
+<docmeta name="stabilityIndex" value="3">
+</docmeta>

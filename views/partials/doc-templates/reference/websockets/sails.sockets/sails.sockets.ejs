@@ -1,0 +1,53 @@
+<h1 id="sockets-sails-sockets-">Sockets (sails.sockets)</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Sails exposes several methods (<code>sails.sockets.*</code>) which provide a simple interface for <a href="/documentation/concepts/realtime">realtime communication</a> with connected socket clients.  This is useful for pushing events and data to connected clients in realtime, rather than waiting for them to actively request it using HTTP.  This is true regardless of whether a client sockets was connected from a browser tab, from an iOS app, or even from your favorite household IoT appliance.</p>
+<p>These methods are implemented using a built-in instance of <a href="http://socket.io" target="_blank">Socket.io</a>, which is available directly as <a href="/documentationreference/application/application.md#sailsio"><code>sails.io</code></a>.  However, you should <em>almost never</em> use <code>sails.io</code> directly.  Instead, you should call the methods available on <code>sails.sockets.*</code>.  In addition, for certain use cases, you might also want to take advantage of <a href="/documentation/reference/web-sockets/resourceful-pub-sub">resourceful pubsub methods</a>, a higher level abstraction which are used by Sails built-in <a href="/documentation/reference/blueprint-api">blueprint API</a>.</p>
+<h3 id="methods" permalink="methods">Methods</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="/documentation/reference/web-sockets/sails-sockets/add-room-members-to-rooms"><code>.addRoomMembersToRooms()</code></a></td>
+<td style="text-align:left">Subscribe all members of a room to one or more additional rooms.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="/documentation/reference/web-sockets/sails-sockets/blast"><code>.blast()</code></a></td>
+<td style="text-align:left">Broadcast a message to all sockets connected to the server.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="/documentation/reference/web-sockets/sails-sockets/broadcast"><code>.broadcast()</code></a></td>
+<td style="text-align:left">Broadcast a message to all sockets in a room.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="/documentation/reference/web-sockets/sails-sockets/get-id"><code>.getId()</code></a></td>
+<td style="text-align:left">Parse the socket ID from an incoming socket request (<code>req</code>).</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="/documentation/reference/web-sockets/sails-sockets/join"><code>.join()</code></a></td>
+<td style="text-align:left">Subscribe a socket to a room.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="/documentation/reference/web-sockets/sails-sockets/leave"><code>.leave()</code></a></td>
+<td style="text-align:left">Unsubscribe a socket from a room.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="/documentation/reference/web-sockets/sails-sockets/leave-all"><code>.leaveAll()</code></a></td>
+<td style="text-align:left">Unsubscribe all members of one room from that room <em>and</em> from every other room they are currently subscribed to; except the automatic room with the same name as each socket ID.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="/documentation/reference/web-sockets/sails-sockets/remove-room-members-from-rooms"><code>.removeRoomMembersFromRooms()</code></a></td>
+<td style="text-align:left">Unsubscribe all members of a room from one or more other rooms.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Don&apos;t see a method you&apos;re looking for above?  A number of <code>sails.sockets</code> methods were deprecated in Sails v0.12, either because a more performant alias was already available, or for performance and scalability reasons.  Please see the <a href="/documentation/concepts/upgrading/to-v-0-12">v0.12 migration guide</a> for more information.</p>
+</blockquote>
+<p><docmeta name="displayName" value="sails.sockets"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

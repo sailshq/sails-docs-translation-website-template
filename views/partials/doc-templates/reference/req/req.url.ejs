@@ -1,0 +1,22 @@
+<h1 id="req-url">req.url</h1>
+<p>Like <a href="/documentation/reference/req/req.path.html"><code>req.path</code></a>, but also includes the query string suffix.</p>
+<pre><code class="javascript">req.url;
+
+// =&gt; &quot;/search?q=worlds%20largest%20dogs&quot;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>It is worth mentioning that the URL fragment/hash (e.g. &quot;#some/clientside/route&quot;) part of the url is <a href="https://github.com/strongloop/express/issues/1083#issuecomment-5179035" target="_blank">not available on the server</a>. This is an <a href="http://stackoverflow.com/a/2305927/486547" target="_blank">open issue with the current HTTP specification</a>. So if you write an action to redirect from one subdomain to another, for instance, you won&apos;t be able to peek at the URL fragment in that action.</li>
+<li>However, if you respond with a 302 redirect (i.e. <code>res.redirect()</code>) the user agent on the other end will preserve the URL fragment/hash and tack it on to the end of the new redirected URL.  In many cases, this is exactly what you want!</li>
+</ul>
+</blockquote>
+<!--
+This doesn't seem to be true anymore:
+
+The querystring parser in Express/Connect removes the query string from the standard `req.url` in Node, so in Sails/Express/Koa/Connect, `req.url` is effectively a synonym for `req.path`.  Please see `req.path` for example usage.
+-->
+<p><docmeta name="displayName" value="req.url"></docmeta></p>
+<docmeta name="pageType" value="property">
+
+</docmeta>

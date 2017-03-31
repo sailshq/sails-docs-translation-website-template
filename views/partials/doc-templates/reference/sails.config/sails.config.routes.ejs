@@ -1,0 +1,14 @@
+<h1 id="sails-config-routes">sails.config.routes</h1>
+<p>Configuration for custom (aka &quot;explicit&quot;) routes.  <code>sails.config.routes</code> is a dictionary whose keys are URL paths (the &quot;route address&quot;) and whose values are one of several types of route handler configurations (called the &quot;route target&quot;).</p>
+<p>For example:</p>
+<pre><code class="nohighlight">module.exports.routes = {
+
+    &quot;GET /&quot;: {view: &quot;homepage&quot;},
+    &quot;POST /foo/bar&quot;: {controller: &quot;FooController&quot;, action: &quot;bar&quot;}
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Please see the <a href="/documentation/concepts/Routes">routes concept overview</a> for a full discussion of Sails routes, and the <a href="/documentation/concepts/Routes/RouteTargetSyntax.html">custom routes documentation</a> for a detailed description of the available configurations for both the route address and route target.</p>
+<p><docmeta name="displayName" value="sails.config.routes"></docmeta></p>
+<docmeta name="pageType" value="property">
+
+</docmeta>

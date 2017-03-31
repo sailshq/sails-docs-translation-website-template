@@ -1,0 +1,66 @@
+<h1 id="-count-criteria-callback-">.count( [<code>criteria</code>, ] <code>callback</code> )</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>Returns the number of records in your database that meet the given search criteria.</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<h4 id="parameters" permalink="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Description</th>
+<th>Accepted Data Types</th>
+<th>Required ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Find Criteria</td>
+<td><code>{}</code>, <code>string</code>, <code>int</code></td>
+<td>No</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Callback</td>
+<td><code>function</code></td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h4 id="callback-parameters" permalink="callback-parameters">Callback Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Description</th>
+<th>Possible Data Types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Error</td>
+<td><code>Error</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Number of Records</td>
+<td><code>int</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<pre><code class="javascript">User.count({name:&apos;Flynn&apos;}).exec(function countCB(error, found) {
+  console.log(&apos;There are &apos; + found + &apos; users called &quot;Flynn&quot;&apos;);
+
+  // There are 1 users called &apos;Flynn&apos;
+  // Don&apos;t forget to handle your errors
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>Any string arguments passed must be the ID of the record.</p>
+</blockquote>
+<p><docmeta name="displayName" value=".count()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

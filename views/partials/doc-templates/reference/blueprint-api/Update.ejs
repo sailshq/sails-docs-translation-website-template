@@ -1,0 +1,59 @@
+<h1 id="update-blueprint-">Update (Blueprint)</h1>
+<p>Update an existing record in the database and notify subscribed sockets that it has changed.</p>
+<pre><code class="nohighlight">PUT /:model/:id
+</code></pre><!-- __LANG=%%__ -->
+<p>This updates the record in the model which matches the <strong>id</strong> parameter and responds with the newly updated record as a JSON dictionary.  If a validation error occurred, a JSON response with the invalid attributes and a <code>400</code> status code will be returned instead.  If no model instance exists matching the specified <strong>id</strong>, a <code>404</code> is returned.</p>
+<h3 id="parameters" permalink="parameters">Parameters</h3>
+<p><em>Attributes to change should be sent in the HTTP body as form-encoded values or JSON.</em></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> model</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> of the containing model.<br><br>e.g. <code>&apos;product&apos;</code> (in <code>PUT /product/5</code>)</td>
+</tr>
+<tr>
+<td> id</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The primary key value of the record to update.<br><br>e.g. <code>&apos;5&apos;</code> (in <code>PUT /product/5</code>)</td>
+</tr>
+<tr>
+<td> *</td>
+<td><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">For <code>POST</code> (RESTful) requests, pass in body parameters with the same name as the attributes defined on your model to set those values on the desired record. For <code>GET</code> (shortcut) requests, add the parameters to the query string.</td>
+</tr>
+<tr>
+<td> <em>callback</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If specified, a JSONP response will be sent (instead of JSON). This is the name of the client-side javascript function to call, passing results as the first (and only) argument<br> <br> e.g. <code>?callback=myJSONPHandlerFn</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>Change Applejack&apos;s hobby to &quot;kickin&quot;:</p>
+<p><code>PUT /pony/47</code></p>
+<pre><code class="json">{
+  &quot;hobby&quot;: &quot;kickin&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p><a href="https://www.getpostman.com/run-collection/96217d0d747e536e49a4" target="_blank"><img src="https://s3.amazonaws.com/postman-static/run-button.png" alt="Run in Postman"></a></p>
+<h5 id="expected-response" permalink="expected-response">Expected Response</h5>
+<pre><code class="json">{
+  &quot;hobby&quot;: &quot;kickin&quot;,
+  &quot;id&quot;: 47,
+  &quot;name&quot;: &quot;AppleJack&quot;,
+  &quot;createdAt&quot;: &quot;2013-10-18T01:23:56.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2013-11-26T22:55:19.951Z&quot;
+}
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="update"></docmeta></p>
+<docmeta name="pageType" value="endpoint">
+
+</docmeta>

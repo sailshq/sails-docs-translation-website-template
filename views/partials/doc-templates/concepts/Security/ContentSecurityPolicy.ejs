@@ -1,0 +1,103 @@
+<h1 id="content-security-policy">Content Security Policy</h1>
+<p>Content Security Policy (CSP) is a W3C specification for instructing the client browser as to which location and/or which type of resources are allowed to be loaded. This spec uses &quot;directives&quot; to define loading behaviors for target resource types. Directives can be specified using HTTP response headers or HTML <code>&lt;meta&gt;</code> tags.</p>
+<h4 id="http-headers" permalink="http-headers">HTTP Headers</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Header</th>
+<th style="text-align:left">Browsers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Content-Security-Policy</td>
+<td style="text-align:left">(W3C Standard header) Chrome version &gt;= 25, Firefox version &gt;= 23, Opera version &gt;= 19</td>
+</tr>
+<tr>
+<td style="text-align:left">X-Content-Security-Policy</td>
+<td style="text-align:left">Firefox version &lt; 23, IE version 10</td>
+</tr>
+<tr>
+<td style="text-align:left">X-WebKit-CSP</td>
+<td style="text-align:left">Chrome version &lt; 25</td>
+</tr>
+</tbody>
+</table>
+<h4 id="supported-directives" permalink="supported-directives">Supported Directives</h4>
+<p>To give you an idea how this works, here&apos;s a snapshot of supported CSP directives, as of 2017:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Directive</th>
+<th style="text-align:left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">default-src</td>
+<td style="text-align:left">Loading policy for all resources type in case a resource type dedicated directive is not defined (fallback)</td>
+</tr>
+<tr>
+<td style="text-align:left">script-src</td>
+<td style="text-align:left">Defines which scripts the protected resource can execute</td>
+</tr>
+<tr>
+<td style="text-align:left">object-src</td>
+<td style="text-align:left">Defines from where the protected resource can load plugins</td>
+</tr>
+<tr>
+<td style="text-align:left">style-src</td>
+<td style="text-align:left">Defines which styles (CSS) the user applies to the protected resource</td>
+</tr>
+<tr>
+<td style="text-align:left">img-src</td>
+<td style="text-align:left">Defines from where the protected resource can load images</td>
+</tr>
+<tr>
+<td style="text-align:left">media-src</td>
+<td style="text-align:left">Defines from where the protected resource can load video and audio</td>
+</tr>
+<tr>
+<td style="text-align:left">frame-src</td>
+<td style="text-align:left">Defines from where the protected resource can embed frames</td>
+</tr>
+<tr>
+<td style="text-align:left">font-src</td>
+<td style="text-align:left">Defines from where the protected resource can load fonts</td>
+</tr>
+<tr>
+<td style="text-align:left">connect-src</td>
+<td style="text-align:left">Defines which URIs the protected resource can load using script interfaces</td>
+</tr>
+<tr>
+<td style="text-align:left">form-action</td>
+<td style="text-align:left">Defines which URIs can be used as the action of HTML form elements</td>
+</tr>
+<tr>
+<td style="text-align:left">sandbox</td>
+<td style="text-align:left">Specifies an HTML sandbox policy that the user agent applies to the protected resource</td>
+</tr>
+<tr>
+<td style="text-align:left">script-nonce</td>
+<td style="text-align:left">Defines script execution by requiring the presence of the specified nonce on script elements</td>
+</tr>
+<tr>
+<td style="text-align:left">plugin-types</td>
+<td style="text-align:left">Defines the set of plugins that can be invoked by the protected resource by limiting the types of resources that can be embedded</td>
+</tr>
+<tr>
+<td style="text-align:left">reflected-xss</td>
+<td style="text-align:left">Instructs a user agent to activate or deactivate any heuristics used to filter or block reflected cross-site scripting attacks, equivalent to the effects of the non-standard X-XSS-Protection header</td>
+</tr>
+<tr>
+<td style="text-align:left">report-uri</td>
+<td style="text-align:left">Specifies a URI to which the user agent sends reports about policy violation</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>For more information, see the <a href="https://w3c.github.io/webappsec/specs/content-security-policy/" target="_blank">W3C CSP Spec</a>.</p>
+</blockquote>
+<docmeta name="displayName" value="Content Security Policy">
+
+</docmeta>

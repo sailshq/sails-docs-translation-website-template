@@ -1,0 +1,17 @@
+<h1 id="req-body">req.body</h1>
+<p>An object containing text parameters from the parsed request body, defaulting to <code>{}</code>.</p>
+<p>By default, the request body can be url-encoded or stringified as JSON.  Support for other formats, such as serialized XML, is possible using the <a href="/documentation/concepts/Middleware">middleware</a> configuration.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.body;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>If a request contains one or more file uploads, only the text parameters sent <em><strong>before</strong></em> the first file parameter will be available in <code>req.body</code>.</li>
+<li>When using the default <a href="https://github.com/balderdashy/skipper" target="_blank">Skipper</a> body parser, this property will be <code>undefined</code> for GET requests.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.body"></docmeta></p>
+<docmeta name="pageType" value="property">
+
+</docmeta>

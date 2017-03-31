@@ -1,0 +1,19 @@
+<h1 id="req-ip">req.ip</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>The IP address of the client who sent this request (<code>req</code>).</p>
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>If the <code>trust proxy</code> option is disabled in Express, this is the &quot;remote address&quot;. Otherwise, if <code>trust proxy</code> is enabled, this is the &quot;upstream address&quot;.
+See Express docs for <a href="http://expressjs.com/api.html#app.set" target="_blank">app.set()</a> - in Sails
+this can be accomplished by adding the line <code>sails.hooks.http.app.set(&apos;trust proxy&apos;, true);</code> to <code>config/bootstrap.js</code>.</p>
+</blockquote>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.ip;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">req.ip;
+// -&gt; &quot;127.0.0.1&quot;
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="req.ip"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

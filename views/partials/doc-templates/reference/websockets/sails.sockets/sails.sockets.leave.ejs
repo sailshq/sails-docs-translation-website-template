@@ -1,0 +1,72 @@
+<h1 id="-leave-">.leave()</h1>
+<p>Unsubscribe a socket from a room.</p>
+<pre><code class="javascript">sails.sockets.leave(socket, roomName);
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>sails.sockets.leave(socket, roomName, cb);</code></li>
+</ul>
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>socket</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="req" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The socket to be unsubscribed.  May be either the incoming socket request (<code>req</code>) or the id of another socket.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>roomName</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The name of the room to which the socket will be unsubscribed.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><em><code>cb</code></em></td>
+<td style="text-align:center"><bubble type="function?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">An optional callback which will be called when the operation is complete on the current server (see notes below for more information), or if fatal errors were encountered.  In the case of errors, it will be called with a single argument (<code>err</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>In a controller action, unsubscribe the requesting socket from the specified room:</p>
+<pre><code class="javascript">leaveFunRoom: function(req, res) {
+  if ( _.isUndefined(req.param(&apos;roomName&apos;)) ) {
+    return res.badRequest(&apos;`roomName` is required.&apos;);
+  }
+
+  if (!req.isSocket) {
+    return res.badRequest(&apos;This endpoints only supports socket requests.&apos;);
+  }
+
+  var roomName = req.param(&apos;roomName&apos;);
+  sails.sockets.leave(req, roomName, function(err) {
+    if (err) {return res.serverError(err);}
+    return res.json({
+      message: &apos;Left a fun room called &apos;+roomName+&apos;!&apos;
+    });
+  });
+}
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="additional-examples" permalink="additional-examples">Additional Examples</h5>
+<p>More examples of <code>sails.sockets.leave()</code> usage are <a href="https://gist.github.com/mikermcneil/971b4e92d833211a0243" target="_blank">available here</a>, including unsubscribing other sockets by id, deeper integration with the database, usage within a service, and usage with the <code>async</code> library.</p>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li><code>sails.sockets.leave()</code> is more or less equivalent to the functionality of <code>.leave()</code> in Socket.io, but with additional built-in support for multi-server deployments.  With <a href="/documentation/concepts/deployment/scaling">recommended production settings</a>, <code>sails.sockets.leave()</code> works as documented no matter what server the code happens to be running on, or the server the target socket is connected to.</li>
+<li>In a multi-server environment, when calling <code>.leave()</code> with a socket ID argument, the callback function (<code>cb</code>) will be executed when the <code>.leave()</code> call completes <em>on the current server</em>.  This does not guarantee that other servers in the cluster have already finished running the operation.</li>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code> as the socket to be unsubscribed.  For that to work, the provided <code>req</code> must be from a socket request, not just any old HTTP request.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".leave()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

@@ -1,0 +1,51 @@
+<h1 id="res-badrequest-">res.badRequest()</h1>
+<p>This method is used to send a <a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#4xx_Client_Error" target="_blank">400</a> (&quot;Bad Request&quot;) response back down to the client indicating that the request is invalid.  This usually means it contained invalid parameters or headers, or tried to do something impossible based on your app logic.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">return res.badRequest();
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>return res.badRequest(data);</code></li>
+<li><code>return res.badRequest(data, pathToView);</code></li>
+</ul>
+<h3 id="details" permalink="details">Details</h3>
+<p>Like the other built-in custom response modules, the behavior of this method is customizable.</p>
+<p>By default, it works as follows:</p>
+<ul>
+<li>If the request &quot;<a href="/documentation/reference/req/req.wantsJSON.html">wants JSON</a>&quot; (e.g. the request originated from AJAX, WebSockets, or a REST client like cURL), Sails will send the provided error <code>data</code> as JSON.  If no <code>data</code> is provided a default response body will be sent (the string <code>&quot;Bad Request&quot;</code>).</li>
+<li>If the request <em>does not</em> &quot;want JSON&quot; (e.g. a URL typed into a web browser), Sails will attempt to serve one of your views.<ul>
+<li>If a specific <code>pathToView</code> was provided, Sails will attempt to use that view.</li>
+<li>Alternatively if <code>pathToView</code> was <em>not</em> provided, Sails will try to guess an appropriate view (see <a href="/documentation/reference/res/res.view.html"><code>res.view()</code></a> for details).  If Sails cannot guess a workable view, it will just send JSON.</li>
+<li>If Sails serves a view, the <code>data</code> argument will be accessible as a <a href="/documentation/concepts/Views/Locals.html">view local</a>: <code>data</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<p>Using the default view:</p>
+<pre><code class="javascript">if ( req.param(&apos;amount&apos;) &lt; 500 )
+  return res.badRequest(
+    &apos;Transaction limit exceeded. Please try again with an amount less than $500.&apos;
+  );
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>With a custom view:</p>
+<pre><code class="javascript">if ( req.param(&apos;amount&apos;) &lt; 500 )
+  return res.badRequest(
+    &apos;Transaction limit exceeded. Please try again with an amount less than $500.&apos;,
+    &apos;salesforce/leads/edit&apos;
+  );
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method is <strong>terminal</strong>, meaning it is generally the last line of code your app should run for a given request (hence the advisory usage of <code>return</code> throughout these docs).</li>
+<li><code>res.badRequest()</code> (like other userland response methods) can be overridden or modified.  It runs the response method defined in <code>/responses/badRequest.js</code>, which is bundled automatically in newly generated Sails apps.  If a <code>badRequest.js</code> response method does not exist in your app, Sails will implicitly use the default behavior.</li>
+<li>This method is called automatically if a call to <a href="https://github.com/balderdashy/sails-docs/blob/master/PAGE_NEEDED.md" target="_blank"><code>req.validate()</code></a> fails any of its validation checks.</li>
+<li>By default, the specified error (<code>err</code>) will be excluded if the app is running in the &quot;production&quot; environment (i.e. <code>process.env.NODE_ENV === &apos;production&apos;</code>).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="res.badRequest()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

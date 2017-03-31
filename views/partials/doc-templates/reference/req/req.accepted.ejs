@@ -1,0 +1,28 @@
+<h1 id="req-accepted">req.accepted</h1>
+<p>Contains an array of the &quot;media types&quot; this request (<code>req</code>) can accept (e.g. <code>text/html</code> or <code>application/json</code>), ordered from highest to lowest quality.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.accepted;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">req.accepted;
+
+/*
+  [ { value: &apos;application/json&apos;,
+      quality: 1,
+      type: &apos;application&apos;,
+      subtype: &apos;json&apos; },
+  { value: &apos;text/html&apos;,
+       quality: 0.5,
+       type: &apos;text&apos;,
+       subtype: &apos;html&apos; } ]
+*/
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>See the <a href="https://github.com/expressjs/accepts" target="_blank"><code>accepts</code> module</a> for the finer details of the header parsing algorithm used in Sails/Express/Koa/Connect.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.accepted"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

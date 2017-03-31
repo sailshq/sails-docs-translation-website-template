@@ -1,0 +1,63 @@
+<h1 id="scaling">Scaling</h1>
+<p>If you have the immediate expectation of lots of traffic to your application (or better yet, you already have the traffic),
+you&apos;ll want to set up a scalable architecture that will allow you to add servers as more and more requests hit your app.</p>
+<h3 id="performance" permalink="performance">Performance</h3>
+<p>In production, Sails performs like any Connect, Express or Socket.io app (<a href="http://serdardogruyol.com/?p=111" target="_blank">example</a>).  If you have your own benchmark you&apos;d like to share, please write a blog post or article and tweet <a href="http://twitter.com/sailsjs" target="_blank">@sailsjs</a>.  But benchmarks aside, keep in mind that most performance and scalability metrics are application-specific.  The actual performance of your app will have a lot more to do with the way you implement your business logic and model calls than it will about the underlying framework you are using.</p>
+<h3 id="example-architecture" permalink="example-architecture">Example architecture</h3>
+<pre><code class="nohighlight">....                 
+                    /  Sails.js server  \      /  Database (e.g. Mongo, Postgres, etc)
+Load Balancer  &lt;--&gt;    Sails.js server    &lt;--&gt;    Socket.io message queue (Redis)
+                    \  Sails.js server  /      \  Session store (Redis, Mongo, etc.)
+                             ....
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="preparing-your-app-for-a-clustered-deployment" permalink="preparing-your-app-for-a-clustered-deployment">Preparing your app for a clustered deployment</h3>
+<p>The most important thing to remember about scaling a server-side application is that it should be <strong>stateless</strong>.  That means you should be able to deploy the same code to <em>n</em> different servers, expecting any given incoming request handled by any given server, and everything should still work.  Luckily, Sails apps come ready for this kind of deployment almost right out of the box.  But before deploying your app to multiple servers, there are a few things you need to do:</p>
+<ul>
+<li>Ensure none of the other dependencies you might be using in your app rely on shared memory.</li>
+<li>Make sure the database(s) for your models (e.g. MySQL, Postgres, Mongo) are scalable (e.g. sharding/cluster)</li>
+<li><strong>If your app uses sessions:</strong><ul>
+<li>Configure your app to use a shared session store such as Redis (simply uncomment the <code>adapter</code> option in <code>config/session.js</code>) and install the connect-redis adapter as a dependency of your app (e.g. <code>npm install connect-redis@~3.0.2 --save --save-exact</code>).</li>
+</ul>
+</li>
+<li><strong>If your app uses sockets:</strong><ul>
+<li>Configure your app to use Redis as a shared message queue for delivering socket.io messages (uncomment the <code>adapter</code> option in <code>config/sockets.js</code>)</li>
+<li>Install the socket.io-redis adapter as a dependency of your app (e.g. <code>npm install socket.io-redis@~1.0.0 --save --save-exact</code>)</li>
+</ul>
+</li>
+<li><strong>If your cluster is on a single server (for instance, using <a href="http://pm2.keymetrics.io/docs/usage/cluster-mode/" target="_blank">pm2 cluster mode</a>)</strong><ul>
+<li>To avoid file conflict issues due to Grunt tasks, always start your apps in <code>production</code> environment, and/or consider <a href="/documentation/concepts/assets/disabling-grunt">turning Grunt off completely</a>.  See <a href="https://github.com/balderdashy/sails/issues/3577#issuecomment-184786535" target="_blank">here</a> for more details on Grunt issues in single-server clusters</li>
+<li>Be careful with <a href="/documentation/reference/configuration/sails-config-bootstrap"><code>config/bootstrap.js</code> code</a> that persists data in a database, to avoid conflicts when the bootstrap runs multiple times (once per node in the cluster)</li>
+</ul>
+</li>
+</ul>
+<h3 id="deploying-a-node-sails-app-to-a-paas" permalink="deploying-a-node/sails-app-to-a-paas">Deploying a Node/Sails app to a PaaS</h3>
+<p>Deploying your app to a PaaS like Heroku or Modulus is dead simple. Depending on your situation, there may still be a few devils in the details, but Node support with hosting providers has gotten <em>really good</em> over the last couple of years.  Take a look at <a href="/documentation/concepts/deployment/Hosting">Hosting</a> for more platform-specific information.</p>
+<h3 id="deploying-your-own-cluster" permalink="deploying-your-own-cluster">Deploying your own cluster</h3>
+<ul>
+<li>Deploy multiple instances (aka servers running a copy of your app) behind a <a href="https://en.wikipedia.org/wiki/Load_balancing_(computing" target="_blank">load balancer</a>) (e.g. nginx)<ul>
+<li>Configure your load balancer to terminate SSL requests</li>
+<li>But remember that you won&apos;t need to use the SSL configuration in Sails-- the traffic will already be decrypted by the time it reaches Sails.</li>
+<li>Lift your app on each instance using a daemon like <code>forever</code> or <code>pm2</code> (see <a href="/documentation/concepts/deployment">http://sailsjs.com/documentation/concepts/deployment</a> for more about daemonology)</li>
+</ul>
+</li>
+</ul>
+<h3 id="optimization" permalink="optimization">Optimization</h3>
+<p>Optimizing an endpoint in your Node/Sails app is exactly like optimizing an endpoint in any other server-side application; e.g. identifying and manually optimizing slow queries, reducing the number of queries, etc.  Specifically for Node apps, if you find you have a heavily trafficked endpoint that is eating up CPU, look for synchronous (blocking) model methods, services, or machines that might be getting called over and over again in a loop or recursive dive.</p>
+<p>But remember:</p>
+<blockquote>
+<p>Premature optimization is the root of all evil.  -<a href="http://c2.com/cgi/wiki?PrematureOptimization" target="_blank">Donald Knuth</a></p>
+</blockquote>
+<p>No matter what tool you&apos;re using, it is important to spend your focus and time on writing high quality, well documented, readable code.  That way, if/when you are forced to optimize a code path in your application, you&apos;ll find it is much easier to do so.</p>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>You don&apos;t have to use Redis for your sessions-- you can actually use any Connect or Express-compatible session store.  See <a href="sailsjs.com/documentation/reference/configuration/sails-config-session">sails.config.session</a> for more information.</li>
+<li>The default Socket.io configuration initially attempts to connect to the server using <a href="http://en.wikipedia.org/wiki/Push_technology#Long_polling" target="_blank">long-polling</a>.  In order for this to work, your server environment <a href="http://socket.io/blog/introducing-socket-io-1-0/#scalability" target="_blank">must support</a> sticky load-balancing (aka sticky sessions), otherwise the handshake will fail until the connection is upgraded to use Websockets (and only if Websockets are available).<ul>
+<li>On <strong>Heroku</strong>, you must have the sticky load-balancing beta feature <a href="https://devcenter.heroku.com/articles/session-affinity" target="_blank">explicitly enabled</a>.</li>
+<li>In an environment without stickky load balancing, you will need to set the <code>transports</code> setting in <a href="https://github.com/balderdashy/sails-docs/blob/v0.11/reference/sails.config/sails.config.sockets.md" target="_blank">config/sockets.js</a> to <code>[&apos;websocket&apos;]</code>, forcing it to use websockets only and avoid long-polling.  You&apos;ll also need to set the transports in your socket client--if you&apos;re using <code>sails.io.js</code>, this is as easy as adding a <code>&lt;script&gt;io.sails.transports=[&apos;websocket&apos;]&lt;/script&gt;</code> immediately after the <code>sails.io.js</code> script include.  For a rather dramatic read on the issue, see <a href="https://github.com/Automattic/engine.io/issues/261" target="_blank">this thread</a>.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<docmeta name="displayName" value="Scaling">
+</docmeta>

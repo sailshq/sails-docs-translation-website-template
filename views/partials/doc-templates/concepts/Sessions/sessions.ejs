@@ -1,0 +1,66 @@
+<h1 id="understanding-sessions-in-sails">Understanding Sessions in Sails</h1>
+<p>For our purposes <strong>sessions</strong> are synonymous with a few components that together allow you to store information about a user agent between requests.</p>
+<blockquote>
+<p>A <strong>user agent</strong> is the software (e.g. browser or native application) that represents you on a device (e.g. a browser tab on your computer, a smartphone application, or your refrigerator).  It is associated one-to-one with a cookie or access token.</p>
+</blockquote>
+<p>Sessions can be very useful because the request/response cycle is <strong>stateless</strong>. The request/response cycle is considered stateless because neither the client nor the server inherently stores any information between different requests about a particular request.  Therefore the lifecycle of a request/response ends when a response is made to the requesting user agent (e.g. <code>res.send()</code>).</p>
+<p>Note, we&#x2019;re going to discuss sessions in the context of a browser user agent. While you can use sessions in Sails for whatever you like, it is generally a best practice to use it purely for storing the state of user agent authentication. Authentication is a process that allows a user agent to prove that they have a certain identity.  For example, in order to access some protected functionality, I might need to prove that my browser tab actually corresponds with a particular user record in a database.  If I provide you with a unique name and a password, you can look up the name and compare my password with a stored (hopefully <a href="http://node-machine.org/machinepack-passwords/encrypt-password" target="_blank">encrypted</a>) password.  If there&apos;s a match, I&apos;m authenticated. But how do you store that &quot;authenticated-ness&quot; between requests? That&apos;s where sessions come in.</p>
+<h3 id="what-sessions-are-made-of" permalink="what-sessions-are-made-of">What sessions are made of</h3>
+<p>There are three main components to the implementation of sessions in Sails:</p>
+<ol>
+<li>the <strong>session store</strong> where information is retained</li>
+<li>the middleware that manages the session</li>
+<li>a cookie that is sent along with every request and stores a session id (by default, <code>sails.sid</code>)</li>
+</ol>
+<p>The <strong>session store</strong> can either be in memory (e.g. the default Sails session store) or in a database (e.g. Sails has built-in support for using Redis for this purpose).  Sails builds on top of Connect middleware to manage the session; which includes using a <strong>cookie</strong> to store a session id (<code>sid</code>) on theuser agent.</p>
+<h3 id="a-day-in-the-life-of-a-request-a-response-and-a-session-" permalink="a-day-in-the-life-of-a-request,-a-response,-and-a-session">A day in the life of a <em>request</em>, a <em>response</em>, and a <em>session</em></h3>
+<p>When a <code>request</code> is sent to Sails, the request header is parsed by the session middleware.  </p>
+<h5 id="scenario-1-the-request-header-has-no-cookie-property-" permalink="scenario-1-the-request-header-has-no-cookie-property">Scenario 1: The request header has no <em>cookie property</em></h5>
+<p>If the header does not contain a cookie property, a <code>sid</code> is created in the session and a default session dictionary is added to <code>req</code> (e.g. <code>req.session</code>).  At this point you can make changes to the session property (usually in a controller/action).  For example, let&apos;s look at the following <em>login</em> action.</p>
+<pre><code class="javascript">module.exports = {
+
+  login: function(req, res) {
+
+    // Authentication code here
+
+    // If successfully authenticated
+
+    req.session.userId = foundUser.id;   // returned from a database
+
+    return res.json(foundUser);
+
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Here we added a <code>userId</code> property to <code>req.session</code>.  </p>
+<blockquote>
+<p><strong>Note:</strong> The property will not be stored in the <em>session store</em> nor available to other requests until the response is sent.</p>
+</blockquote>
+<p>Once the response is sent, any new requests will have access to <code>req.session.userId</code>. Since we didn&apos;t have a cookie <em>property</em> in the request header a cookie will be established for us.  </p>
+<h5 id="scenario-2-the-request-header-has-a-cookie-property-with-a-sails-sid-" permalink="scenario-2-the-request-header-has-a-cookie-property-with-a-sailssid">Scenario 2: The request header has a cookie <em>property</em> with a <code>Sails.sid</code></h5>
+<p>Now when the user agent makes the next request, the <code>Sails.sid</code> stored on the cookie is checked for authenticity and if it matches an existing <code>sid</code> in the session store, the contents of the session store is added as a property on the <code>req</code> dictionary (e.g. <code>req.session</code>).  We can access properties on <code>req.session</code> (e.g. <code>req.session.me</code>) or add properties to it (e.g. <code>req.session.me == someValue</code>).  The values in the session store might change but generally the <code>Sails.sid</code> and <code>sid</code> do not change.</p>
+<h3 id="when-does-the-sails-sid-change-" permalink="when-does-the-sailssid-change">When does the <code>Sails.sid</code> change?</h3>
+<p>By default, the Sails session store is <em>in memory</em>.  Therefore, when you close the Sails server, the current session store moves on to session heaven (e.g. the session store disappears).  When Sails is restarted, although a user agent request contains a <code>Sails.sid</code> in the cookie, the <code>sid</code> is no longer in the session store.  Therefore, a new <code>sid</code> will be generated and replaced in the cookie.  The <code>Sails.sid</code> will also change if the user agent cookie expires or is removed.</p>
+<blockquote>
+<p>The lifespan of a Sails cookie can be changed from its default setting (e.g. never expires) to a new setting by accessing the <code>cookie.maxAge</code> property in <code>projectName/config/session.js</code>.</p>
+</blockquote>
+<h3 id="using-redis-as-the-session-store" permalink="using-redis-as-the-session-store">Using <em>Redis</em> as the session store</h3>
+<p>Redis is a key-value database package that can be used as a session store that is separate from the Sails instance.  This configuration for sessions has two benefits.  The first is that the session store will remain viable between Sails restarts.  The second is that if you have multiple Sails instances behind a load balancer, all of the instances can point to a single consolidated session store.</p>
+<p>To enable Redis as a session store open <code>projectName/config/session.js</code> in your favorite text editor and uncomment the <code>adapter</code> property.  That&apos;s it.  During development as long as you have a Redis instance running on the same machine as your Sails instance your session store will use Redis.  You can point to a different Redis instance by configuring the following optional properties in <code>projectName/config/session.js</code>:</p>
+<pre><code class="nohighlight">// host: &apos;localhost&apos;,
+  // port: 6379,
+  // ttl: &lt;redis session TTL in seconds&gt;,
+  // db: 0,
+  // pass: &lt;redis auth password&gt;,
+  // prefix: &apos;sess:&apos;,
+</code></pre><!-- __LANG=%%__ -->
+<p>For more information on configuring these properties go to <a href="https://github.com/tj/connect-redis" target="_blank">https://github.com/tj/connect-redis</a>.</p>
+<h4 id="nerdy-details-of-how-the-session-cookie-is-created" permalink="nerdy-details-of-how-the-session-cookie-is-created">Nerdy details of how the session cookie is created</h4>
+<p>The value for the cookie is created by first hashing the <code>sid</code> with a configurable <em>secret</em> which is just a long string.</p>
+<blockquote>
+<p>You can change the session <code>secret</code> property in <code>projectName/config/session.js</code>. </p>
+</blockquote>
+<p>The Sails <code>sid</code> (e.g. <code>Sails.sid</code>) then becomes a combination of the plain <code>sid</code> followed by a hash of the <code>sid</code> plus the <code>secret</code>.  To take this out of the world of abstraction, let&apos;s use an example.  Sails creates a <code>sid</code> of <code>234lj232hg234jluy32UUYUHH</code> and a <code>session secret</code> of <code>9238cca11a83d473e10981c49c4f</code>. These values are simply two strings that Sails combine and hash to create a <code>signature</code> of <code>AuSosBAbL9t3Ev44EofZtIpiMuV7fB2oi</code>.  So the <code>Sails.sid</code> becomes <code>234lj232hg234jluy32UUYUHH.AuSosBAbL9t3Ev44EofZtIpiMuV7fB2oi</code> and is stored in the user agent cookie by sending a <code>set-cookie</code> property in the response header. </p>
+<p><strong>What does this prevent?</strong> It prevents a user from guessing the <code>sid</code> as well as prevents a evil doer from spoofing a user into making an authetication request with a <code>sid</code> that the evil doer knows.  This could allow the evil doer to use the <code>sid</code> to do bad things while the user is authenticated via the session.</p>
+<docmeta name="displayName" value="Sessions">
+</docmeta>

@@ -1,0 +1,14 @@
+<span><a href="/documentation/<%= navItem.slug %>"><%= navItem.displayName %></a></span>
+<% if(_.isArray(navItem.children) && navItem.children.length > 0) { %>
+<ol>
+  <% _.each(navItem.children, function(childPath) {
+    // Here we assume that childSlug always references another menu item in `navItems` that actually exists.
+    // (this is a _fine_ assumption)
+    var childNavItem = _.find(navItems, function(navItem) {
+      return navItem.path.toLowerCase() === childPath.toLowerCase();
+    });
+  %>
+  <li><%- partial('../partials/table-of-contents-item', {navItem: childNavItem, navItems: navItems}) %></li>
+  <% }) %>
+</ol>
+<% } %>

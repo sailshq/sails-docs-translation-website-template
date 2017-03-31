@@ -1,0 +1,22 @@
+// Dependencies:
+@import '../../utilities/index.less';
+@import '../../styleguide/index.less';
+
+/**
+ * Main documentation nav
+ * (For most documentation pages)
+ */
+.docs-default-side-nav() {
+  >ul {
+    // Styles for all <li>s
+    li {
+      // <ul>s inside of <ul>s
+      ul {
+        border-left: 3px solid @border-lt-gray;
+        padding-left: 20px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+<h1 id="sails-debug">sails debug</h1>
+<p>Attach the node debugger and lift the sails app; similar to running <code>node --debug app.js</code>.  Takes the same options as <code>sails lift</code>.  You can then use <a href="https://github.com/node-inspector/node-inspector" target="_blank">node-inspector</a> to debug your app as it runs.</p>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="nohighlight">$ sails debug
+
+info: Running node-inspector on this app...
+info: If you don&apos;t know what to do next, type `help`
+info: Or check out the docs:
+info: http://nodejs.org/api/debugger.html
+
+info: ( to exit, type &lt;CTRL&gt;+&lt;C&gt; )
+
+debugger listening on port 5858
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>To use the standard (command-line) node debugger with sails, you can always just run <code>node debug app.js</code>.</p>
+</blockquote>
+<h3 id="using-node-inspector" permalink="using-nodeinspector">Using node-inspector</h3>
+<p>To debug your Sails app using node-inspector, first install it over npm</p>
+<pre><code class="bash">$ npm install -g node-inspector
+</code></pre><!-- __LANG=%%__ -->
+<p>Then, launch it with the <code>node-inspector</code> command</p>
+<pre><code class="bash">$ node-inspector
+</code></pre><!-- __LANG=%%__ -->
+<p>Now, you can lift your Sails app in debug mode</p>
+<pre><code class="bash">$ sails debug
+</code></pre><!-- __LANG=%%__ -->
+<p>Once the application is launched, visit <a href="http://127.0.0.1:8080?port=5858" target="_blank">http://127.0.0.1:8080?port=5858</a> in Opera or Chrome (<em>sorry, other browsers!</em>). Now you can request your app as usual on port 1337 and debug your code from the browser.</p>
+<blockquote>
+<p><strong>How it works</strong>
+Node.js includes a TCP-based debugger. When you start your application using <code>sails debug</code>, Node.js lifts your app and opens a socket on port <code>5858</code>. This socket allows external tools to interact with and control the debugger. Node-inspector, accessible via the port <code>8080</code>, is this kind of tool.</p>
+<p>If you don&apos;t see your files in the browser at <a href="http://127.0.0.1:8080?port=5858" target="_blank">http://127.0.0.1:8080?port=5858</a> or if it&apos;s very slow to load, try to run node-inspector with the <code>--no-preload</code> argument. <a href="https://github.com/node-inspector/node-inspector" target="_blank">See the node-inspector repo</a> for more details</p>
+</blockquote>
+<p><docmeta name="displayName" value="sails debug"></docmeta></p>
+<docmeta name="pageType" value="command">
+</docmeta>

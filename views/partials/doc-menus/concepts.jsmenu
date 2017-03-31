@@ -1,0 +1,1150 @@
+[
+  {
+    "templateTitle": "Assets.ejs",
+    "fullPathAndFileName": "concepts/Assets/Assets.ejs",
+    "realPath": "concepts/Assets/",
+    "data": {
+      "displayName": "Assets",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Assets/DisablingGrunt.ejs",
+      "concepts/Assets/DefaultTasks.ejs",
+      "concepts/Assets/TaskAutomation.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "DefaultTasks.ejs",
+    "fullPathAndFileName": "concepts/Assets/DefaultTasks.ejs",
+    "data": {
+      "displayName": "Default Tasks",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Assets/Assets.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "DisablingGrunt.ejs",
+    "fullPathAndFileName": "concepts/Assets/DisablingGrunt.ejs",
+    "data": {
+      "displayName": "Disabling Grunt",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Assets/Assets.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "TaskAutomation.ejs",
+    "fullPathAndFileName": "concepts/Assets/TaskAutomation.ejs",
+    "data": {
+      "displayName": "Task Automation",
+      "lastModified": 1489790131000
+    },
+    "parent": "concepts/Assets/Assets.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Blueprint Actions.ejs",
+    "fullPathAndFileName": "concepts/Blueprints/Blueprint Actions.ejs",
+    "data": {
+      "displayName": "Blueprint Actions",
+      "lastModified": 1484093831000
+    },
+    "parent": "concepts/Blueprints/Blueprints.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Blueprint Routes.ejs",
+    "fullPathAndFileName": "concepts/Blueprints/Blueprint Routes.ejs",
+    "data": {
+      "displayName": "Blueprint Routes",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Blueprints/Blueprints.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Blueprints.ejs",
+    "fullPathAndFileName": "concepts/Blueprints/Blueprints.ejs",
+    "realPath": "concepts/Blueprints/",
+    "data": {
+      "displayName": "Blueprints",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Blueprints/Blueprint Actions.ejs",
+      "concepts/Blueprints/Blueprint Routes.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "Configuration.ejs",
+    "fullPathAndFileName": "concepts/Configuration/Configuration.ejs",
+    "realPath": "concepts/Configuration/",
+    "data": {
+      "displayName": "Configuration",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Configuration/localjsfile.ejs",
+      "concepts/Configuration/usingsailsrcfiles.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "localjsfile.ejs",
+    "fullPathAndFileName": "concepts/Configuration/localjsfile.ejs",
+    "data": {
+      "displayName": "The local.js file",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Configuration/Configuration.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "usingsailsrcfiles.ejs",
+    "fullPathAndFileName": "concepts/Configuration/usingsailsrcfiles.ejs",
+    "data": {
+      "displayName": "Using `.sailsrc` Files",
+      "lastModified": 1451068412000
+    },
+    "parent": "concepts/Configuration/Configuration.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Controllers.ejs",
+    "fullPathAndFileName": "concepts/Controllers/Controllers.ejs",
+    "realPath": "concepts/Controllers/",
+    "data": {
+      "displayName": "Controllers",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Controllers/GeneratingControllers.ejs",
+      "concepts/Controllers/RoutingToControllers.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "GeneratingControllers.ejs",
+    "fullPathAndFileName": "concepts/Controllers/GeneratingControllers.ejs",
+    "data": {
+      "displayName": "Generating Controllers",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Controllers/Controllers.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "RoutingToControllers.ejs",
+    "fullPathAndFileName": "concepts/Controllers/RoutingToControllers.ejs",
+    "data": {
+      "displayName": "Routing to Controllers",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Controllers/Controllers.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "AddingCustomResponse.ejs",
+    "fullPathAndFileName": "concepts/Custom Responses/AddingCustomResponse.ejs",
+    "data": {
+      "displayName": "Adding a Custom Response",
+      "lastModified": 1476914667000
+    },
+    "parent": "concepts/Custom Responses/Custom Responses.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Custom Responses.ejs",
+    "fullPathAndFileName": "concepts/Custom Responses/Custom Responses.ejs",
+    "realPath": "concepts/Custom Responses/",
+    "data": {
+      "displayName": "Custom Responses",
+      "lastModified": 1476328255000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Custom Responses/AddingCustomResponse.ejs",
+      "concepts/Custom Responses/DefaultResponses.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "DefaultResponses.ejs",
+    "fullPathAndFileName": "concepts/Custom Responses/DefaultResponses.ejs",
+    "data": {
+      "displayName": "Default Responses",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Custom Responses/Custom Responses.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Deployment.ejs",
+    "fullPathAndFileName": "concepts/Deployment/Deployment.ejs",
+    "realPath": "concepts/Deployment/",
+    "data": {
+      "displayName": "Deployment",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Deployment/FAQ.ejs",
+      "concepts/Deployment/Hosting.ejs",
+      "concepts/Deployment/Scaling.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "FAQ.ejs",
+    "fullPathAndFileName": "concepts/Deployment/FAQ.ejs",
+    "data": {
+      "displayName": "FAQ",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Deployment/Deployment.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Hosting.ejs",
+    "fullPathAndFileName": "concepts/Deployment/Hosting.ejs",
+    "data": {
+      "displayName": "Hosting",
+      "lastModified": 1482119344000
+    },
+    "parent": "concepts/Deployment/Deployment.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Scaling.ejs",
+    "fullPathAndFileName": "concepts/Deployment/Scaling.ejs",
+    "data": {
+      "displayName": "Scaling",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Deployment/Deployment.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "File Uploads.ejs",
+    "fullPathAndFileName": "concepts/File Uploads/File Uploads.ejs",
+    "realPath": "concepts/File Uploads/",
+    "data": {
+      "displayName": "File Uploads",
+      "lastModified": 1487009905000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/File Uploads/uploading-to-amazon-s3.ejs",
+      "concepts/File Uploads/uploading-to-mongo-gridfs.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "uploading-to-amazon-s3.ejs",
+    "fullPathAndFileName": "concepts/File Uploads/uploading-to-amazon-s3.ejs",
+    "data": {
+      "displayName": "Uploading to S3",
+      "lastModified": 1483157202000
+    },
+    "parent": "concepts/File Uploads/File Uploads.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "uploading-to-mongo-gridfs.ejs",
+    "fullPathAndFileName": "concepts/File Uploads/uploading-to-mongo-gridfs.ejs",
+    "data": {
+      "displayName": "Uploading to GridFS",
+      "lastModified": 1419031309000
+    },
+    "parent": "concepts/File Uploads/File Uploads.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "DisablingGlobals.ejs",
+    "fullPathAndFileName": "concepts/Globals/DisablingGlobals.ejs",
+    "data": {
+      "displayName": "Disabling Globals",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Globals/Globals.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Globals.ejs",
+    "fullPathAndFileName": "concepts/Globals/Globals.ejs",
+    "realPath": "concepts/Globals/",
+    "data": {
+      "displayName": "Globals",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Globals/DisablingGlobals.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "Internationalization.ejs",
+    "fullPathAndFileName": "concepts/Internationalization/Internationalization.ejs",
+    "realPath": "concepts/Internationalization/",
+    "data": {
+      "displayName": "Internationalization",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Internationalization/Locales.ejs",
+      "concepts/Internationalization/TranslatingDynamicContent.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "Locales.ejs",
+    "fullPathAndFileName": "concepts/Internationalization/Locales.ejs",
+    "data": {
+      "displayName": "Locales",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Internationalization/Internationalization.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "TranslatingDynamicContent.ejs",
+    "fullPathAndFileName": "concepts/Internationalization/TranslatingDynamicContent.ejs",
+    "data": {
+      "displayName": "Translating Dynamic Content",
+      "lastModified": 1432858732000
+    },
+    "parent": "concepts/Internationalization/Internationalization.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Custom log messages.ejs",
+    "fullPathAndFileName": "concepts/Logging/Custom log messages.ejs",
+    "data": {
+      "displayName": "Custom log messages",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Logging/Logging.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Logging.ejs",
+    "fullPathAndFileName": "concepts/Logging/Logging.ejs",
+    "realPath": "concepts/Logging/",
+    "data": {
+      "displayName": "Logging",
+      "lastModified": 1486521209000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Logging/Custom log messages.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "ConventionalDefaults.ejs",
+    "fullPathAndFileName": "concepts/Middleware/ConventionalDefaults.ejs",
+    "data": {
+      "displayName": "Conventional Defaults",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Middleware/Middleware.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Middleware.ejs",
+    "fullPathAndFileName": "concepts/Middleware/Middleware.ejs",
+    "realPath": "concepts/Middleware/",
+    "data": {
+      "displayName": "Middleware",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Middleware/ConventionalDefaults.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "Associations.ejs",
+    "fullPathAndFileName": "concepts/ORM/Associations/Associations.ejs",
+    "realPath": "concepts/ORM/Associations/",
+    "data": {
+      "displayName": "Associations",
+      "lastModified": 1486499822000
+    },
+    "parent": "concepts/ORM/ORM.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/ORM/Associations/Dominance.ejs",
+      "concepts/ORM/Associations/ThroughAssociations.ejs",
+      "concepts/ORM/Associations/OnetoOne.ejs",
+      "concepts/ORM/Associations/OnetoMany.ejs",
+      "concepts/ORM/Associations/OneWayAssociation.ejs",
+      "concepts/ORM/Associations/ManytoMany.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "Dominance.ejs",
+    "fullPathAndFileName": "concepts/ORM/Associations/Dominance.ejs",
+    "data": {
+      "displayName": "Dominance",
+      "lastModified": 1451068412000
+    },
+    "parent": "concepts/ORM/Associations/Associations.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "ManytoMany.ejs",
+    "fullPathAndFileName": "concepts/ORM/Associations/ManytoMany.ejs",
+    "data": {
+      "displayName": "Many-to-Many",
+      "lastModified": 1454367198000
+    },
+    "parent": "concepts/ORM/Associations/Associations.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "OneWayAssociation.ejs",
+    "fullPathAndFileName": "concepts/ORM/Associations/OneWayAssociation.ejs",
+    "data": {
+      "displayName": "One Way Association",
+      "lastModified": 1454367108000
+    },
+    "parent": "concepts/ORM/Associations/Associations.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "OnetoMany.ejs",
+    "fullPathAndFileName": "concepts/ORM/Associations/OnetoMany.ejs",
+    "data": {
+      "displayName": "One-to-Many",
+      "lastModified": 1454367150000
+    },
+    "parent": "concepts/ORM/Associations/Associations.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "OnetoOne.ejs",
+    "fullPathAndFileName": "concepts/ORM/Associations/OnetoOne.ejs",
+    "data": {
+      "displayName": "One-to-One",
+      "lastModified": 1454367409000
+    },
+    "parent": "concepts/ORM/Associations/Associations.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "ThroughAssociations.ejs",
+    "fullPathAndFileName": "concepts/ORM/Associations/ThroughAssociations.ejs",
+    "data": {
+      "displayName": "Through Associations",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/ORM/Associations/Associations.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Attributes.ejs",
+    "fullPathAndFileName": "concepts/ORM/Attributes.ejs",
+    "data": {
+      "displayName": "Attributes",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/ORM/ORM.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Lifecyclecallbacks.ejs",
+    "fullPathAndFileName": "concepts/ORM/Lifecyclecallbacks.ejs",
+    "data": {
+      "displayName": "Lifecycle callbacks",
+      "lastModified": 1457094731000
+    },
+    "parent": "concepts/ORM/ORM.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Models.ejs",
+    "fullPathAndFileName": "concepts/ORM/Models.ejs",
+    "data": {
+      "displayName": "Models",
+      "lastModified": 1489536533000
+    },
+    "parent": "concepts/ORM/ORM.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "ORM.ejs",
+    "fullPathAndFileName": "concepts/ORM/ORM.ejs",
+    "realPath": "concepts/ORM/",
+    "data": {
+      "displayName": "Models and ORM",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/ORM/Models.ejs",
+      "concepts/ORM/Attributes.ejs",
+      "concepts/ORM/Lifecyclecallbacks.ejs",
+      "concepts/ORM/Querylanguage.ejs",
+      "concepts/ORM/model-settings.ejs",
+      "concepts/ORM/Validations.ejs",
+      "concepts/ORM/Associations/Associations.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "Querylanguage.ejs",
+    "fullPathAndFileName": "concepts/ORM/Querylanguage.ejs",
+    "data": {
+      "displayName": "Query Language",
+      "lastModified": 1486740620000
+    },
+    "parent": "concepts/ORM/ORM.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Validations.ejs",
+    "fullPathAndFileName": "concepts/ORM/Validations.ejs",
+    "data": {
+      "displayName": "Validations",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/ORM/ORM.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "model-settings.ejs",
+    "fullPathAndFileName": "concepts/ORM/model-settings.ejs",
+    "data": {
+      "displayName": "Model Settings",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/ORM/ORM.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Policies.ejs",
+    "fullPathAndFileName": "concepts/Policies/Policies.ejs",
+    "realPath": "concepts/Policies/",
+    "data": {
+      "displayName": "Policies",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Policies/SailsAndPassport.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "SailsAndPassport.ejs",
+    "fullPathAndFileName": "concepts/Policies/SailsAndPassport.ejs",
+    "data": {
+      "displayName": "Sails + Passport",
+      "lastModified": 1479592617000
+    },
+    "parent": "concepts/Policies/Policies.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Programmatic Usage.ejs",
+    "fullPathAndFileName": "concepts/Programmatic Usage/Programmatic Usage.ejs",
+    "realPath": "concepts/Programmatic Usage/",
+    "data": {
+      "displayName": "Programmatic Usage",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Programmatic Usage/Tips and Tricks.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "Tips and Tricks.ejs",
+    "fullPathAndFileName": "concepts/Programmatic Usage/Tips and Tricks.ejs",
+    "data": {
+      "displayName": "Tips and Tricks",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Programmatic Usage/Programmatic Usage.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "README.ejs",
+    "fullPathAndFileName": "concepts/README.ejs",
+    "data": {
+      "notShownOnWebsite": "true",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Multi-server environments.ejs",
+    "fullPathAndFileName": "concepts/Realtime/Multi-server environments.ejs",
+    "data": {
+      "displayName": "Multi-server environments",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Realtime/Realtime.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "On the client.ejs",
+    "fullPathAndFileName": "concepts/Realtime/On the client.ejs",
+    "data": {
+      "displayName": "On the client",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Realtime/Realtime.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "On the server.ejs",
+    "fullPathAndFileName": "concepts/Realtime/On the server.ejs",
+    "data": {
+      "displayName": "On the server",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Realtime/Realtime.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Realtime.ejs",
+    "fullPathAndFileName": "concepts/Realtime/Realtime.ejs",
+    "realPath": "concepts/Realtime/",
+    "data": {
+      "displayName": "Realtime",
+      "lastModified": 1489422879000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Realtime/On the client.ejs",
+      "concepts/Realtime/Multi-server environments.ejs",
+      "concepts/Realtime/On the server.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "RouteTargetSyntax.ejs",
+    "fullPathAndFileName": "concepts/Routes/RouteTargetSyntax.ejs",
+    "data": {
+      "displayName": "Custom Routes",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Routes/Routes.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Routes.ejs",
+    "fullPathAndFileName": "concepts/Routes/Routes.ejs",
+    "realPath": "concepts/Routes/",
+    "data": {
+      "displayName": "Routes",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Routes/RouteTargetSyntax.ejs",
+      "concepts/Routes/URLSlugs.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "URLSlugs.ejs",
+    "fullPathAndFileName": "concepts/Routes/URLSlugs.ejs",
+    "data": {
+      "displayName": "URL Slugs",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Routes/Routes.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "CORS.ejs",
+    "fullPathAndFileName": "concepts/Security/CORS.ejs",
+    "data": {
+      "displayName": "CORS",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Security/Security.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "CSRF.ejs",
+    "fullPathAndFileName": "concepts/Security/CSRF.ejs",
+    "data": {
+      "displayName": "CSRF",
+      "lastModified": 1476481708000
+    },
+    "parent": "concepts/Security/Security.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Clickjacking.ejs",
+    "fullPathAndFileName": "concepts/Security/Clickjacking.ejs",
+    "data": {
+      "displayName": "Clickjacking",
+      "tags": "clickjacking,ui redress attack",
+      "lastModified": 1451068412000
+    },
+    "parent": "concepts/Security/Security.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "ContentSecurityPolicy.ejs",
+    "fullPathAndFileName": "concepts/Security/ContentSecurityPolicy.ejs",
+    "data": {
+      "displayName": "Content Security Policy",
+      "lastModified": 1483242659000
+    },
+    "parent": "concepts/Security/Security.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "DDOS.ejs",
+    "fullPathAndFileName": "concepts/Security/DDOS.ejs",
+    "data": {
+      "displayName": "DDOS",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Security/Security.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "P3P.ejs",
+    "fullPathAndFileName": "concepts/Security/P3P.ejs",
+    "data": {
+      "displayName": "P3P",
+      "lastModified": 1451068412000
+    },
+    "parent": "concepts/Security/Security.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Security.ejs",
+    "fullPathAndFileName": "concepts/Security/Security.ejs",
+    "realPath": "concepts/Security/",
+    "data": {
+      "displayName": "Security",
+      "lastModified": 1442429085000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Security/CORS.ejs",
+      "concepts/Security/CSRF.ejs",
+      "concepts/Security/ContentSecurityPolicy.ejs",
+      "concepts/Security/DDOS.ejs",
+      "concepts/Security/P3P.ejs",
+      "concepts/Security/Clickjacking.ejs",
+      "concepts/Security/SocketHijacking.ejs",
+      "concepts/Security/XSS.ejs",
+      "concepts/Security/StrictTransportSecurity.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "SocketHijacking.ejs",
+    "fullPathAndFileName": "concepts/Security/SocketHijacking.ejs",
+    "data": {
+      "displayName": "Socket Hijacking",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Security/Security.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "StrictTransportSecurity.ejs",
+    "fullPathAndFileName": "concepts/Security/StrictTransportSecurity.ejs",
+    "data": {
+      "displayName": "Strict Transport Security",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Security/Security.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "XSS.ejs",
+    "fullPathAndFileName": "concepts/Security/XSS.ejs",
+    "data": {
+      "displayName": "XSS",
+      "lastModified": 1468258492000
+    },
+    "parent": "concepts/Security/Security.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "CreatingAService.ejs",
+    "fullPathAndFileName": "concepts/Services/CreatingAService.ejs",
+    "data": {
+      "displayName": "Creating a Service",
+      "lastModified": 1469843134000
+    },
+    "parent": "concepts/Services/Services.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Services.ejs",
+    "fullPathAndFileName": "concepts/Services/Services.ejs",
+    "realPath": "concepts/Services/",
+    "data": {
+      "displayName": "Services",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Services/CreatingAService.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "sessions.ejs",
+    "fullPathAndFileName": "concepts/Sessions/sessions.ejs",
+    "data": {
+      "displayName": "Sessions",
+      "lastModified": 1472861042000
+    }
+  },
+  {
+    "templateTitle": "Testing.ejs",
+    "fullPathAndFileName": "concepts/Testing/Testing.ejs",
+    "realPath": "concepts/Testing/",
+    "data": {
+      "displayName": "Testing",
+      "lastModified": 1484016735000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [],
+    "isParent": true
+  },
+  {
+    "templateTitle": "Layouts.ejs",
+    "fullPathAndFileName": "concepts/Views/Layouts.ejs",
+    "data": {
+      "displayName": "Layouts",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Views/Views.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Locals.ejs",
+    "fullPathAndFileName": "concepts/Views/Locals.ejs",
+    "data": {
+      "displayName": "Locals",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Views/Views.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Partials.ejs",
+    "fullPathAndFileName": "concepts/Views/Partials.ejs",
+    "data": {
+      "displayName": "Partials",
+      "lastModified": 1477592356000
+    },
+    "parent": "concepts/Views/Views.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "ViewEngines.ejs",
+    "fullPathAndFileName": "concepts/Views/ViewEngines.ejs",
+    "data": {
+      "displayName": "View Engines",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/Views/Views.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Views.ejs",
+    "fullPathAndFileName": "concepts/Views/Views.ejs",
+    "realPath": "concepts/Views/",
+    "data": {
+      "displayName": "Views",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/Views/Layouts.ejs",
+      "concepts/Views/Locals.ejs",
+      "concepts/Views/Partials.ejs",
+      "concepts/Views/ViewEngines.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "concepts.ejs",
+    "fullPathAndFileName": "concepts/concepts.ejs",
+    "realPath": "concepts/",
+    "data": {
+      "displayName": "Concepts: Table of Contents",
+      "isTableOfContents": "true",
+      "lastModified": 1482176930000
+    },
+    "children": [
+      "concepts/README.ejs",
+      "concepts/Assets/Assets.ejs",
+      "concepts/Deployment/Deployment.ejs",
+      "concepts/Configuration/Configuration.ejs",
+      "concepts/Blueprints/Blueprints.ejs",
+      "concepts/File Uploads/File Uploads.ejs",
+      "concepts/Controllers/Controllers.ejs",
+      "concepts/Logging/Logging.ejs",
+      "concepts/Internationalization/Internationalization.ejs",
+      "concepts/Globals/Globals.ejs",
+      "concepts/Middleware/Middleware.ejs",
+      "concepts/ORM/ORM.ejs",
+      "concepts/Programmatic Usage/Programmatic Usage.ejs",
+      "concepts/Policies/Policies.ejs",
+      "concepts/Realtime/Realtime.ejs",
+      "concepts/Routes/Routes.ejs",
+      "concepts/Security/Security.ejs",
+      "concepts/Services/Services.ejs",
+      "concepts/Testing/Testing.ejs",
+      "concepts/Views/Views.ejs",
+      "concepts/extending-sails/extending-sails.ejs",
+      "concepts/Custom Responses/Custom Responses.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "Adapters.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Adapters/Adapters.ejs",
+    "realPath": "concepts/extending-sails/Adapters/",
+    "data": {
+      "displayName": "Adapters",
+      "stabilityIndex": "3",
+      "lastModified": 1476597556000
+    },
+    "parent": "concepts/extending-sails/extending-sails.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/extending-sails/Adapters/adapterList.ejs",
+      "concepts/extending-sails/Adapters/customAdapters.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "adapterList.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Adapters/adapterList.ejs",
+    "data": {
+      "displayName": "Available Adapters",
+      "lastModified": 1483486257000
+    },
+    "parent": "concepts/extending-sails/Adapters/Adapters.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "customAdapters.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Adapters/customAdapters.ejs",
+    "data": {
+      "displayName": "Custom Adapters",
+      "lastModified": 1479923163000
+    },
+    "parent": "concepts/extending-sails/Adapters/Adapters.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Generators.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Generators/Generators.ejs",
+    "realPath": "concepts/extending-sails/Generators/",
+    "data": {
+      "displayName": "Generators",
+      "stabilityIndex": "2",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/extending-sails/extending-sails.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/extending-sails/Generators/customGenerators.ejs",
+      "concepts/extending-sails/Generators/generatorList.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "customGenerators.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Generators/customGenerators.ejs",
+    "data": {
+      "displayName": "Custom Generators",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/extending-sails/Generators/Generators.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "generatorList.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Generators/generatorList.ejs",
+    "data": {
+      "displayName": "Available Generators",
+      "lastModified": 1488235221000
+    },
+    "parent": "concepts/extending-sails/Generators/Generators.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "Hooks.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Hooks/Hooks.ejs",
+    "realPath": "concepts/extending-sails/Hooks/",
+    "data": {
+      "displayName": "Hooks",
+      "stabilityIndex": "3",
+      "lastModified": 1486883295000
+    },
+    "parent": "concepts/extending-sails/extending-sails.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/extending-sails/Hooks/projecthooks.ejs",
+      "concepts/extending-sails/Hooks/installablehooks.ejs",
+      "concepts/extending-sails/Hooks/usinghooks.ejs",
+      "concepts/extending-sails/Hooks/hookspec/hookspec.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "configure.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Hooks/hookspec/configure.ejs",
+    "data": {
+      "displayName": ".configure()",
+      "stabilityIndex": "3",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/extending-sails/Hooks/hookspec/hookspec.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "defaults.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Hooks/hookspec/defaults.ejs",
+    "data": {
+      "displayName": ".defaults",
+      "stabilityIndex": "3",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/extending-sails/Hooks/hookspec/hookspec.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "hookspec.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Hooks/hookspec/hookspec.ejs",
+    "realPath": "concepts/extending-sails/Hooks/hookspec/",
+    "data": {
+      "displayName": "Hook Specification",
+      "stabilityIndex": "3",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/extending-sails/Hooks/Hooks.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/extending-sails/Hooks/hookspec/configure.ejs",
+      "concepts/extending-sails/Hooks/hookspec/defaults.ejs",
+      "concepts/extending-sails/Hooks/hookspec/routes.ejs",
+      "concepts/extending-sails/Hooks/hookspec/initialize.ejs"
+    ],
+    "isParent": true
+  },
+  {
+    "templateTitle": "initialize.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Hooks/hookspec/initialize.ejs",
+    "data": {
+      "displayName": ".initialize()",
+      "stabilityIndex": "3",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/extending-sails/Hooks/hookspec/hookspec.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "routes.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Hooks/hookspec/routes.ejs",
+    "data": {
+      "displayName": ".routes",
+      "stabilityIndex": "3",
+      "lastModified": 1485264585000
+    },
+    "parent": "concepts/extending-sails/Hooks/hookspec/hookspec.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "installablehooks.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Hooks/installablehooks.ejs",
+    "data": {
+      "displayName": "Installable Hooks",
+      "stabilityIndex": "3",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/extending-sails/Hooks/Hooks.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "projecthooks.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Hooks/projecthooks.ejs",
+    "data": {
+      "displayName": "Project Hooks",
+      "stabilityIndex": "3",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/extending-sails/Hooks/Hooks.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "usinghooks.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/Hooks/usinghooks.ejs",
+    "data": {
+      "displayName": "Using Hooks",
+      "stabilityIndex": "3",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/extending-sails/Hooks/Hooks.ejs",
+    "isChild": true
+  },
+  {
+    "templateTitle": "extending-sails.ejs",
+    "fullPathAndFileName": "concepts/extending-sails/extending-sails.ejs",
+    "realPath": "concepts/extending-sails/",
+    "data": {
+      "displayName": "Extending Sails",
+      "lastModified": 1483231589000
+    },
+    "parent": "concepts/concepts.ejs",
+    "isChild": true,
+    "children": [
+      "concepts/extending-sails/Hooks/Hooks.ejs",
+      "concepts/extending-sails/Adapters/Adapters.ejs",
+      "concepts/extending-sails/Generators/Generators.ejs"
+    ],
+    "isParent": true
+  }
+]

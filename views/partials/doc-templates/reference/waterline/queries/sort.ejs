@@ -1,0 +1,48 @@
+<h1 id="-sort-string-">.sort(<code>string</code>)</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<h3 id="parameters" permalink="parameters">Parameters</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Accepted Data Types</th>
+<th>Required ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Sort String</td>
+<td><code>string</code></td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<pre><code class="javascript">var myQuery = User.find();
+
+var sortString= &apos;name ASC&apos;;
+
+// Sort strings look like this
+
+// &apos;&lt;Model Attribute&gt; &lt;sort type&gt;&apos;
+
+myQuery.sort(&apos;name ASC&apos;);
+
+myQuery.exec(function callBack(err,results){
+    console.log(results)
+    });
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>The .find() method returns a chainable object if you don&apos;t supply a callback.  This method can be chained to .find() to further filter your results.</p>
+<p>Other Sort Types include</p>
+<ul>
+<li>ASC</li>
+<li>DESC</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".sort()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

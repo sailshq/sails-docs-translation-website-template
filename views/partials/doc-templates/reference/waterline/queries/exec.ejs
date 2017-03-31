@@ -1,0 +1,73 @@
+<h1 id="-exec-">.exec()</h1>
+<p>Execute a Waterline <a href="/documentation/reference/waterline-orm/queries">query instance</a>.</p>
+<pre><code class="javascript">query.exec(function afterwards(err, result) {
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">callback</td>
+<td><bubble type="function" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The Node-style callback that will be called when the query completes; successfully or otherwise.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">err</td>
+<td><bubble type="Error?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The error that occurred, or <code>undefined</code> if there were no errors.</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left">result</td>
+<td><bubble type="JSON" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The result from the database.  Exact data type depends on the query.  If an error occurred (i.e. <code>err</code> is truthy), then this result argument should be ignored.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">Zookeeper.find().exec(function (err, zookeepers) {
+  if (err) {
+    // uh oh
+    // (handle error; e.g. `return res.negotiate()`)
+    return;
+  }
+
+  // would you look at all those zookeepers?
+  // (now let&apos;s do the next thing;
+  //  e.g. `_.reduce(zookeepers, ...)` and/or `return res.json(zookeepers)`)
+});
+//
+// (don&apos;t put code out here)
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>If you don&apos;t run <code>.exec()</code> or use promises, your query will not execute. For help using <code>.exec()</code> with model methods like <code>.find()</code>, read more about the <a href="/documentation/reference/waterline-orm/queries">chainable query object</a>.</p>
+</blockquote>
+<p><docmeta name="displayName" value=".exec()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

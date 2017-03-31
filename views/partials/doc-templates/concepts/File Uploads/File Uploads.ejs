@@ -1,0 +1,157 @@
+<h1 id="file-uploads">File Uploads</h1>
+<p>Uploading files in Sails is similar to how you would upload files for a vanilla Node.js or Express application.  It is, however, probably different than what you&apos;re used to if you&apos;re coming from a different server-side platform like PHP, .NET, Python, Ruby, or Java.  But fear not: the core team has gone to great lengths to make file uploads easier to accomplish, while still keeping them scalable and secure.</p>
+<p>Sails comes with a powerful &quot;body parser&quot; called <a href="https://github.com/balderdashy/skipper" target="_blank">Skipper</a> which makes it easy to implement streaming file uploads-- not only to the server&apos;s filesystem (i.e. hard disk), but also to Amazon S3, MongoDB&apos;s gridfs, or any of its other supported file adapters.</p>
+<h3 id="uploading-a-file" permalink="uploading-a-file">Uploading a file</h3>
+<p>Files are uploaded to HTTP web servers as <em>file parameters</em>.  In the same way you might send a form POST to a URL with text parameters like &quot;name&quot;, &quot;email&quot;, and &quot;password&quot;, you send files as file parameters, like &quot;avatar&quot; or &quot;newSong&quot;.</p>
+<p>Take this simple example:</p>
+<pre><code class="javascript">req.file(&apos;avatar&apos;).upload(function (err, uploadedFiles) {
+  // ...
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>Files should be uploaded inside of an <code>action</code> in one of your controllers.  Here&apos;s a more in-depth example that demonstrates how you could allow users to upload an avatar image and associate it with their accounts.  It assumes you&apos;ve already taken care of access control in a policy, that you&apos;re storing the id of the logged-in user in <code>req.session.me</code>, and that you&apos;ve put the base URL in an <a href="/documentation/concepts/configuration#?environmentspecific-files-config-env">environment-dependent configuration value</a> called <code>sails.config.appUrl</code>.</p>
+<pre><code class="javascript">// api/controllers/UserController.js
+//
+// ...
+
+
+/**
+ * Upload avatar for currently logged-in user
+ *
+ * (POST /user/avatar)
+ */
+uploadAvatar: function (req, res) {
+
+  req.file(&apos;avatar&apos;).upload({
+    // don&apos;t allow the total upload size to exceed ~10MB
+    maxBytes: 10000000
+  },function whenDone(err, uploadedFiles) {
+    if (err) {
+      return res.negotiate(err);
+    }
+
+    // If no files were uploaded, respond with an error.
+    if (uploadedFiles.length === 0){
+      return res.badRequest(&apos;No file was uploaded&apos;);
+    }
+
+
+    // Save the &quot;fd&quot; and the url where the avatar for a user can be accessed
+    User.update(req.session.me, {
+
+      // Generate a unique URL where the avatar can be downloaded.
+      avatarUrl: require(&apos;util&apos;).format(&apos;%s/user/avatar/%s&apos;, sails.config.appUrl, req.session.me),
+
+      // Grab the first file and use it&apos;s `fd` (file descriptor)
+      avatarFd: uploadedFiles[0].fd
+    })
+    .exec(function (err){
+      if (err) return res.negotiate(err);
+      return res.ok();
+    });
+  });
+},
+
+
+/**
+ * Download avatar of the user with the specified id
+ *
+ * (GET /user/avatar/:id)
+ */
+avatar: function (req, res){
+
+  req.validate({
+    id: &apos;string&apos;
+  });
+
+  User.findOne(req.param(&apos;id&apos;)).exec(function (err, user){
+    if (err) return res.negotiate(err);
+    if (!user) return res.notFound();
+
+    // User has no avatar image uploaded.
+    // (should have never have hit this endpoint and used the default image)
+    if (!user.avatarFd) {
+      return res.notFound();
+    }
+
+    var SkipperDisk = require(&apos;skipper-disk&apos;);
+    var fileAdapter = SkipperDisk(/* optional opts */);
+
+    // set the filename to the same file as the user uploaded
+    res.set(&quot;Content-disposition&quot;, &quot;attachment; filename=&apos;&quot; + file.name + &quot;&apos;&quot;);
+
+    // Stream the file down
+    fileAdapter.read(user.avatarFd)
+    .on(&apos;error&apos;, function (err){
+      return res.serverError(err);
+    })
+    .pipe(res);
+  });
+}
+
+//
+// ...
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="where-do-the-files-go-" permalink="where-do-the-files-go">Where do the files go?</h4>
+<p>When using the default <code>receiver</code>, file uploads go to the <code>.tmp/uploads/</code> directory.  You can override this using the <code>dirname</code> option.  Note that you&apos;ll need to provide this option both when you call the <code>.upload()</code> function AND when you invoke the skipper-disk adapter (so that you are uploading to and downloading from the same place.)</p>
+<h4 id="uploading-to-a-custom-folder" permalink="uploading-to-a-custom-folder">Uploading to a custom folder</h4>
+<p>In the above example we upload the file to .tmp/uploads. So how do we configure it with a custom folder, say &#x2018;assets/images&#x2019;. We can achieve this by adding options to upload function as shown below.</p>
+<pre><code class="javascript">req.file(&apos;avatar&apos;).upload({
+  dirname: require(&apos;path&apos;).resolve(sails.config.appPath, &apos;assets/images&apos;)
+},function (err, uploadedFiles) {
+  if (err) return res.negotiate(err);
+
+  return res.json({
+    message: uploadedFiles.length + &apos; file(s) uploaded successfully!&apos;
+  });
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<h4 id="generate-an-api-" permalink="generate-an-api">Generate an <code>api</code></h4>
+<p>First we need to generate a new <code>api</code> for serving/storing files.  Do this using the sails command line tool.</p>
+<pre><code class="bash">$ sails generate api file
+
+debug: Generated a new controller `file` at api/controllers/FileController.js!
+debug: Generated a new model `File` at api/models/File.js!
+
+info: REST API generated @ http://localhost:1337/file
+info: and will be available the next time you run `sails lift`.
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="write-controller-actions" permalink="write-controller-actions">Write Controller Actions</h4>
+<p>Lets make an <code>index</code> action to initiate the file upload and an <code>upload</code> action to receive the file.</p>
+<pre><code class="javascript">// api/controllers/FileController.js
+
+module.exports = {
+
+  index: function (req,res){
+
+    res.writeHead(200, {&apos;content-type&apos;: &apos;text/html&apos;});
+    res.end(
+    &apos;&lt;form action=&quot;http://localhost:1337/file/upload&quot; enctype=&quot;multipart/form-data&quot; method=&quot;post&quot;&gt;&apos;+
+    &apos;&lt;input type=&quot;text&quot; name=&quot;title&quot;&gt;&lt;br&gt;&apos;+
+    &apos;&lt;input type=&quot;file&quot; name=&quot;avatar&quot; multiple=&quot;multiple&quot;&gt;&lt;br&gt;&apos;+
+    &apos;&lt;input type=&quot;submit&quot; value=&quot;Upload&quot;&gt;&apos;+
+    &apos;&lt;/form&gt;&apos;
+    )
+  },
+  upload: function  (req, res) {
+    req.file(&apos;avatar&apos;).upload(function (err, files) {
+      if (err)
+        return res.serverError(err);
+
+      return res.json({
+        message: files.length + &apos; file(s) uploaded successfully!&apos;,
+        files: files
+      });
+    });
+  }
+
+};
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="read-more" permalink="read-more">Read more</h2>
+<ul>
+<li><a href="https://github.com/balderdashy/skipper" target="_blank">Skipper docs</a></li>
+<li><a href="/documentation/concepts/file-uploads/uploading-to-s-3">Uploading to Amazon S3</a></li>
+<li><a href="/documentation/concepts/file-uploads/uploading-to-grid-fs">Uploading to Mongo GridFS</a></li>
+</ul>
+<docmeta name="displayName" value="File Uploads">
+</docmeta>

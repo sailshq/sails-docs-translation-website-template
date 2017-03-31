@@ -1,0 +1,50 @@
+<h1 id="find-one-blueprint-">Find One (Blueprint)</h1>
+<p>Look up the record with the specified <code>id</code> from the database and (if possible) subscribe to the record to hear about any future changes.</p>
+<pre><code class="nohighlight">GET /:model/:id
+</code></pre><!-- __LANG=%%__ -->
+<p>The <strong>findOne()</strong> blueprint action returns a single record from the model (given by <code>:model</code>) as a JSON object. The specified <code>id</code> is the <a href="http://en.wikipedia.org/wiki/Unique_key" target="_blank">primary key</a> of the desired record.</p>
+<p>If the action was triggered via a socket request, the requesting socket will be &quot;subscribed&quot; to the returned record. If the record is subsequently updated or deleted, a message will be sent to that socket&apos;s client informing them of the change. See the docs for <a href="/documentation/reference/websockets/resourceful-pubsub/subscribe.html">.subscribe()</a> for more info.</p>
+<h3 id="parameters" permalink="parameters">Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> model</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> of the containing model.<br><br>e.g. <code>&apos;purchase&apos;</code> (in <code>/purchase/7</code>)</td>
+</tr>
+<tr>
+<td> id</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The desired target record&apos;s primary key value<br><br>e.g. <code>&apos;7&apos;</code> (in <code>/purchase/7</code>).</td>
+</tr>
+<tr>
+<td> <em>callback</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Optional. If specified, a JSONP response will be sent (instead of JSON). This is the name of the client-side javascript function to call, passing results as the first (and only) argument<br> <br> e.g. <code>?callback=myJSONPHandlerFn</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>Find the purchase with id #1:</p>
+<pre><code class="nohighlight">GET /purchase/1
+</code></pre><!-- __LANG=%%__ -->
+<p><a href="https://www.getpostman.com/run-collection/96217d0d747e536e49a4" target="_blank"><img src="https://s3.amazonaws.com/postman-static/run-button.png" alt="Run in Postman"></a></p>
+<h5 id="expected-response" permalink="expected-response">Expected Response</h5>
+<pre><code class="json">{
+   &quot;amount&quot;: 49.99,
+   &quot;id&quot;: 1,
+   &quot;createdAt&quot;: &quot;2013-10-18T01:22:56.000Z&quot;,
+   &quot;updatedAt&quot;: &quot;2013-10-18T01:22:56.000Z&quot;
+ }
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="find one"></docmeta></p>
+<docmeta name="pageType" value="endpoint">
+
+</docmeta>

@@ -1,0 +1,116 @@
+<h1 id="io-socket-on-">io.socket.on()</h1>
+<p>Start listening for server-sent events from Sails with the specified <code>eventIdentity</code>.  Will trigger the provided callback function when a matching event is received.</p>
+<pre><code class="javascript">io.socket.on(eventIdentity, function (msg) {
+  // ...
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>eventIdentity</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The unique identity of a server-sent event, e.g. &quot;recipe&quot;</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>handlerFn</code></td>
+<td style="text-align:center"><bubble type="function" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Will be called when the server emits a message to this socket.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="event-handler" permalink="event-handler">Event handler</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>msg</code></td>
+<td style="text-align:center"><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The message broadcasted from the Sails server.</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the event handler will NEVER be called until one of your back-end controllers, models, services, etc. sends a message to this socket.  Typically that is achieved one of the following ways:</p>
+<h6 id="resourceful-pubsub-methods">Resourceful Pubsub Methods</h6>
+<ul>
+<li>server publishes a message about a record to which this socket is subscribed (see <a href="/documentation/reference/websockets/resourceful-pubsub/publishUpdate.html">Model.publishUpdate()</a>, <a href="/documentation/reference/websockets/resourceful-pubsub/publishDestroy.html">Model.publishDestroy()</a>, and <a href="/documentation/reference/websockets/resourceful-pubsub/subscribe.html">Model.subscribe()</a>)</li>
+<li>server publishes a message informing all permitted watcher sockets that a new record has been created in the model with the same identity as <code>eventIdentity</code> (see <a href="/documentation/reference/websockets/resourceful-pubsub/publishCreate.html">Model.publishCreate(http://sailsjs.com/documentation/reference/websockets/resourceful-pubsub/publishCreate.html)</a> and <a href="/documentation/reference/websockets/resourceful-pubsub/watch.html">Model.watch()</a>)</li>
+</ul>
+<h6 id="low-level-socket-methods-sails-sockets-">Low-Level Socket Methods (<code>sails.sockets</code>)</h6>
+<ul>
+<li>server emits a message to all known sockets (see <a href="/documentation/reference/websockets/sails.sockets/sails.sockets.blast.html">sails.sockets.blast()</a>)</li>
+<li>server emits a message directly to this socket (<code>io.socket</code>) using its unique id (see <a href="/documentation/reference/websockets/sails.sockets/sails.sockets.emit.html">sails.sockets.emit()</a>)</li>
+<li>server <a href="/documentation/reference/websockets/sails.sockets/sails.sockets.broadcast.html">broadcasts</a> to a room in which this socket (<code>io.socket</code>) has been allowed to <a href="/documentation/reference/websockets/sails.sockets/sails.sockets.join.html">join</a> (remember that a socket only stays subscribed as long as it is connected-- i.e. as long as the browser tab is open)</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<p>Listen for new orders and updates to existing orders:</p>
+<pre><code class="javascript">io.socket.on(&apos;order&apos;, function onServerSentEvent (msg) {
+  // msg =&gt; {...whatever the server broadcasted...}
+});
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="another-example-this-time-using-angular-" permalink="another-example,-this-time-using-angular">Another example, this time using Angular:</h5>
+<blockquote>
+<p>Note that this Angular example assumes the backend calls <code>publishCreate()</code> at some point.</p>
+</blockquote>
+<pre><code class="javascript">angular.module(&apos;cafeteria&apos;).controller(&apos;CheckoutCtrl&apos;, function ($scope) {
+
+  $scope.orders = $scope.orders || [];
+
+  if (!io.socket.alreadyListeningToOrders) {
+    io.socket.alreadyListeningToOrders = true;
+    io.socket.on(&apos;order&apos;, function onServerSentEvent (msg) {
+
+      // Let&apos;s see what the server has to say...
+      switch(msg.verb) {
+
+        case &apos;created&apos;:
+          $scope.orders.push(msg.data); // (add the new order to the DOM)
+          $scope.$apply();              // (re-render)
+          break;
+
+        default: return; // ignore any unrecognized messages
+      }
+    });
+  }
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="handle-socket-connect-and-disconnect-events" permalink="handle-socket-connect-and-disconnect-events">Handle Socket &apos;Connect&apos; and &apos;Disconnect&apos; events</h3>
+<p>If a socket&apos;s connection to the server was interrupted-- perhaps because the server was restarted, or the client had some kind of network issue-- it is possible to handle <code>connect</code> and <code>disconnect</code> events and manually reconnect the socket again.  <code>sails.io.js</code> does this for you automatically, but you can also bind your own handlers.  While <strong>this is not recommended for 99% of apps</strong>, usage is documented below for completeness:</p>
+<pre><code class="javascript">io.socket.on(&apos;connect&apos;, function(){
+      io.socket.get(&apos;/messages&apos;);
+      io.socket.get(&apos;/notifications/subscribe/statusUpdates&apos;);
+  });
+
+  io.socket.on(&apos;disconnect&apos;, function(){
+      console.log(&apos;Lost connection to server&apos;);
+  });
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>When listening for resourceful pubsub calls, the <code>eventIdentity</code> is the same as the identity of the calling model (e.g. if you have a model &quot;UserComment&quot;, the identity is &quot;usercomment&quot;.)</li>
+<li>For context-- these types of server-sent events are sometimes referred to as <a href="http://en.wikipedia.org/wiki/Comet_(programming" target="_blank">&quot;comet&quot;</a>) messages.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="io.socket.on()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

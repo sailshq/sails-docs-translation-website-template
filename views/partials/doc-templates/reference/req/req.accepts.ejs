@@ -1,0 +1,20 @@
+<h1 id="req-accepts-">req.accepts()</h1>
+<p>Checks whether this request&apos;s stated list of &quot;accepted&quot; <a href="http://www.iana.org/assignments/media-types/media-types.xhtml" target="_blank">media types</a> includes the specified <code>type</code>. Returns true or false.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.accepts(type);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">req.accepts(&apos;application/json&apos;);
+// -&gt; true
+req.accepts(&apos;json&apos;);
+// -&gt; true
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>See the <a href="https://github.com/expressjs/accepts" target="_blank"><code>accepts</code> module</a> for the finer details of the header parsing algorithm used in Sails/Express/Koa/Connect.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.accepts()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

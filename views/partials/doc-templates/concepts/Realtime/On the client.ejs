@@ -1,0 +1,32 @@
+<h1 id="realtime-communication-between-the-client-and-the-server">Realtime communication between the client and the server</h1>
+<p>The easiest way to send a realtime message from a client to a Sails app is by using the <a href="/documentation/reference/web-sockets/sails-io-js">sails.io.js</a> library.  This library allows you to easily connect sockets to a running Sails app, and provides methods for making requests to <a href="/documentation/concepts/routes">Sails routes</a> that are handled in the same manner as a &quot;regular&quot; HTTP request.</p>
+<p>The sails.io.js library is automatically added to the default <a href="/documentation/concepts/views/layouts">layout template</a> of new Sails apps using a <code>&lt;script&gt;</code> tag.  When a web page loads the <code>sails.io.js</code> script, it attempts to create a new <a href="/documentation/reference/web-sockets/socket-client/sails-socket">client socket</a> and connect it to the Sails app, exposing it as the global variable <code>io.socket</code>.</p>
+<h3 id="examples" permalink="examples">Examples</h3>
+<p>Include the <code>sails.io.js</code> library, and make a request to the <code>/hello</code> route of a Sails app using the automatically-connected socket:</p>
+<pre><code class="html">&lt;script type=&quot;text/javascript&quot; src=&quot;/js/dependencies/sails.io.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+io.socket.get(&apos;/hello&apos;, function responseFromServer (body, response) {
+  console.log(&quot;The server responded with status &quot; + response.statusCode + &quot; and said: &quot;, body);
+});
+&lt;/script&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p>Now consider this more advanced (and much rarer) use case: Let&apos;s disable the eager (auto-connecting) socket, and instead create a new client socket manually.  When it successfully connects to the server, we&apos;ll make it log a message:</p>
+<pre><code class="html">&lt;script type=&quot;text/javascript&quot; src=&quot;/js/dependencies/sails.io.js&quot; autoConnect=&quot;false&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+var mySocket = io.sails.connect();
+mySocket.on(&apos;connect&apos;, function onConnect () {
+  console.log(&quot;Socket connected!&quot;);
+});
+&lt;/script&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="socket-requests-vs-traditional-ajax-requests" permalink="socket-requests-vs-traditional-ajax-requests">Socket requests vs traditional AJAX requests</h3>
+<p>You may have noticed that a client socket <code>.get()</code> is very similar to making an AJAX request, for example by using jQuery&apos;s <code>$.get()</code> method.  This is intentional&#x2014;the goal is for you to be able to get the same response from Sails no matter where the request originated from.  The benefit to making the request using a client socket is that the <a href="/documentation/concepts/controllers#?actions">controller action</a> in your Sails app will have access to the socket which made the request, allowing it to <em>subscribe</em> that socket to realtime notifications (see <a href="/documentation/concepts/realtime/on-the-server">sending realtime messages from the server</a>).</p>
+<h3 id="reference" permalink="reference">Reference</h3>
+<ul>
+<li>View the full <a href="/documentation/reference/web-sockets/socket-client">sails.io.js library</a> reference.</li>
+<li>See the <a href="/documentation/reference/web-sockets/sails-sockets">sails.sockets</a> reference to learn how to send messages from the server to connected sockets</li>
+<li>See the <a href="/documentation/reference/web-sockets/resourceful-pub-sub">resourceful pub-sub</a> reference to learn how to use Sails blueprints to automatically send realtime messages about changes to your <a href="/documentation/concepts/models-and-orm/models">models</a>.</li>
+<li>Visit the <a href="http://socket.io" target="_blank">Socket.io</a> website to learn more about the underlying library Sails uses for realtime communication</li>
+</ul>
+<docmeta name="displayName" value="On the client">
+</docmeta>

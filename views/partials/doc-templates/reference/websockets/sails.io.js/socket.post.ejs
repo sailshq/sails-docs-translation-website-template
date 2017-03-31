@@ -1,0 +1,80 @@
+<h1 id="io-socket-post-">io.socket.post()</h1>
+<p>Send a socket request (virtual POST) to a Sails server using Socket.io.</p>
+<pre><code class="javascript">io.socket.post(url, data, function (resData, jwres){
+  // ...
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>url</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>The destination URL path, e.g. &quot;/checkout&quot;.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em><code>data</code></em></td>
+<td style="text-align:center"><bubble type="json?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Optional request data- if provided, will be JSON-encoded and included as the virtual HTTP body.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><em><code>callback</code></em></td>
+<td style="text-align:center"><bubble type="function?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Optional callback- if provided, will be called when the server responds.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th style="text-align:center">Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>resData</code></td>
+<td style="text-align:center"><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Data received in the response from the Sails server (=== <code>jwres.body</code>, and also equivalent to the HTTP response body.)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>jwres</code></td>
+<td style="text-align:center"><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>A <a href="https://github.com/balderdashy/sails-docs/blob/master/PAGE_NEEDED.md" target="_blank">JSON WebSocket Response</a> object.  Has <code>headers</code>, a <code>body</code>, and a <code>statusCode</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="html">&lt;script&gt;
+io.socket.post(&apos;/users&apos;, { name: &apos;Timmy Mendez&apos; }, function (resData, jwRes) {
+  jwRes.statusCode; // =&gt; 200
+});
+&lt;/script&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Remember that you can communicate with <em>any of your routes</em> using socket requests.</li>
+<li>Need to customize request headers?  Check out the slightly lower-level <a href="/documentation/reference/web-sockets/socket-client/io-socket-request"><code>io.socket.request()</code></a> method, or to set custom headers for <em>all</em> outgoing requests, check out <a href="/documentation/reference/web-sockets/socket-client/io-sails"><code>io.sails.headers</code></a>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="io.socket.post()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

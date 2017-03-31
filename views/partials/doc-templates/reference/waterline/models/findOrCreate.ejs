@@ -1,0 +1,70 @@
+<h1 id="findorcreate">findOrCreate</h1>
+<ul>
+<li>Checks for the existence of the record in the first parameter.  If it can&apos;t be found, the record in the second parameter is created.</li>
+<li>If no parameters are passed, it will return the first record that exists.</li>
+<li>If no <code>record</code> is provided, it will either find a record with matching <code>criteria</code> or create the record if the object can not be found.</li>
+</ul>
+<p>Eg. <code>Model.findOrCreate( findCriteria , recordToCreate , [callback] )</code></p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<h4 id="parameters" permalink="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>findCriteria<br><em>(required)</em></td>
+<td><code>{}</code>,<code>[{}]</code>, <code>string</code>, <code>int</code></td>
+<td style="text-align:left">The criteria used to find the record. If not found and no recordToCreate is provided, it is also the record that will be created.</td>
+</tr>
+<tr>
+<td>recordToCreate</td>
+<td><code>{}</code>, <code>[{}]</code></td>
+<td style="text-align:left">The object, or array of objects, that you would like to create</td>
+</tr>
+<tr>
+<td>callback</td>
+<td><code>function(error, createdOrFoundRecords)</code></td>
+<td style="text-align:left">The function that will be called after the command is executed</td>
+</tr>
+</tbody>
+</table>
+<h4 id="callback-parameters" permalink="callback-parameters">Callback Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>error</td>
+<td>`Error&apos;</td>
+<td style="text-align:left">An error is returned if the request is unsuccessful</td>
+</tr>
+<tr>
+<td>createdOrFoundRecords</td>
+<td><code>{}</code>, <code>[{}]</code></td>
+<td style="text-align:left">The object, or array of objects, that were found or created</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<pre><code class="javascript">User.findOrCreate({name:&apos;Walter&apos;}, {name:&apos;Jessie&apos;}).exec(function createFindCB(error, createdOrFoundRecords){
+  console.log(&apos;What\&apos;s cookin\&apos; &apos;+createdOrFoundRecords.name+&apos;?&apos;);
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>Any string arguments passed must be the ID of the record.
+If you are trying to find an attribute that is an array, you must wrap it in an additional set of brackets otherwise Waterline will think you want to perform an inQuery.</p>
+</blockquote>
+<p><docmeta name="displayName" value=".findOrCreate()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

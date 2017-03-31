@@ -1,0 +1,21 @@
+<!-- Header -->
+<%- partial ('partials/header.ejs', {currentSection: 'home'})%>
+
+<div id="sails-page_homepage">
+  <!-- White bar with github updates & social media -->
+  <%- partial ('partials/news-banner.ejs') %>
+
+  <!--Top Section with Mr. Squiddy-->
+  <div class="homepage-container">
+    <div class="page-header">
+      <div class="page-header-container">
+        <img class="hero-image" src="/images/features_hero.png" data-rjs="2"/>
+        <h1>Welcome to the Sails.js [LANGUAGE] documentation site.</h1>
+        <h5>This website is hosted by the maintainers of the [LANGUAGE] <a target="_blank" href="https://github.com/balderdashy/sails-docs#in-other-languages">translation effort</a>. The content has been trimmed down for maintainability, but you can always visit the full site at <a href="http://sailsjs.com">sailsjs.com</a>.</h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<%- partial ('partials/footer.ejs', { isFlagshipPage: false })%>

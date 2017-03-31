@@ -1,0 +1,38 @@
+<h1 id="custom-responses">Custom Responses</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Sails allows for customizable server responses.  Sails comes with a handful of the most common response types by default.  They can be found in the <code>/api/responses</code> directory of your project.  To customize these, simply edit the appropriate .js file.</p>
+<p>As a quick example, consider the following controller action:</p>
+<pre><code class="javascript">foo: function(req, res) {
+   if (!req.param(&apos;id&apos;)) {
+     res.status(400);
+     res.view(&apos;400&apos;, {message: &apos;Sorry, you need to tell us the ID of the FOO you want!&apos;});
+   }
+   ...
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>This code handles a bad request by sending a 400 error status and a short message describing the problem.  However, this code has several drawbacks, primarily:</p>
+<ul>
+<li>It isn&apos;t <em>normalized</em>; the code is specific to this instance, and we&apos;d have to work hard to keep the same format everywhere</li>
+<li>It isn&apos;t <em>abstracted</em>; if we wanted to use a similar approach elsewhere, we&apos;d have to copy / paste the code</li>
+<li>The response isn&apos;t <em>content-negotiated</em>; if the client is expecting a JSON response, they&apos;re out of luck</li>
+</ul>
+<p>Now, consider this replacement:</p>
+<pre><code class="javascript">foo: function(req, res) {
+   if (!req.param(&apos;id&apos;)) {
+     res.badRequest(&apos;Sorry, you need to tell us the ID of the FOO you want!&apos;);
+   }
+   ...
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>This approach has many advantages:</p>
+<ul>
+<li>Error payloads are normalized</li>
+<li>Production vs. Development logging is taken into account</li>
+<li>Error codes are consistent</li>
+<li>Content negotiation (JSON vs HTML) is taken care of</li>
+<li>API tweaks can be done in one quick edit to the appropriate generic response file</li>
+</ul>
+<h3 id="responses-methods-and-files" permalink="responses-methods-and-files">Responses methods and files</h3>
+<p>Any <code>.js</code> script saved in the <code>/api/responses</code> folder will be executed by calling <code>res.[responseName]</code> in your controller.  For example, <code>/api/responses/serverError.js</code> can be executed with a call to <code>res.serverError(errors)</code>.  The request and response objects are available inside the response script as <code>this.req</code> and <code>this.res</code>; this allows the actual response function to take arbitrary parameters (like <code>serverError</code>&apos;s <code>errors</code> parameter).</p>
+<docmeta name="displayName" value="Custom Responses">
+</docmeta>

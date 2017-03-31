@@ -1,0 +1,72 @@
+/*********
+* General
+*********/
+
+.lg-page-header(@color: @text-dark) {
+  color: @color;
+  font-family: @header-font;
+  font-weight: @light;
+  font-size: 42px;
+}
+
+.sm-page-header(@color: @text-dark) {
+  color: @color;
+  font-family: @header-font;
+  font-weight: @bold;
+  font-size: 24px;
+}
+
+.lg-section-header(@color: @text-normal) {
+  color: @color;
+  font-family: @header-font;
+  font-weight: @light;
+  font-size: 32px;
+}
+
+.sm-section-header(@color: @text-dark) {
+  color: @color;
+  font-family: @header-font;
+  font-size: 20px;
+  line-height: 22px;
+  font-weight: @bold;
+}
+
+.lg-paragraph(@color: @text-normal) {
+  color: @color;
+  font-family: @main-font;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: @light;
+}
+
+.paragraph(@color: @text-normal) {
+  color: @color;
+  font-family: @main-font;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: @light;
+}
+
+.sm-paragraph(@color: @text-normal) {
+  color: @color;
+  font-family: @main-font;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: @normal;
+}
+
+.link-default() {
+  .transition(color 250ms);
+  color: @brand-sails;
+  &:hover {
+    color: @text-dark;
+  }
+}
+
+.link-flagship() {
+  .transition(color 250ms);
+  color: @brand-flagship;
+  &:hover {
+    color: @text-dark;
+  }
+}

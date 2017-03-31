@@ -1,0 +1,15 @@
+<h1 id="assets">Assets</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Assets refer to <a href="http://en.wikipedia.org/wiki/Static_web_page" target="_blank">static files</a> (js, css, images, etc) on your server that you want to make accessible to the outside world.  In Sails, these files are placed in the <a href="/documentation/anatomy/assets"><code>assets/</code></a> folder.  When you lift your app, add files to your <code>assets/</code> folder, or change existing assets, Sails&apos; built-in asset pipeline processes and syncs those files to a hidden folder (<code>.tmp/public/</code>).</p>
+<blockquote>
+<p>This intermediate step (moving files from <code>assets/</code> into <code>.tmp/public/</code>) allows Sails to pre-process assets for use on the client - things like LESS, CoffeeScript, SASS, spritesheets, Jade templates, etc.</p>
+</blockquote>
+<p>The contents of this <code>.tmp/public</code> folder are what Sails actually serves at runtime.  This is roughly equivalent to the &quot;public&quot; folder in <a href="https://github.com/expressjs" target="_blank">express</a>, or the <code>www/</code> folder you might be familiar with from other web servers like Apache.</p>
+<h3 id="static-middleware" permalink="static-middleware">Static middleware</h3>
+<p>Behind the scenes, Sails uses the <a href="http://www.senchalabs.org/connect/static.html" target="_blank">static middleware</a> from Express to serve your assets. You can configure this middleware (e.g. cache settings) in <a href="/documentation/reference/sails.config/sails.config.http.html"><code>/config/http.js</code></a>.</p>
+<h5 id="-index-html-" permalink="indexhtml"><code>index.html</code></h5>
+<p>Like most web servers, Sails honors the <code>index.html</code> convention.  For instance, if you create <code>assets/foo.html</code> in a new Sails project, it will be accessible at <code>http://localhost:1337/foo.html</code>.  But if you create <code>assets/foo/index.html</code>, it will be available at both <code>http://localhost:1337/foo/index.html</code> and <code>http://localhost:1337/foo</code>.</p>
+<h5 id="precedence" permalink="precedence">Precedence</h5>
+<p>It is important to note that the static <a href="http://stephensugden.com/middleware_guide/" target="_blank">middleware</a> is installed <strong>after</strong> the Sails router.  So if you define a <a href="/documentation/concepts/Routes?q=custom-routes">custom route</a>, but also have a file in your assets directory with a conflicting path, the custom route will intercept the request before it reaches the static middleware. For example, if you create <code>assets/index.html</code>, with no routes defined in your <a href="/documentation/reference/sails.config/sails.config.routes.html"><code>config/routes.js</code></a> file, it will be served as your home page.  But if you define a custom route, <code>&apos;/&apos;: &apos;FooController.bar&apos;</code>, that route will take precedence.</p>
+<docmeta name="displayName" value="Assets">
+</docmeta>

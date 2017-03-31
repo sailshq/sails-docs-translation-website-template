@@ -1,0 +1,60 @@
+<h1 id="-remove-primary-key-">*.remove( <code>primary key</code> )</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>Used to remove records from the join table that is automatically generated during a many-to-many association. Unlike .add(), it only accepts the primary key of the model instance (defaults to record ID).</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<h4 id="parameters" permalink="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Accepted Data Types</th>
+<th>Required ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Primary Key</td>
+<td><code>string</code>, <code>int</code></td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<pre><code class="javascript">User.find({name:&apos;Mike&apos;}).populate(&apos;pets&apos;).exec(function(e,r){
+  r[0].pets.remove(7);
+  r[0].save(console.log)
+});
+
+  /*
+
+{ pets:
+   [ { name: &apos;Rainbow Dash&apos;,
+       color: &apos;blue&apos;,
+       id: 8,
+       createdAt: Wed Feb 12 2014 18:06:50 GMT-0600 (CST),
+       updatedAt: Wed Feb 12 2014 18:06:50 GMT-0600 (CST) },
+     { name: &apos;Applejack&apos;,
+       color: &apos;orange&apos;,
+       id: 9,
+       createdAt: Wed Feb 12 2014 18:06:50 GMT-0600 (CST),
+       updatedAt: Wed Feb 12 2014 18:06:50 GMT-0600 (CST) } ],
+  name: &apos;Mike&apos;,
+  age: 16,
+  createdAt: Wed Feb 12 2014 18:06:50 GMT-0600 (CST),
+  updatedAt: Wed Feb 12 2014 19:30:54 GMT-0600 (CST),
+  id: 7 }
+
+  */
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Any string arguments passed must be the primary key of the record.</li>
+<li><code>.remove()</code> alone won&apos;t actually persist the change in associations to the databse.  You should call <code>.save()</code> after using <code>.add()</code> or <code>.remove()</code>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".remove()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

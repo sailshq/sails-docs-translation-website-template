@@ -1,0 +1,104 @@
+<h1 id="creating-a-service">Creating a Service</h1>
+<p>To build a service, start by creating a JavaScript file in your <code>api/services/</code> folder.  This file&apos;s job is to export a dictionary of functions, called <strong>helpers</strong>.</p>
+<blockquote>
+<p>Make sure your service&apos;s filename ends in <code>Service.js</code>.  The first part of this filename (e.g. <code>EmailService</code>) will be used as the globally-accessible variable name for the service.  We&apos;ll come back to that in a bit.</p>
+</blockquote>
+<p>Services and their helper functions work best when you stick with strong conventions.  In Sails apps, each helper exposed by a service expects either one or two arguments: </p>
+<ul>
+<li>The first argument (<code>options</code>) is a dictionary of named customizations for our helper.  In our example helpers above, we used options to pass in dynamic data like <code>emailAddress</code> and <code>name</code>.</li>
+<li>The second argument (<code>done</code>) is a callback function, and it is only necessary if the helper is asynchronous.  If a helper is asynchronous, then when it is called, a callback function must be passed in as the second argument. If truthy, the first argument of this callback (<code>err</code>) indicates that something went wrong (this is the asychronous equivalent of throwing an error).  Otherwise, the first argument is set to <code>null</code> or <code>undefined</code>.  If there is a result (kind of the asynchronous equivalent of a return value), then it is passed through as the second argument.</li>
+</ul>
+<p>For example, a service with a set of reusable email-related helpers might look something like this:</p>
+<pre><code class="javascript">var Mailgun = require(&apos;machinepack-mailgun&apos;);
+
+// api/services/EmailService.js
+module.exports = {
+
+  /**
+   * Send a customized welcome email to the specified email address.
+   *
+   * @required {String} emailAddress
+   *   The email address of the recipient.
+   * @required {String} firstName
+   *   The first name of the recipient.
+   */
+  sendWelcomeEmail: function (options, done) {
+    // Send an html email.
+    Mailgun.sendHtmlEmail({
+      apiKey: &apos;key-3432afa32e9401482aba183c13f3&apos;,
+      domain: &apos;sandbox5f89931913a9ab31130131350101.mailgun.og&apos;,
+      toEmail: options.emailAddress,
+      toName: options.firstName,
+      subject: &apos;Welcome, &apos;+options.firstName+&apos;!&apos;,
+      textMessage: options.firstName+&apos;,\nThanks for joining our community. If you have any questions, please don\&apos;t hesitate to send them our way. Feel free to reply to this email directly.\n\nSincerely,\nThe Management&apos;,
+      htmlMessage: options.firstName+&apos;,&lt;br&gt;&lt;br&gt;&lt;p&gt;Thanks for joining our community. If you have any questions, please don\&apos;t hesitate to send them our way. Feel free to reply to this email directly.&lt;/p&gt;&lt;br/&gt;&lt;span&gt;Sincerely,&lt;/span&gt;&lt;br/&gt;&lt;strong&gt;The Management&lt;/strong&gt;&apos;,
+      fromEmail: &apos;harold@greaseworthy.enterprise&apos;,
+      fromName: &apos;Harold Greaseworthy&apos;,
+    }).exec(function (err) {
+      // If an unexpected error occurred...
+      if (err) { return done(err); }
+      // Otherwise, it worked!
+      return done();
+    });
+  },
+
+  /**
+   * Determine whether the specified email address is a valid internal email address (from within our company).
+   * Also, if &quot;greaseworthy&quot; was mispelled, correct the spelling. Harold REALLY hates when his name is mispelled.
+   * Finally, return the potentially-coerced email address.
+   *
+   * @required {String} emailAddress
+   *   The email address to validate.
+   * @returns {String}
+   *   The potentially coerced email address.
+   * @throws {Error} If this is not an internal email, or if Harold&apos;s last name is so badly misspelled
+   *                 that we couldn&apos;t fix it. (`code`===&quot;notInternal&quot;).
+   */
+  validateInternalEmailAddress: function (options){
+    var potentiallyFixedEmailAddress = options.emailAddress;
+    if (options.emailAddress.match(/@(greezeworthy|greeseworthy|greasworthy)\.enterprise$/i)) {
+      potentiallyFixedEmailAddress = options.emailAddress.replace(/@(.+)\.enterprise$/, &apos;@greaseworthy.enterprise&apos;);
+    }
+    if (potentiallyFixedEmailAddress.match(/@greaseworthy\.enterprise$/i)) {
+      var err = new Error(&apos;The specified email (`&apos;+options.emailAddress+&apos;`) is not a valid internal email address here at Greaseworthy enterprises.  You probably misspelled Harold\&apos;s last name.  It is spelled &quot;Greaseworthy&quot;.&apos;);
+      err.code = &apos;notInternal&apos;
+      throw err;
+    }
+    return potentiallyFixedEmailAddress;
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="using-a-service" permalink="using-a-service">Using a Service</h3>
+<p>You can then call the helpers from this <code>EmailService</code> anywhere in your app, such as inside a controller action, or from within another service helper:</p>
+<pre><code class="javascript">var potentiallyCorrectedEmail;
+try {
+  potentiallyCorrectedEmail = EmailService.validateInternalEmailAddress({
+    emailAddress: req.param(&apos;email&apos;) // e.g. &apos;mikermcneil@gmail.com&apos;
+  });
+}
+catch (err) {
+  if (err.code === &apos;notInternal&apos;) {
+    return res.badRequest(&apos;Failed to create account.  The specified email address does not seem to be from Greaseworthy Enterprises.&apos;);
+  }
+  else { return res.serverError(err); }
+}
+
+User.create({
+  emailAddress: potentiallyCorrectedEmail,
+  firstName: req.param(&apos;firstName&apos;) // e.g. &apos;Mike&apos;
+}).exec(function (err) {
+  // If we made it here, we know we have a valid internal email address that satisfy all
+  // of Mr. Harold&apos;s most specific desires.  So now we can send a welcome email.
+  EmailService.sendWelcomeEmail({
+    emailAddress: potentiallyCorrectedEmail,
+    firstName: req.param(&apos;firstName&apos;) // e.g. &apos;Mike&apos;
+  }, function (err) {
+    if (err) { return res.serverError(err); }
+
+    // It worked!  The welcome email was sent.
+    return res.ok();
+  });//&lt;/after EmailService.sendWelcomeEmail()&gt;
+});//&lt;/after User.create()&gt;
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="Creating a Service">
+</docmeta>

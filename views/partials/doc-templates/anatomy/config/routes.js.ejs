@@ -1,0 +1,52 @@
+<h1 id="config-routes-js">config/routes.js</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This file is where you can define explicit routes to connect clients with the resources that they request.</p>
+<p>When a user tries to access a resource on your app, Sails uses this file (and a few other things) in order to map the URL requested to it&apos;s appropriate controller action which upon authentication, will respond to the client with the requested resource.</p>
+<p>By default, there is only one explicitly defined route.  Its purpose is to point users that try to access the base URL <code>http://localhost:1337/</code> to the view located in <code>views/home/index.ejs</code>. Feel free to add as many routes as you&apos;d like to this file.</p>
+<p>You can even define routes in a way such that part of the requested URL is treated as a request parameter. For example, <code>http://localhost:1337/ponies/PinkiePie</code> would request the resource with the &apos;id&apos; parameter equal to &apos;PinkiePie&apos;.</p>
+<docmeta name="displayName" value="routes.js">
+
+<pre><code class="nohighlight">/**
+ * Route Mappings
+ * (sails.config.routes)
+ *
+ * Your routes map URLs to views and controllers.
+ *
+ * If Sails receives a URL that doesn&apos;t match any of the routes below,
+ * it will check for matching files (images, scripts, stylesheets, etc.)
+ * in your assets directory.  e.g. `http://localhost:1337/images/foo.jpg`
+ * might match an image file: `/assets/images/foo.jpg`
+ *
+ * Finally, if those don&apos;t match either, the default 404 handler is triggered.
+ * See `config/404.js` to adjust your app&apos;s 404 logic.
+ *
+ * Note: Sails doesn&apos;t ACTUALLY serve stuff from `assets`-- the default Gruntfile in Sails copies
+ * flat files from `assets` to `.tmp/public`.  This allows you to do things like compile LESS or
+ * CoffeeScript for the front-end.
+ *
+ * For more information on routes, check out:
+ * http://sailsjs.com/documentation/reference/configuration/sails-config-routes
+ */
+
+module.exports.routes = {
+
+
+  // Make the view located at `views/homepage.ejs` (or `views/homepage.jade`, etc. depending on your
+  // default view engine) your home page.
+  //
+  // (Alternatively, remove this and add an `index.html` file in your `assets` directory)
+  &apos;/&apos;: {
+    view: &apos;homepage&apos;
+  },
+
+
+  // Custom routes here...
+
+
+  // If a request to a URL doesn&apos;t match any of the custom routes above,
+  // it is matched against Sails route blueprints.  See `config/blueprints.js`
+  // for configuration options and examples.
+
+};
+</code></pre><!-- __LANG=%%__ -->
+</docmeta>

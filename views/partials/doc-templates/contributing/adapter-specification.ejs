@@ -1,0 +1,224 @@
+<h1 id="adapter-interface-reference">Adapter Interface Reference</h1>
+<blockquote>
+<p>The adapter interface specification is currently under active development and may change.</p>
+</blockquote>
+<h2 id="semantic-interface-" permalink="semantic-(interface)">Semantic (interface)</h2>
+<blockquote>
+<p>e.g. <code>RestAPI</code> or <code>MySQL</code></p>
+<h5 id="stability-3-http-nodejs-org-api-documentation-html-documentation_stability_index-stable" permalink="stability-3--stable">Stability: <a href="http://nodejs.org/api/documentation.html#documentation_stability_index" target="_blank">3</a> - Stable</h5>
+</blockquote>
+<p>Implementing the basic semantic interface (CRUD) is really a step towards a complete implementation of the Queryable interface, but with some services/datasources, about as far as you&apos;ll be able to get using native methods.</p>
+<p>By supporting the Semantic interface, you also get the following:</p>
+<ul>
+<li>if you write a <code>find()</code> function, developers can also use all of its synonyms, including dynamic finders and <code>findOne()</code>.  When they&apos;re called, they&apos;ll automatically be converted into the appropriate criteria object for the basic <code>find()</code> definition in your adapter.</li>
+<li>as long as you implement basic <code>where</code> functionality (see <code>Queryable</code> below), Waterline can derive a simplistic version of associations support for you.  To optimize the default assumptions with native methods, override the appropriate methods in your adapter.</li>
+</ul>
+<!--
+
+Deprecated-- should be moved to the pubsub hook docs:
+
++ When a socket subscribes to one or more "instance room(s)" (e.g. `Foo.subscribe(req, [3,2]`), it will receive `Foo.publishUpdate()` and `Foo.publishDestroy()` notifications for the relevant instances.
++ If a socket is subscribed to an "instance room", it will also be subscribed for "updates" and "destroys" to all instances of other models with a 1:* association with `Foo`.  The socket will also be notified of and subscribed to new matching instances of the associated model.
+
++ automatic socket.io pubsub support is provided by Sails-- it manages "rooms" for every class (collection) and each instance (model)
+  + As soon as a socket subscribes to the "class room" using `Foo.subscribe()`, it starts receiving `Foo.publishCreate()` notifications any time they're fired for `Foo`.
+-->
+<blockquote>
+<p>All officially supported Sails.js database adapters implement the <code>Semantic</code> interface.</p>
+</blockquote>
+<h6 id="class-methods">Class methods</h6>
+<ul>
+<li><code>Model.create()</code></li>
+<li><code>Model.find()</code></li>
+<li><code>Model.update()</code></li>
+<li><code>Model.destroy()</code></li>
+<li>Optimizations:<ul>
+<li><code>findOrCreate()</code></li>
+<li><code>createEach()</code></li>
+<li>Not yet available:<ul>
+<li><code>destroyEach()</code></li>
+<li><code>updateEach()</code></li>
+<li><code>findOrCreateEach()</code></li>
+<li><code>findAndUpdateOrCreate()</code></li>
+<li><code>findAndUpdateOrCreateEach()</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!--
++ `henry.destroy()`
+-->
+<h2 id="queryable-interface-" permalink="queryable-(interface)">Queryable (interface)</h2>
+<blockquote>
+<h5 id="stability-3-http-nodejs-org-api-documentation-html-documentation_stability_index-stable" permalink="stability-3--stable">Stability: <a href="http://nodejs.org/api/documentation.html#documentation_stability_index" target="_blank">3</a> - Stable</h5>
+</blockquote>
+<p>Query building features are common in traditional ORMs, but not at all a guarantee when working with Waterline.  Since Waterline adapters can support services as varied as Twitter, SMTP, and Skype, traditional assumptions around structured data don&apos;t always apply.</p>
+<p>If query modifiers are enabled, the adapter must support <code>Model.find()</code>, as well as the <strong>complete</strong> query interface, or, where it is impossible to do so, at least provide helper notices.  If coverage of the interace is unfinished, it&apos;s still not a bad idea to make the adapter available, but it&apos;s important to clearly state the unifinished parts, and consequent limitations, up front.  This helps prevent the creation of off-topic issues in Sails/Waterline core, protects developers from unexpected consequences, and perhaps most importantly, helps focus contributors on high-value tasks.</p>
+<blockquote>
+<p>All officially supported Sails.js database adapters implement this interface.</p>
+</blockquote>
+<h6 id="query-modifiers">Query modifiers</h6>
+<p>Query modifiers include filters:</p>
+<ul>
+<li><code>where</code></li>
+<li><code>limit</code></li>
+<li><code>skip</code></li>
+<li><code>sort</code></li>
+<li><code>select</code></li>
+<li><code>distinct</code></li>
+</ul>
+<p>Boolean logic:</p>
+<ul>
+<li><code>and</code></li>
+<li><code>or</code></li>
+<li><code>not</code></li>
+</ul>
+<p>As well as <code>groupBy</code> and the aggregators:</p>
+<ul>
+<li><code>count</code></li>
+<li><code>sum</code></li>
+<li><code>min</code></li>
+<li><code>max</code></li>
+<li><code>average</code></li>
+</ul>
+<p><code>IN</code> queries:
+Adapters which implement <code>where</code> should recognize a list of values (e.g. <code>name: [&apos;Gandalf&apos;, &apos;Merlin&apos;]</code>) as an <code>IN</code> query.  In other words, if <code>name</code> is either of those values, a match occured.</p>
+<p>Sub-attribute modifiers:
+You are also responsible for sub-attribute modifiers, (e.g. <code>{ age: { &apos;&gt;=&apos; : 65 } }</code>) with the notable exception of <code>contains</code>, <code>startsWith</code>, and <code>endsWith</code>, since support for those modifiers can be derived programatically by leveraging your definition of  <code>like</code>.</p>
+<ul>
+<li><code>like</code>    (SQL-style, with % wildcards)</li>
+<li><code>&apos;&gt;&apos;</code>    (you can also opt to use the more verbose <code>.greaterThan()</code>, etc.)</li>
+<li><code>&apos;&lt;&apos;</code></li>
+<li><code>&apos;&gt;=&apos;</code></li>
+<li><code>&apos;&lt;=&apos;</code></li>
+<li>TODO: range queries (e.g. <code>{ &apos;&lt;&apos;:4, &gt;= 2 }</code>)</li>
+</ul>
+<h2 id="migratable-interface-" permalink="migratable-(interface)">Migratable (interface)</h2>
+<blockquote>
+<h5 id="stability-1-http-nodejs-org-api-documentation-html-documentation_stability_index-experimental" permalink="stability-1--experimental">Stability: <a href="http://nodejs.org/api/documentation.html#documentation_stability_index" target="_blank">1</a> - Experimental</h5>
+</blockquote>
+<p>Adapters which implement the Migratable interface are usually interacting with SQL databases.  This interface enables the <code>migrate</code> configuration option on a per-model or adapter-global basis, as well as access to the prototypal/class-level CRUD operations for working with tables.</p>
+<h6 id="adapter-methods">Adapter methods</h6>
+<blockquote>
+<p>This is not how it actually works, but how it could work soon:</p>
+</blockquote>
+<ul>
+<li><code>Adapter.define()</code></li>
+<li><code>Adapter.describe()</code></li>
+<li><code>Adapter.drop()</code></li>
+<li><code>Adapter.alter()</code> (change table name, other table metadata)</li>
+<li><code>Adapter.addAttribute()</code> (add column)</li>
+<li><code>Adapter.removeAttribute()</code> (remove column)</li>
+<li><code>Adapter.alterAttribute()</code> (rename column, add or remove uniquness constraint to column)</li>
+<li><code>Adapter.addIndex()</code></li>
+<li><code>Adapter.removeIndex()</code></li>
+</ul>
+<h6 id="auto-migration-strategies">Auto-migration strategies</h6>
+<ul>
+<li><code>&quot;safe&quot;</code> (default in production env)<ul>
+<li>do nothing</li>
+</ul>
+</li>
+<li><code>&quot;drop&quot;</code> (default in development env)<ul>
+<li>drop all tables and recreate them each time the server starts-- useful for development</li>
+</ul>
+</li>
+<li><code>&quot;alter&quot;</code><ul>
+<li>experimental automigrations</li>
+</ul>
+</li>
+<li><code>&quot;create&quot;</code><ul>
+<li>create all missing tables/columns without modifying existing data</li>
+</ul>
+</li>
+</ul>
+<h2 id="sql-interface-" permalink="sql-(interface)">SQL (interface)</h2>
+<blockquote>
+<h5 id="stability-1-http-nodejs-org-api-documentation-html-documentation_stability_index-experimental" permalink="stability-1--experimental">Stability: <a href="http://nodejs.org/api/documentation.html#documentation_stability_index" target="_blank">1</a> - Experimental</h5>
+</blockquote>
+<p>Adapters which implement the SQL interface interact with databases supporting the SQL language. This interface exposes the method <code>.query()</code> allowing the user to run <em>raw</em> SQL queries against the database.</p>
+<h6 id="adapter-methods">Adapter methods</h6>
+<ul>
+<li><code>Adapter.query(query,[ data,] cb)</code></li>
+</ul>
+<h2 id="iterable-interface-" permalink="iterable-(interface)">Iterable (interface)</h2>
+<blockquote>
+<h5 id="stability-1-http-nodejs-org-api-documentation-html-documentation_stability_index-experimental" permalink="stability-1--experimental">Stability: <a href="http://nodejs.org/api/documentation.html#documentation_stability_index" target="_blank">1</a> - Experimental</h5>
+</blockquote>
+<h4 id="background" permalink="background">Background</h4>
+<blockquote>
+<p>Communicating with another server via messages/packets is the gold standard of performance--
+network latency is the slowest I/O operation computers deal with, yet ironically, the standard methodology
+used by most developers/frameworks/libraries outside of Node.js is detrimental to performance.</p>
+<p>In the Node community, you might say we&apos;re in the midst of a bit of an I/O renaissance.</p>
+<p>The standard approach to communicating with another server (or a disk) involves loading a message into memory
+from the source, and then sending the entire object to the destination at once.</p>
+<p>This is like trying to transport a heavy bag of gold over a river by wading across with it on your back.
+Even if you&apos;re very strong, with enough gold, you will drown.  This is analogous to your server
+running out of RAM as it buffers data in memory, and the resulting scalability problem.</p>
+<p>Using Node streams is a different ball game.  It&apos;s like splitting up the big bag into smaller containers, then
+floating them across one by one.  This way, no matter how much gold you end up with, you never drown.</p>
+</blockquote>
+<p>A huge advantage of using Node.js is the ease with which you can parse and manipulate streams of data.  Instead of pulling an entire dataset into RAM, you can inspect it a little at a time.  This unlocks a level of performance that is unachievable using conventional approaches.</p>
+<p>The most common use case is taking advantage of the available HTTP response stream to pipe the output byte stream from the database directly back to the user.  i.e. to generate a dynamic sitemap, you might need to respond with a huge set of data (far too large to fit in memory on a commodity server) and simultaneously transform it into XML.</p>
+<h4 id="implementation" permalink="implementation">Implementation</h4>
+<p>Implementing the Streaming CRUD interface is actually pretty simple-- you just need to get comfortable with Node.js streams.  You can mutate streams as they come in-- you just need to find or design a mapping function designed for streams, where you don&apos;t have all the data at once.</p>
+<h2 id="blob-readable-writable-interface-" permalink="blob-/-readable-/-writable-(interface)">Blob / Readable / Writable (interface)</h2>
+<blockquote>
+<h5 id="stability-1-http-nodejs-org-api-documentation-html-documentation_stability_index-experimental" permalink="stability-1--experimental">Stability: <a href="http://nodejs.org/api/documentation.html#documentation_stability_index" target="_blank">1</a> - Experimental</h5>
+</blockquote>
+<p>e.g. <code>sails-local-fs</code>, <code>sails-s3</code></p>
+<p>Implementing the Blob interface allows you to upload and download binary data (aka files) to the service/database.  These &quot;blobs&quot; might be MP3 music files (~5MB) but they could also be data-center backups (~50TB).  Because of this, it&apos;s crucial that adapters which implement this interface use streams for uploads (incoming, into data source from Sails) and downloads (outgoing, from data source to Sails).</p>
+<h6 id="class-methods">Class methods</h6>
+<ul>
+<li><code>write( id, options )</code> or <code>upload()</code></li>
+<li><code>read( id, options )</code> or <code>download()</code></li>
+</ul>
+<h2 id="mesageable-interface-" permalink="mesageable-(interface)">Mesageable (interface)</h2>
+<blockquote>
+<h5 id="stability-1-http-nodejs-org-api-documentation-html-documentation_stability_index-experimental" permalink="stability-1--experimental">Stability: <a href="http://nodejs.org/api/documentation.html#documentation_stability_index" target="_blank">1</a> - Experimental</h5>
+</blockquote>
+<p>Adapters which implement one-way messages.  This lets user know two important facts about your adapter:</p>
+<ol>
+<li>that it&apos;s not safe to assume that its operations are reversible or atomic.</li>
+<li>that it has a <code>send</code> or one or more <code>send*()</code> methods with a custom suffix.</li>
+</ol>
+<p>An example of one such adapter is SMTP, for sending email, or APNS for sending Apple push notifications.</p>
+<p>If <code>send</code> is passed an array of target ids, it will broadcast its data to each of them.</p>
+<h6 id="class-methods">Class methods</h6>
+<ul>
+<li><code>send( targetId, data, onComplete )</code></li>
+<li>Optimizations:<ul>
+<li><code>broadcast( targetIds, data, onComplete )</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="subscribable-interface-" permalink="subscribable-(interface)">Subscribable (interface)</h2>
+<blockquote>
+<h5 id="stability-1-http-nodejs-org-api-documentation-html-documentation_stability_index-experimental" permalink="stability-1--experimental">Stability: <a href="http://nodejs.org/api/documentation.html#documentation_stability_index" target="_blank">1</a> - Experimental</h5>
+</blockquote>
+<p>Adapters implementing the pubsub interface report changes from the service/database back up to the app.</p>
+<p>When a subscriber needs to be informed of an incoming notifiation, the subscribable adapters currently do one of the following:</p>
+<ol>
+<li>emit a declaratively configurable event on the <code>sails</code> object.</li>
+<li>send an HTTP request to a declaratively configurable endpoint.</li>
+<li>call a function which is part of their declarative config, leveraging the generic <code>req/res</code> interpreter in Sails</li>
+</ol>
+<p>(#3 is where I&apos;d like this head in the future, since it provides the most normalized, extensible interface)</p>
+<!--
+deprecated:
+
+They should call Sails' `Model.publishUpdate()`, `Model.publishCreate()`, and `Model.publishDestroy()` to publish changes and take advantage of automatic room management functionality.
+`Model.subscribe()` should still be called at the app layer, not in our adapter.
+We don't want to force users to handle realtime events-- we don't know the specific goals and requiements of their app, and since the broadcasts are volatile, pubsub notifications is a feature that should be opt-in anyway.
+-->
+<p>Examples:</p>
+<ul>
+<li>Twitter streaming API (see new tweets as they come in)</li>
+<li>IRC (see new chats as they come in)</li>
+<li>Stock prices (visualize the latest market data as soon as it is available)</li>
+<li>Hardware scanners (see new data as it comes in)</li>
+</ul>
+<docmeta name="notShownOnWebsite" value="true">
+</docmeta>

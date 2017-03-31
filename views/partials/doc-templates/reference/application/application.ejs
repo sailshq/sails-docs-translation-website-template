@@ -1,0 +1,46 @@
+<h1 id="application-sails-">Application (<code>sails</code>)</h1>
+<p>The Sails application object contains all relevant runtime state for a Sails application.
+By default it is exposed globally as <code>sails</code>, but this behavior <a href="/documentation/reference/configuration/sails-config-globals">can be disabled</a>, e.g. for
+use cases where multiple Sails app instances need to exist at once, or where globals
+are not an option. The application object can also always be accessed on an incoming
+request (<code>req._sails</code>), and inside of <a href="/documentation/concepts/models-and-orm/models">model</a> and <a href="/documentation/concepts/services">service</a> modules via <code>this.sails</code>.</p>
+<h3 id="how-does-it-work-" permalink="how-does-it-work">How does it work?</h3>
+<p>An application instance is automatically created the first time you <code>require(&apos;sails&apos;)</code>.
+This is what is happening in the generated <code>app.js</code> file:</p>
+<pre><code class="javascript">var sails = require(&apos;sails&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="properties" permalink="properties">Properties</h3>
+<p>The application object has a number of methods and properties which are useful.
+The officially supported methods on the <code>sails</code> object are covered by the other
+pages in this section.  Here are a few of its most useful properties:</p>
+<h5 id="sails-models" permalink="sailsmodels">sails.models</h5>
+<p>A dictionary of all loaded <a href="/documentation/concepts/models-and-orm/models">Sails models</a>, indexed by their <em>identity</em>.</p>
+<p>By default, a model&apos;s identity is the lowercased version of its filename, without the <strong>.js</strong> extension.  For example, the default identity for a model loaded from <code>api/models/PowerPuff.js</code> would be <code>powerpuff</code>, and the model would be accessible via <code>sails.models.powerpuff</code>.  A model&apos;s identity can be customized by setting an <code>identity</code> property in its module file.</p>
+<h5 id="sails-config" permalink="sailsconfig">sails.config</h5>
+<p>The full set of configuration options for the Sails instance, loaded from a combination of environment variables, <code>.sailsrc</code> files, user-configuration files and defaults.  See the <a href="/documentation/concepts/configuration">configuration concepts section</a> for a full overview of configuring Sails, and the <a href="/documentation/reference/configuration">configuration reference</a> for details on individual options.</p>
+<h5 id="sails-sockets" permalink="sailssockets">sails.sockets</h5>
+<p>A set of convenience methods for low-level interaction with connected websockets.  See the <a href="/documentation/reference/web-sockets/sails-sockets"><code>sails.sockets.*</code> reference section</a> for details.</p>
+<h5 id="sails-hooks" permalink="sailshooks">sails.hooks</h5>
+<p>A dictionary of all loaded <a href="/documentation/concepts/extending-sails/hooks">Sails hooks</a>, indexed by their <em>identity</em>.  Use <code>sails.hooks</code> to access properties and methods of hooks you&apos;ve installed to extend Sails; for example, by calling <code>sails.hooks.email.send()</code>.  You can also use this dictionary to access the Sails <a href="/documentation/concepts/extending-sails/hooks#?types-of-hooks">core hooks</a>, for advanced usage.</p>
+<p>By default, a hook&apos;s identity is the lowercased version of its folder name, with any <code>sails-hook-</code> prefix removed.  For example, the default identity for a hook loaded from <code>node_modules/sails-hook-email</code> would be <code>email</code>, and the hook would be accessible via <code>sails.hooks.email</code>.  An installed hook&apos;s identity can be changed via the <a href="/documentation/concepts/extending-sails/hooks/using-hooks#?changing-the-way-sails-loads-an-installable-hook"><code>installedHooks</code> config property</a>.</p>
+<p>See the <a href="/documentation/concepts/extending-sails/hooks">hooks concept documentation</a> for more info about hooks.</p>
+<h5 id="-sails-io-" permalink="sailsio"><code>sails.io</code></h5>
+<p>The API exposed by the <a href="/documentation/reference/web-sockets/sails-sockets"><code>sails.sockets.*</code> methods</a> is flexible enough out of the box to cover the requirements of most applications, and using them will future-proof your app against possible changes in the underlying implementation.  However, if you are working on bringing some legacy code from a vanilla Socket.io app into your Sails app, it can be useful to talk to Socket.io directly.  To accomplish this, Sails provides raw access to the underlying <a href="http://socket.io/" target="_blank">socket.io</a> server instance (<code>io</code>) as <code>sails.io</code>. See the <a href="http://socket.io/docs/" target="_blank">Socket.io docs</a> for more information.  If you decide to use Socket.io directly, please proceed with care.</p>
+<blockquote>
+<p>As of v0.11.4, Sails bundles <code>socket.io@v1.4.3</code> as a dependency of <a href="github.com/balderdashy/sails-hook-sockets">sails-hook-sockets</a>, a core hook.</p>
+</blockquote>
+<h3 id="creating-a-new-application-object-advanced-" permalink="creating-a-new-application-object-(advanced)">Creating a new application object (advanced)</h3>
+<p>If you are implementing something unconventional (e.g. writing tests for Sails core)
+where you need to create more than one Sails application instance in a process, you <em>should not</em> use
+the instance returned by <code>require(&apos;sails&apos;)</code>, as this can cause unexpected behavior.  Instead, you should
+obtain application instances by using the Sails constructor:</p>
+<pre><code class="javascript">var Sails = require(&apos;sails&apos;).constructor;
+var sails0 = new Sails();
+var sails1 = new Sails();
+var sails2 = new Sails();
+</code></pre><!-- __LANG=%%__ -->
+<p>Each app instance (<code>sails0</code>, <code>sails1</code>, <code>sails2</code>) can be loaded/lifted separately,
+using different configuration.</p>
+<p>For more on using Sails programatically, see the conceptual overview on <a href="/documentation/concepts/programmatic-usage">programatic usage in Sails</a>.</p>
+<docmeta name="displayName" value="Application">
+</docmeta>

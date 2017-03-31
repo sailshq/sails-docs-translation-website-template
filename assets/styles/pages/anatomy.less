@@ -1,0 +1,20 @@
+// Dependencies:
+@import '../utilities/index.less';
+@import '../styleguide/index.less';
+@import '../mixins/docs-page.less';
+@import '../mixins/docs-page-mixins/docs-anatomy-side-nav.less';
+
+
+/**
+ * Reference/concepts
+ */
+.anatomy() {
+  .docs-page();
+
+  .side-nav {
+    width: 250px;
+    .side-nav-inner {
+      .docs-anatomy-side-nav();
+    }
+  }
+}

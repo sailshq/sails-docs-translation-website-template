@@ -1,0 +1,13 @@
+[
+  {
+    "templateTitle": "irc.ejs",
+    "fullPathAndFileName": "irc/irc.ejs",
+    "realPath": "irc/",
+    "data": {
+      "displayName": "#sailsjs on IRC",
+      "lastModified": 1482187985000
+    },
+    "children": [],
+    "isParent": true
+  }
+]

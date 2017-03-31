@@ -1,0 +1,53 @@
+<h1 id="-subscribers-">.subscribers()</h1>
+<blockquote>
+<p><em><strong>This method is deprecated</strong>.</em></p>
+<p>If you absolutely need to retrieve the list of socket IDs subscribed to a specific record, you may use the lower-level <code>app.io.sockets.in(roomName).clients(cb)</code> method (see <a href="https://github.com/socketio/socket.io/#namespaceclientsfnfunction" target="_blank">https://github.com/socketio/socket.io/#namespaceclientsfnfunction</a>). However, be aware that in multi-server scenarios, that method will <em>not</em> return IDs of sockets on other servers (at the time of writing, the current documentation on Socket.io&apos;s GitHub is out of date on that point).</p>
+<p>For the most common use-case of &quot;taking all members of room A and subscribing/unsubscribing them to room B&quot;, you can use the <a href="/documentation/reference/web-sockets/sails-sockets/add-room-members-to-rooms"><code>sails.sockets.addRoomMembersToRooms</code></a> and <a href="/documentation/reference/web-sockets/sails-sockets/remove-room-members-from-rooms"><code>sails.sockets.removeRoomMembersFromRooms</code></a> methods, which <em>do</em> work cross-server.</p>
+</blockquote>
+<pre><code class="nohighlight">Something.subscribers(`record`,[`contexts`])
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>Returns an array of sockets that are subscribed to <code>record</code>.  This can be used in conjunction with lower-level methods like <a href="/documentation/reference/websockets/sails.sockets/sails.sockets.emit.html"><code>sails.sockets.emit</code></a> to send custom messages to a collection of sockets, or with <a href="/documentation/reference/websockets/resourceful-pubsub/subscribe.html"><code>.subscribe</code></a> to subscribe one group of sockets to a new instance.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Accepted Data Types</th>
+<th>Required ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Record</td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="integer" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Contexts to subscribe to</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p><em>Note</em>: <code>record</code> can be either an instance of a model, or a model&#x2019;s primary key.</p>
+<h4 id="-context-" permalink="context"><code>context</code></h4>
+<p>If you specify a specific context (or array of contexts), you will only get sockets that are subscribed to the specified contexts for the record.</p>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<p>Controller Code</p>
+<pre><code class="javascript">// Find user #1
+    User.findOne(1).exec(function(e,userOne){
+        // Get all of the sockets that are subscribed to user #1
+        var subscribers = User.subscribers(userOne);
+        // Subscribe them all to userOne&apos;s best friend, too
+        _.each(subscribers, function(subscriber) {
+           User.subscribe(subscriber, userOne.bestFriendId);
+        });
+    });
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value=".subscribers()"></docmeta></p>
+<p><docmeta name="pageType" value="method"></docmeta></p>
+<docmeta name="isDeprecated" value="true">
+</docmeta>

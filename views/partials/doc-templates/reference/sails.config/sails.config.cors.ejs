@@ -1,0 +1,72 @@
+<h1 id="sails-config-cors">sails.config.cors</h1>
+<p>Configuration for Sails&apos; <a href="/documentation/concepts/CORS">built-in support for Cross-Origin Resource Sharing</a>.  CORS specifies how HTTP requests to your app originating from foreign domains should be treated.  It is primarily used to allow third-party sites to make AJAX requests to your app, which are normally blocked by browsers following the <a href="http://en.wikipedia.org/wiki/Same-origin_policy" target="_blank">same-origin policy</a>.</p>
+<p>These options are conventionally set in the <strong>config/cors.js</strong> configuration file.  Note that these settings (with the exception of <code>allRoutes</code>) can be changed on a per-route basis in the <a href="/documentation/concepts/Routes/RouteTargetSyntax.html?q=route-target-options"><strong>config/routes.js</strong> file</a>.</p>
+<h3 id="properties" permalink="properties">Properties</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Property</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>allRoutes</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">false</td>
+<td style="text-align:left">Indicates whether the other CORS configuration settings should apply to every route in the app by default.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>origin</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>*</code></td>
+<td style="text-align:left">Comma-delimited list of default hosts (beginning with http:// or https://) to give access to, or <code>*</code> to allow all domains CORS access.  If <code>allRoutes</code> is <code>true</code> and <code>origin</code> is <code>*</code>, then your app will be fully accessible to sites hosted on foreign domains (except for routes which have their own CORS settings).  If <code>credentials</code> is also <code>true</code>, this means your app will be unprotected against cross-origin attacks that exploit your logged-in users.  Any routes that are exposed in this way must be careful not to perform sensitive actions or return secure data!</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>methods</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">GET, POST, PUT, DELETE, OPTIONS, HEAD</td>
+<td style="text-align:left">Comma-delimited list of methods that are allowed to be used in CORS requests.  This is only used in response to <a href="https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS#Preflighted_requests" target="_blank">preflight requests</a>, so the inclusion of GET, POST, OPTIONS and HEAD, although customary, is not necessary.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>headers</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">content-type</td>
+<td style="text-align:left">Comma-delimited list of headers that are allowed to be sent with CORS requests.  This is only used in response to <a href="https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS#Preflighted_requests" target="_blank">preflight requests</a>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>exposeHeaders</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>&apos;&apos;</code></td>
+<td style="text-align:left">List of headers that browsers will be allowed to access.  See <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Access-Control-Expose-Headers" target="_blank">access-control-expose-headers</a>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>credentials</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">true</td>
+<td style="text-align:left">Indicates whether cookies can be shared in CORS requests.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>securityLevel</code></td>
+<td style="text-align:center"><bubble type="integer" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">Indicates how Sails should respond to requests from disallowed origins.  In normal  mode (0), Sails processes all requests normally, simply setting the appropriate CORS headers and leaving it to the client to determine how to handle the response.  In high mode (1), Sails will send back a 403 response to requests from disallowed origins, if the origin starts with http or https.  In very high mode (2), Sails will send back a 403 response to requests from disallowed origins, regardless of the origin protocol.   See <a href="/documentation/concepts/Security/CORS.html?q=security-levels">Security Levels</a> in the CORS concepts documentation for more info.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="custom-route-config-example" permalink="custom-route-config-example">Custom route config example</h3>
+<p>The following will allow cross-origin AJAX GET, PUT and POST requests to <code>/foo/bar</code> from sites hosted <code>http://foobar.com</code> and <code>https://owlhoot.com</code>.  DELETE requests, or requests from sites on any other domains, will be blocked by the browser.</p>
+<pre><code class="javascript">&apos;/foo/bar&apos;: {
+  target: &apos;FooController.bar&apos;,
+  cors: {
+    origin: &apos;http://foobar.com,https://owlhoot.com&apos;,
+    methods: &apos;GET,PUT,POST,OPTIONS,HEAD&apos;
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="sails.config.cors"></docmeta></p>
+<docmeta name="pageType" value="property">
+
+</docmeta>

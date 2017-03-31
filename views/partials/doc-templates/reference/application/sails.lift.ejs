@@ -1,0 +1,78 @@
+<h1 id="sails-lift-">sails.lift()</h1>
+<p>Lift a Sails app programmatically.</p>
+<p><em>This does exactly what you might be used to seeing by now when you run <code>sails lift</code>.  It <a href="/documentation/reference/application/sails-load">loads</a> the app, runs its bootstrap, then starts listening for HTTP requests and WebSocket connections.  Useful for building top-to-bottom integration tests that rely on HTTP requests, and for building higher-level tooling on top of Sails.</em></p>
+<pre><code class="javascript">sailsApp.lift(configOverrides, function (err) {
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>sailsApp.lift(function (err) {...});</code></li>
+</ul>
+<h4 id="usage" permalink="usage">Usage</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">configOverrides</td>
+<td><bubble type="dictionary?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">A dictionary of config that will override any conflicting options present on the command line, in environment variables, or in configuration files.  If provided, this will be merged on top of <a href="/documentation/reference/configuration"><code>sails.config</code></a>.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">err</td>
+<td><bubble type="Error?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">An error encountered while lifting, or <code>undefined</code> if there were no errors.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">var Sails = require(&apos;sails&apos;).constructor;
+var sailsApp = new Sails();
+
+sailsApp.lift({
+  log: {
+    level: &apos;warn&apos;
+  }
+}, function (err) {
+  if (err) {
+    console.log(&apos;Error occurred lifting Sails app:&apos;, err);
+    return;
+  }
+
+  // --&#x2022;
+  console.log(&apos;Sails app lifted successfully!&apos;);
+
+));
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>The difference between <a href="/documentation/reference/application/sails-lift"><code>.lift()</code></a> and <a href="/documentation/reference/application/sails-load"><code>.load()</code></a> is that <code>.lift()</code> takes the additional steps of (1) running the app&apos;s <a href="/documentation/reference/configuration/sails-config-bootstrap">bootstrap</a> (if any), and (2) emitting the <code>ready</code> event.  The core <code>http</code> hook will typically respond to the <code>ready</code> event by starting an HTTP server on the port configured via <code>sails.config.port</code> (1337 by default).</li>
+<li>When a Sails app is fully lifted, it also emits the <code>lifted</code> event.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="sails.lift()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

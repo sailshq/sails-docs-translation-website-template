@@ -1,0 +1,148 @@
+<h1 id="upgrading-to-v0-10">Upgrading to v0.10</h1>
+<p>For the most part, running sails lift in an existing v0.9 project should just work. The core contributors have taken a number of steps to make the upgrade as easy as possible, and if you follow the deprecation messages in the console, you should do just fine.</p>
+<p>Sails v0.10 comes with some big changes. The sections below provide a high level overview of what&apos;s changed, major bug fixes, enhancements and new features, as well as a basic tutorial on how to upgrade your v0.9.x Sails app to v0.10.</p>
+<h2 id="file-uploads" permalink="file-uploads">File uploads</h2>
+<p>The Connect multipart middleware <a href="http://www.senchalabs.org/connect/multipart.html" target="_blank">will soon be officially deprecated</a>. But since this module was used as the built-in HTTP body parser in Sails v0.9 and Express v3, this is a breaking change for v0.9 Sails projects relying on <code>req.files</code>.</p>
+<p>By default in v0.10, Sails includes <a href="https://github.com/balderdashy/skipper" target="_blank">skipper</a>, a body parser which allows for streaming file uploads without buffering tmp files to disk. For run-of-the-mill file upload use cases, Skipper comes with bundled support for uploads to local disk (via skipper-disk), but streaming uploads can be plugged in to any of its supported adapters.</p>
+<p>For examples/documentation, please see the Skipper repository as well as the Sails documentation on <code>req.file()</code>.</p>
+<h3 id="why-" permalink="why">Why?</h3>
+<p>A body parser&apos;s job is to parse the &quot;body&quot; of incoming multipart HTTP requests. Sometimes, that &quot;body&quot; includes text parameters, but sometimes, it includes file uploads.</p>
+<p>Connect multipart is great code, and it supports both file uploads AND text parameters in multipart requests. But like most modules of its kind, it accomplishes this by buffering file uploads to disk. This can quickly overwhelm a server&apos;s available disk space, and in many cases exposes a serious DoS attack vulnerability.</p>
+<p>Skipper is unique in that it supports <strong>streaming</strong> file uploads, but also maintains support for metadata in the request body (i.e. JSON/XML/urlencoded request body parameters). It uses a handful of heuristics to make sure only the files you&apos;re expecting get plugged in and received by the blob adapter, and other (potentially malicous) file fields are ignored.</p>
+<blockquote>
+<h4 id="-important-" permalink="-important"><strong> Important!</strong></h4>
+<p>For Skipper to work, you <em>must include all text parameters BEFORE file parameters</em> in file upload requests to the server. Once Skipper sees the first file field, it stops waiting for text parameters (this is to avoid unnecessary/unsafe buffering of file data).</p>
+</blockquote>
+<h3 id="configuring-a-different-body-parser" permalink="configuring-a-different-body-parser">Configuring a different body parser</h3>
+<p>As with most things in Sails, you can use any Connect/Express/Sails-compatible bodyparser you like. To switch back to <strong>connect-multipart</strong>, or any other body parser (like <strong>formidable</strong> or <strong>busboy</strong>), change your app&apos;s http configuration.</p>
+<h2 id="blueprints" permalink="blueprints">Blueprints</h2>
+<p>A new blueprint action (<code>findOne</code>) has been added. For instance, if you have a <code>FooController</code> and <code>Foo</code> model, then send a request to <code>/foo/5</code>, the <code>findOne</code> action in your <code>FooController</code> will run. If you don&apos;t have a <code>findOne</code> action, the <code>findOne</code> blueprint action will be used in its stead. Requests sent to <code>/foo</code> will still run the find controller/blueprint action.</p>
+<h2 id="policies" permalink="policies">Policies</h2>
+<p>Policies work exactly as they did in v0.9- however there is a new consideration you should take into account: Due to the introduction of the more specific <code>findOne()</code> blueprint action mentioned above, you will want to make sure you&apos;re handling it explicitly in your policy mapping configuration.</p>
+<p>For example, let&apos;s say you have a v0.9 app whose <code>policies.js</code> configuration prevents access to the <code>find</code> action in your <code>DoveController</code>:</p>
+<pre><code class="javascript">module.exports.policies = {
+  &apos;*&apos;: true,
+  DoveController: {
+    find: false
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>Assuming rest blueprint routes are enabled, this would prevent access to requests like both <code>/dove</code> and <code>/dove/14</code>. But now in v0.10, since <code>/dove/14</code> will actually run the <code>findOne</code> action, we must handle it explicitly:</p>
+<pre><code class="javascript">module.exports.policies = {
+  &apos;*&apos;: true,
+  DoveController: {
+    find: false,
+    findOne: false
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="pubsub" permalink="pubsub">Pubsub</h2>
+<h3 id="summary" permalink="summary">Summary</h3>
+<ul>
+<li><code>message</code> socket (i.e. &quot;comment&quot;) event on client is now <code>modelIdentity</code> (where &quot;modelIdentity&quot; is different depending on the model that the <code>publish*()</code> method was called from.</li>
+<li>Clients are no longer subscribed to model-creation events by the blueprint routes. To listen for creation events, use <code>Model.watch()</code>.</li>
+<li>The events that were formerly <code>create</code>, <code>update</code>, and <code>destroy</code> are now <code>created</code>, <code>updated</code>, and <code>destroyed</code>.</li>
+</ul>
+<h3 id="details" permalink="details">Details</h3>
+<p>The biggest change to pubsub is that Socket.io events are emitted under the name of the model emitting them. Previously, your client listened for the <code>message</code> event and then had to determine which model it came from based on the included data:</p>
+<pre><code class="javascript">socket.on(&apos;message&apos;, function(cometEvent) {
+   if (cometEvent.model == &apos;user&apos;) {
+     // Handle inbound messages related to a user record
+   }
+   else if (cometEvent.model === &apos;product&apos;) {
+     // Handle inbound messages related to a product record
+   }
+   // ...
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Now, you subscribe to the identity of the model:</p>
+<pre><code class="javascript">socket.on(&apos;user&apos;, function(cometEvent) {
+  // Handle inbound messages related to a user record
+});
+
+socket.on(&apos;product&apos;, function (cometEvent) {
+  // Handle inbound messages related to a product record
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>This helps to structure your front end code.</p>
+<p>The way you subscribe clients to models has also changed. Previously, you specified whether you were subscribing to the model class (class room) or one or more model instances based on the parameters that you passed to <code>Model.subscribe</code>. It was effectively one method to do two very different things.</p>
+<p>Now, you use <code>Model.subscribe()</code> to subscribe only to model instances (records). You can also specify event &quot;contexts&quot;, or types, that you&apos;d like to hear about. For example, if you only wanted to get messages about updates to an instance, you would call <code>User.subscribe(req, myUser, &apos;update&apos;)</code>. If no context is given in a call to <code>.subscribe()</code>, then all contexts specified by the model class&apos;s autosubscribe property will be used.</p>
+<p>To subscribe to model creation events, you can now use <code>Model.watch()</code>. Upon subscription, your clients will receive messages every time a new record is created on that model using the blueprint routes, and will automatically be subscribed to the new instance as well.</p>
+<p>Remember, when working with blueprints, clients are no longer auto subscribed to the class room. This must be done manually.</p>
+<p>Finally, if you want to see all pubsub messages from all models, you can access the <code>firehose</code>, a development-only tool that broadcasts messages about <em>everything</em> that happens to your models. You can subscribe to the firehose using <code>sails.sockets.subscribeToFirehose(socket)</code>, or on the front end by making a socket request to <code>/firehose</code>. The firehose will broadcast a <code>firehose</code> event whenever a model is created, updated, destroyed, added to, removed from or messaged. This effectively replaces the <code>message</code> event used in previous Sails versions.</p>
+<p>To see examples of the new pubsub methods in action, see <a href="https://github.com/balderdashy/sailschat" target="_blank">SailsChat</a>.</p>
+<h2 id="arguments-to-lifecycle-callbacks-are-now-typecasted" permalink="arguments-to-lifecycle-callbacks-are-now-typecasted">Arguments to lifecycle callbacks are now typecasted</h2>
+<p>Previously, with <code>schema: true</code>, if you sent an attribute value to a <code>.create()</code> or <code>.update()</code> that did not match the expected type declared in the model&apos;s attributes, the value you passed in would still be accessible in your model&apos;s lifecycle callbacks.</p>
+<p>In Sails/Waterline v0.10, this is no longer the case. Values passed to <code>.create()</code> and <code>.update()</code> are type-casted before your lifecycle callbacks run. Affected lifecycle callbacks include <code>beforeUpdate()</code>, <code>beforeCreate()</code>, and <code>beforeValidate()</code>.</p>
+<h2 id="beforevalidation-is-now-beforevalidate-" permalink="beforevalidation()-is-now-beforevalidate()">beforeValidation() is now beforeValidate()</h2>
+<p>If you were using the <code>beforeValidation</code> or <code>afterValidation</code> model lifecycle callbacks in any of your models, you should change them to <code>beforeValidate</code> or <code>afterValidate</code>. This change was made in Waterline to match the style of the other lifecycle callbacks (e.g. <code>beforeCreate</code>, <code>afterUpdate</code>, etc.).</p>
+<h2 id="-done-vs-exec-" permalink="done()-vs-exec()">.done() vs. .exec()</h2>
+<p><strong> The old (/confusing?) meaning of <code>.done()</code> has been deprecated.</strong></p>
+<p>In Sails &lt;= v0.8, the syntax for executing an ORM query was <code>Model. [ &#x2026; ] .done( cb )</code>. In v0.9, when promise support was added, the <code>Model. [ &#x2026; ] .exec( cb )</code> became the recommended replacement, since <code>.done()</code> has a special meaning in the promise spec. However, the original usage of <code>.done()</code> was left untouched to make upgrading from v0.8 to v0.9 easier.</p>
+<p>But as of Sails/Waterline v0.10, the original meaning of <code>.done()</code> has been officially deprecated to allow for a more robust promise implementation going forward, and pluggable promise library support (e.g. choose <code>Q</code> or <code>Bluebird</code> etc.).</p>
+<h2 id="associations" permalink="associations">Associations</h2>
+<p>Sails v0.10 introduces associations between data models. Since the work we&apos;ve done on associations is largely additive, your existing models should still just work. That said, this is a powerful new feature that allows you to write less code and makes your app more maintainable, so we suggest taking advantage of it! To learn about how to use associations in Sails, check out the docs.</p>
+<p>Associations (or &quot;relations&quot;) are really just special attributes. Instead of string or integer values, you can specify an instance of a model or a collection of model instances. You can think about this kind of like an object (<code>{...}</code>) or an array (<code>[{...}, {...}]</code>) you might store as JSON in a NoSQL database. The difference is, in Sails, this works with any of the supported databases, and even allows you to populate (i.e. join) across different databases and types of databases.</p>
+<h2 id="generators" permalink="generators">Generators</h2>
+<p>Sails has had support for generating code for a while now (e.g. <code>sails generate controller foo</code>) but in v0.10, we wanted to make this feature more extensible, open, and accessible to everybody in the Sails community. With that in mind, v0.10 comes with a complete rewrite of the command-line tool, and pluggable generators. Want to be able to run <code>sails generate blog foo</code> to make a new blog built on Sails? Create a <code>blog</code> generator (run sails <code>generate generator blog</code>), add your templates, and configure the generator to copy the new templates over. Then you can release it to the community by publishing an npm module called <code>sails-generate-blog</code>. Compatibility with Yeoman generators is also in our roadmap.</p>
+<h2 id="command-line-tool" permalink="commandline-tool">Command-line tool</h2>
+<p>The big change here is how you create a new api. In the past you called <code>sails generate new_api</code>. This would generate a new controller and model called <code>new_api</code> in the appropriate places. This is now done using <code>sails generate api new_api</code>.</p>
+<p>You can still generate models and controllers seperately using the same CLI Commands.</p>
+<p>Also, <code>--linker</code> switch is no longer available. In previous version, if <code>--linker</code> switch was provided, it created a <code>myApp/assets/linker folder</code>, with <code>js</code>, <code>styles</code> and <code>templates</code> folders inside. In this new version, the <code>myApp/assets/linker</code> folder is not created. Compiling CoffeeScript and Less is the default behavior now, right from the <code>myApp/assets/js</code> and <code>myApp/assets/scripts</code> folders.</p>
+<h2 id="custom-server-responses" permalink="custom-server-responses">Custom server responses</h2>
+<p>In v0.10, you can now generate your own custom server responses.</p>
+<p>Like before, there are a few that we automatically create for you. Instead of generating <code>myApp/config/500.js</code> and other <code>.js</code> responses in the config directory, they are now generated in <code>myApp/api/responses/</code>.</p>
+<p>To migrate, you will need to create a new v0.10 project and copy the <code>myApp/api/responses</code> directory into your existing app. You will then modify the appropriate .js file to reflect any customization you made in your response logic files (500.js,etc).</p>
+<h2 id="legacy-data-stored-in-the-temporary-sails-disk-database" permalink="legacy-data-stored-in-the-temporary-sailsdisk-database">Legacy data stored in the temporary sails-disk database</h2>
+<p><code>sails-disk</code>, used by default in new Sails projects, now stores data a bit differently. If you have some temporary data stored in a 0.9.x project, you&apos;ll want to wipe it out and start fresh. To do this:</p>
+<p>From your project&apos;s root directory:</p>
+<pre><code class="bash">$ rm .tmp/disk.db
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="adapter-database-configuration" permalink="adapter/database-configuration">Adapter/Database Configuration</h2>
+<p><code>config.adapters</code> (in <code>myApp/config/adapters.js</code>) is now config.connections (in new projects, this is generated in <code>myApp/config/connections.js</code>). Also, <code>config.model</code> is now <code>config.models</code>.</p>
+<p>Your app&apos;s default <code>connection</code> (i.e. database) should now be configured as a string <code>config.models.connection</code> used by default for model. New projects are generated with a <code>/config/models.js</code> file that includes the default connection.</p>
+<p>To configure a model to use specific adapters, you must now specify them in the <code>connection</code> key instead of <code>adapters</code>.</p>
+<p>For example:</p>
+<pre><code class="javascript">module.exports = {
+
+    connection: [&apos;someMongoDatabase&apos;],
+
+    attributes: {
+        name:{
+            type     : &apos;string&apos;,
+            required : true
+        }
+    }
+};
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="blueprints-controller-configuration" permalink="blueprints/controller-configuration">Blueprints/Controller configuration</h2>
+<p>The object literal describing controller configuration overrides for controller blueprints should change from:</p>
+<pre><code class="javascript">...
+_config: {
+  blueprints: {
+    rest: true,
+    ...
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>to:</p>
+<pre><code class="javascript">...
+_config: {
+    rest: true,
+    ...
+}
+</code></pre><!-- __LANG=%%__ -->
+<h2 id="layout-paths-" permalink="layout-paths">Layout paths:</h2>
+<p>In Sails v0.9, you could use the following syntax to specify <code>auth/someLayout.ejs</code> as a custom layout when rendering a view:</p>
+<pre><code class="javascript">return res.view(&apos;auth/login&apos;,{
+  layout: &apos;someLayout&apos;
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>However in Sails v0.10, all layout paths are relative to your app&apos;s views path. In other words, the relative path of the layout is no longer resolved from the view&apos;s own path-- it is now always resolved from the views path. This makes it easier to understand which file is being used, particularly when layout files have similar names:</p>
+<pre><code class="javascript">return res.view(&apos;auth/login&apos;, {
+  layout: &apos;auth/someLayout&apos;
+});
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="To v.0.10"></docmeta></p>
+<docmeta name="version" value="0.10.0">
+</docmeta>

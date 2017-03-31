@@ -1,0 +1,30 @@
+<h1 id="layouts">Layouts</h1>
+<p>When building an app with many different pages, it can be helpful to extrapolate markup shared by several HTML files into a layout.  This <a href="http://en.wikipedia.org/wiki/Don&apos;t_repeat_yourself" target="_blank">reduces the total amount of code</a> in your project and helps you avoid making the same changes in multiple files down the road.</p>
+<p>In Sails and Express, layouts are implemented by the view engines themselves.  For instance, <code>jade</code> has its own layout system, with its own syntax.</p>
+<p>For convenience, Sails bundles special support for layouts <strong>when using the default view engine, EJS</strong>. If you&apos;d like to use layouts with a different view engine, check out <a href="/documentation/concepts/Views/ViewEngines.html">that view engine&apos;s documentation</a> to find the appropriate syntax.</p>
+<h3 id="creating-layouts" permalink="creating-layouts">Creating Layouts</h3>
+<p>Sails layouts are special <code>.ejs</code> files in your app&apos;s <code>views/</code> folder you can use to &quot;wrap&quot; or &quot;sandwich&quot; other views. Layouts usually contain the preamble (e.g. <code>&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;....&lt;/head&gt;&lt;body&gt;</code>) and conclusion (<code>&lt;/body&gt;&lt;/html&gt;</code>).  Then the original view file is included using <code>&lt;%- body %&gt;</code>.  Layouts are never used without a view- that would be like serving someone a bread sandwich.</p>
+<p>Layout support for your app can be configured or disabled in <a href="/documentation/anatomy/myApp/config/views.js.html"><code>config/views.js</code></a>, and can be overridden for a particular route or action by setting a special <a href="/documentation/concepts/Views/Locals.html">local</a> called <code>layout</code>. By default, Sails will compile all views using the layout located at <code>views/layout.ejs</code>.</p>
+<p>To specify what layout a view uses, see the example below. There is more information in the docs at <a href="/documentation/concepts/Routes.html">routes</a>.</p>
+<p>The example route below will use the view located at <code>./views/users/privacy.ejs</code> within the layout located at <code>./views/users.ejs</code></p>
+<pre><code class="javascript">&apos;get /privacy&apos;: {
+    view: &apos;users/privacy&apos;,
+    locals: {
+      layout: &apos;users&apos;
+    }
+  },
+</code></pre><!-- __LANG=%%__ -->
+<p>The example controller action below will use the view located at <code>./views/users/privacy.ejs</code> within the layout located at <code>./views/users.ejs</code></p>
+<pre><code class="javascript">privacy: function (req, res) {
+  res.view(&apos;users/privacy&apos;, {layout: &apos;users&apos;})
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<h4 id="why-do-layouts-only-work-for-ejs-" permalink="why-do-layouts-only-work-for-ejs">Why do layouts only work for EJS?</h4>
+<p>A couple of years ago, built-in support for layouts/partials was deprecated in Express. Instead, developers were expected to rely on the view engines themselves to implement this features. (See <a href="https://github.com/balderdashy/sails/issues/494" target="_blank">https://github.com/balderdashy/sails/issues/494</a> for more info on that.)</p>
+<p>Sails supports the legacy <code>layouts</code> feature for convenience, backwards compatibility with Express 2.x and Sails 0.8.x apps, and in particular, familiarity for new community members coming from other MVC frameworks. As a result, layouts have only been tested with the default view engine (ejs).</p>
+<p>If layouts aren&#x2019;t your thing, or (for now) if you&#x2019;re using a server-side view engine other than ejs, (e.g. Jade, handlebars, haml, dust) you&#x2019;ll want to set <code>layout:false</code> in <a href="/documentation/reference/sails.config/sails.config.views.html"><code>sails.config.views</code></a>, then rely on your view engine&#x2019;s custom layout/partial support.</p>
+</blockquote>
+<docmeta name="displayName" value="Layouts">
+</docmeta>

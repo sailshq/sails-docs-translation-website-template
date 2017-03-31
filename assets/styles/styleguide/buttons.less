@@ -1,0 +1,89 @@
+.btn-reset() {
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.lg-button (@bg-color: @black, @color: @white) {
+  .btn-reset();
+  color: @color;
+  background: @bg-color;
+  display: inline-block;
+  font-size: 20px;
+  padding: 12px 25px;
+  text-align: center;
+  border-radius: 7px;
+  font-weight: @bold;
+  font-family: @header-font;
+  .transition(all 250ms);
+}
+.med-button (@bg-color: @black, @color: @white) {
+  .btn-reset();
+  color: @color;
+  background: @bg-color;
+  display: inline-block;
+  font-size: 16px;
+  padding: 10px 15px;
+  text-align: center;
+  border-radius: 5px;
+  font-weight: @bold;
+  font-family: @header-font;
+  .transition(all 250ms);
+}
+
+.left-icon-text-btn(@color: @brand-sails) {
+  .btn-reset();
+  .border-box();
+  .transition(all 250ms);
+  position: relative;
+  font-size: 16px;
+  font-family: @header-font;
+  color: @color;
+  height: 42px;
+  line-height: 42px;
+  vertical-align: middle;
+  padding-left: 50px;
+  margin-top: 25px;
+  i {
+    position: absolute;
+    left: 0px;
+    top: 2px;
+    font-size: 38px;
+  }
+  &:hover {
+    i {
+      color: @text-normal;
+    }
+  }
+}
+
+.right-icon-text-btn(@color: @brand-sails) {
+  .btn-reset();
+  .border-box();
+  .transition(all 250ms);
+  display: inline-block;
+  position: relative;
+  font-size: 16px;
+  font-family: @header-font;
+  color: @color;
+  height: 42px;
+  line-height: 42px;
+  vertical-align: middle;
+  padding-right: 50px;
+  margin-top: 25px;
+  i {
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    font-size: 38px;
+  }
+  &:hover {
+    i {
+      color: @text-normal;
+    }
+  }
+}

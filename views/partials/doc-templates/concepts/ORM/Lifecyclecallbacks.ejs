@@ -1,0 +1,61 @@
+<h1 id="lifecycle-callbacks">Lifecycle callbacks</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Lifecycle callbacks are functions that are automagically called before or after certain <em>model</em> actions. For example, we sometimes use lifecycle callbacks to automatically hash a password before creating or updating an <code>Account</code> model.</p>
+<p>Sails exposes a handful of lifecycle callbacks by default.</p>
+<h5 id="callbacks-on-create-" permalink="callbacks-on-create">Callbacks on <code>create</code></h5>
+<ul>
+<li>beforeValidate: fn(values, cb)</li>
+<li>afterValidate: fn(values, cb)</li>
+<li>beforeCreate: fn(values, cb)</li>
+<li>afterCreate: fn(newlyInsertedRecord, cb)</li>
+</ul>
+<h5 id="callbacks-on-update-" permalink="callbacks-on-update">Callbacks on <code>update</code></h5>
+<ul>
+<li>beforeValidate: fn(valuesToUpdate, cb)</li>
+<li>afterValidate: fn(valuesToUpdate, cb)</li>
+<li>beforeUpdate: fn(valuesToUpdate, cb)</li>
+<li>afterUpdate: fn(updatedRecord, cb)</li>
+</ul>
+<h5 id="callbacks-on-destroy-" permalink="callbacks-on-destroy">Callbacks on <code>destroy</code></h5>
+<ul>
+<li>beforeDestroy: fn(criteria, cb)</li>
+<li>afterDestroy: fn(destroyedRecords, cb)</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<p>If you want to hash a password before saving in the database, you might use the <code>beforeCreate</code> lifecycle callback.</p>
+<pre><code class="javascript">var bcrypt = require(&apos;bcrypt&apos;);
+
+module.exports = {
+
+  attributes: {
+
+    username: {
+      type: &apos;string&apos;,
+      required: true
+    },
+
+    password: {
+      type: &apos;string&apos;,
+      minLength: 6,
+      required: true,
+      columnName: &apos;hashed_password&apos;
+    }
+
+  },
+
+
+  // Lifecycle Callbacks
+  beforeCreate: function (values, cb) {
+
+    // Hash password
+    bcrypt.hash(values.password, 10, function(err, hash) {
+      if(err) return cb(err);
+      values.password = hash;
+      //calling cb() with an argument returns an error. Useful for canceling the entire operation if some criteria fails.
+      cb();
+    });
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="Lifecycle callbacks">
+</docmeta>

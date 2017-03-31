@@ -1,0 +1,48 @@
+<h1 id="-unsubscribe-">.unsubscribe()</h1>
+<p>Unsubscribe the requesting client socket from one or more database records.</p>
+<pre><code class="javascript">Something.unsubscribe(req, ids);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left"><code>req</code></td>
+<td style="text-align:center"><bubble type="req" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The incoming socket request (<code>req</code>) containing the socket to unsubscribe.</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left"><code>ids</code></td>
+<td style="text-align:center"><bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">An array of record ids (primary key values).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">User.find({name: &apos;Lenny&apos;}).exec(function(err, lennies) {
+  if (err) return res.serverError(err);
+  if (req.isSocket) {
+    User.unsubscribe( req, _.pluck(lennies, &apos;id&apos;) );
+  }
+  return res.ok();
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code> to refer to the requesting socket.  The provided <code>req</code> must be from a socket request, not just any old HTTP request.</li>
+<li><code>unsubscribe</code> will only work when the request is made over a socket connection (e.g. using <code>io.socket.get()</code>), <em>not</em> over HTTP (e.g. using <code>jQuery.get()</code>).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".unsubscribe()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

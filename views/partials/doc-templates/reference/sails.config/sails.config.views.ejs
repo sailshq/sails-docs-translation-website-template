@@ -1,0 +1,51 @@
+<h1 id="sails-config-views">sails.config.views</h1>
+<p>Configuration for your app&apos;s server-side <a href="/documentation/concepts/Views">views</a>.  The options are conventionally specified in the <a href="/documentation/anatomy/myApp/config/views.js.html"><code>config/views.js</code></a> configuration file.</p>
+<h3 id="properties" permalink="properties">Properties</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Property</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>layout</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble> -or- <bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>&quot;layout&quot;</code></td>
+<td style="text-align:left">Set the default <a href="/documentation/concepts/Views/Layouts.html">layout</a> for your app by specifying the relative path to the desired layout file from your views folder (i.e. <code>views/</code>.)  Or disable layout support altogether with <code>false</code>.  Built-in support for layouts is only relevant when using <code>ejs</code> (see below)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>engine</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>&quot;ejs&quot;</code></td>
+<td style="text-align:left">The <a href="/documentation/concepts/Views/ViewEngines.html">view engine</a> your app will use to compile server-side markup into HTML.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>extension</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Same as <code>engine</code></td>
+<td style="text-align:left">The file extension for view files.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>locals</code></td>
+<td style="text-align:center"><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>{}</code></td>
+<td style="text-align:left">Default data to be included as <a href="/documentation/concepts/Views/Locals.html">view locals</a> every time a server-side view is compiled anywhere in this app.  If an optional <code>locals</code> argument was passed in directly via <code>res.view()</code>, its properties take precedence when both dictionaries are merged and provided to the view (more on that below)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>If your app is NOT using <code>ejs</code> (the default view engine) Sails will function as if the <code>layout</code> option was set to <code>false</code>.  To take advantage of layouts when using a custom view engine like Jade or Handlebars, check out <a href="/documentation/concepts/Views/ViewEngines.html">that view engine&apos;s documentation</a> to find the appropriate syntax.</li>
+<li>As of Sails 0.12.0, app-wide locals from <code>sails.config.views.locals</code> are combined with any one-off locals you use with <code>res.view()</code> using a <strong>shallow merge strategy</strong>.  That is, if your app-wide locals configuration is <code>{foo: 3, bar: { baz: &apos;beep&apos; } }</code>, and then you use <code>res.view({bar: &apos;boop&apos;})</code>, your view will have access to <code>foo</code> (<code>3</code>) and <code>bar</code> (<code>&apos;boop&apos;</code>).</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="sails.config.views"></docmeta></p>
+<docmeta name="pageType" value="property">
+
+
+</docmeta>

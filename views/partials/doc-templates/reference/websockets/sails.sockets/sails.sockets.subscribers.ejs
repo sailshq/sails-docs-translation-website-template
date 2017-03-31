@@ -1,0 +1,74 @@
+<h1 id="sails-sockets-subscribers-">sails.sockets.subscribers()</h1>
+<blockquote>
+<p><em><strong>This method is deprecated</strong>.</em></p>
+<p>If you absolutely need to retrieve the list of socket IDs in a room, you may use the lower-level <code>sails.io.sockets.in(roomName).clients(cb)</code> method (see <a href="https://github.com/socketio/socket.io/#namespaceclientsfnfunction" target="_blank">https://github.com/socketio/socket.io/#namespaceclientsfnfunction</a>).</p>
+<p>However, be aware that in multi-server scenarios, that method will <em>not</em> return IDs of sockets on other servers (at the time of writing, the current documentation on Socket.io&apos;s GitHub is out of date on that point).</p>
+<p>For the most common use-case of &quot;taking all members of room A and subscribing/unsubscribing them to room B&quot;, you can use the <a href="/documentation/reference/web-sockets/sails-sockets/add-room-members-to-rooms"><code>sails.sockets.addRoomMembersToRooms</code></a> and <a href="/documentation/reference/web-sockets/sails-sockets/remove-room-members-from-rooms"><code>sails.sockets.removeRoomMembersFromRooms</code></a> methods, which <em>do</em> work cross-server.</p>
+</blockquote>
+<hr>
+<p>Get the IDs of all sockets subscribed to a room.</p>
+<pre><code class="javascript">sails.sockets.subscribers(roomName, cb);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th>Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>roomName</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>The name of the room whose socket IDs should be retrieved. <br> e.g. <code>&apos;supportchat&apos;</code>.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>cb</td>
+<td><bubble type="function" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Function to be called when the socket IDs have been retrieved.  The function should have two arguments: <code>err</code> and <code>socketIds</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">sails.sockets.subscribers(&apos;supportchat&apos;, function(err, socketIds) {
+  console.log(socketIds);
+});
+// =&gt; [&apos;BetX2G-2889Bg22xi-jy&apos;, &apos;BTA4G-8126Kr32bi-za&apos;]
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>This method currently only operates on a <em>single server</em>.  If your Sails app is distributed over multiple servers (for example
+  by using the <a href="https://github.com/socketio/socket.io-redis" target="_blank"><code>socket.io-redis</code> adapter</a>), calling <code>.subscribers(roomName, cb)</code> will only
+  retrieve the socket IDs of subscribers to <code>roomName</code> that are connected to the server making the call.</p>
+</blockquote>
+<!--
+
+  Wrote this, then took this out because it's needlessly complex.
+  See sails101/low-level-sockets for more like it.
+  ~mike
+
+```
+<!-- __LANG=%javascript%__ -->
+<p>// Controller action</p>
+<p>getRoomSubscribers: function(req, res) {
+  if (!req.isSocket) return res.badRequest();
+  if (!req.param(&apos;room&apos;)) return res.badRequest(&apos;No <code>room</code> specified- please specify the name of the room whose subscribers you want to look up.&apos;);</p>
+<p>  var subscribers = sails.sockets.subscribers(room);
+  return res.ok(require(&apos;util&apos;).format(
+    &apos;The &quot;%s&quot; room currently has %d subscribers: &apos;,
+    req.param(&apos;room&apos;),
+    subscribers.length,
+    subscribers
+  ));
+}
+```
+<!-- __LANG=%%__ -->
+--&gt;</p>
+<p><docmeta name="displayName" value="sails.sockets.subscribers()"></docmeta></p>
+<docmeta name="isDeprecated" value="true">
+</docmeta>

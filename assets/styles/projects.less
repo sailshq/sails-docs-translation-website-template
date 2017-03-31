@@ -1,0 +1,94 @@
+.projects-page {
+  .clearfix();
+  overflow-x: hidden;
+  font-family: @main-font;
+  .border-box();
+  div.page-header {
+    .sm-page-header();
+    .footer-gradient();
+    div.page-header-container {
+      .container();
+      .border-box();
+      padding: 110px 0 35px;
+      position: relative;
+      h5 {
+        font-style: italic;
+      }
+    }
+  }
+  hr {
+    .border-box();
+    .container();
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    // border-bottom: 2px solid darken(@ltest-gray, 2%);
+    border-bottom: 2px solid @ltest-gray;
+  }
+  div.projects-container {
+    .container();
+    .clearfix();
+    padding: 125px 0;
+    div.project-list {
+      .clearfix();
+      .project-wrapper {
+        .border-box();
+        width: 50%;
+        float: left;
+        &:nth-child(even) {
+          padding-left: 20px;
+        }
+        &:nth-child(odd) {
+          padding-right: 20px;
+        }
+        .project {
+          .border-box();
+          border: 1px solid @border-lt-gray;
+          background-color: @ltest-gray;
+          margin-bottom: 40px;
+          border-radius: 10px;
+          >a {
+            .border-box();
+            display: block;
+            padding: 24px;
+            img {
+              .border-box();
+              width: 100%;
+              border: 1px solid @black;
+            }
+            h2 {
+              color: @turquoise;
+              font-size: 26px;
+              padding-bottom: 25px;
+              font-weight: 300;
+            }
+            p {
+              color: @med-gray;
+              padding-bottom: 15px;
+            }
+          }
+        }
+      }
+    }
+    .contribution-message {
+      border-top: 2px solid @ltest-gray;
+      padding-top: 40px;
+      text-align: center;
+      h4 {
+        color: @turquoise;
+        font-size: 17px;
+      }
+      p {
+        font-size: 15px;
+      }
+    }
+  }
+  //Tablet/small screen styles:
+  @media screen and (max-width: 768px) {
+    // TODO
+  }
+  //Mobile Styles:
+  @media screen and (max-width: 500px) {
+    // TODO
+  }
+}

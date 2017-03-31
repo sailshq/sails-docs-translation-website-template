@@ -1,0 +1,64 @@
+<h1 id="-find-">.find()</h1>
+<p>Find records in your database that match the given criteria.</p>
+<pre><code class="javascript">Something.find(criteria).exec(function (err, records) {
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">criteria</td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The <a href="https://github.com/balderdashy/waterline-docs/blob/master/queries/query-language.md" target="_blank">Waterline criteria</a> to use for matching records in the database.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">err</td>
+<td><bubble type="Error?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The error that occurred, or <code>null</code> if there were no errors.</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left">records</td>
+<td><bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The array of records from your database which match the given criteria.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>To find any users named Finn in the database:</p>
+<pre><code class="javascript">User.find({name:&apos;Finn&apos;}).exec(function (err, usersNamedFinn){
+  if (err) {
+    return res.serverError(err);
+  }
+  sails.log(&apos;Wow, there are %d users named Finn.  Check it out:&apos;, usersNamedFinn.length, usersNamedFinn);
+  return res.json(usersNamedFinn);
+});
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="importance" value="10"></docmeta></p>
+<p><docmeta name="displayName" value=".find()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

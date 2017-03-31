@@ -1,0 +1,44 @@
+<h1 id="sails-geturlfor-">sails.getUrlFor()</h1>
+<p>Look up the first route pointing at the specified target (e.g. <code>MeController.login</code>) and return its URL.</p>
+<pre><code class="javascript">sails.getUrlFor(target);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>target</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The route target string; e.g. <code>MeController.login</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="returns" permalink="returns">Returns</h4>
+<p><strong>Type:</strong> <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></p>
+<pre><code class="javascript">&apos;/login&apos;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>In a view...</p>
+<pre><code class="ejs">&lt;a href=&quot;&lt;%= sails.getUrlFor(&apos;PageController.login&apos;) %&gt;&quot;&gt;Login&lt;/a&gt;
+&lt;a href=&quot;&lt;%= sails.getUrlFor(&apos;PageController.signup&apos;) %&gt;&quot;&gt;Signup&lt;/a&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This function searches the Sails app&apos;s explicitly configured routes; <a href="/documentation/reference/configuration/sails-config-routes"><code>sails.config.routes</code></a>.  Shadow routes bound by hooks (including <a href="/documentation/reference/blueprint-api#?blueprint-routes">blueprint routes</a>) will not be matched.</li>
+<li>If a matching target cannot be found, this function throws an <code>E_NOT_FOUND</code> error (i.e. if you catch the error and check its <code>code</code> property, it will be the string <code>E_NOT_FOUND</code>).</li>
+<li>If more than one route matches the specified target, the first match is returned.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="sails.getUrlFor()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

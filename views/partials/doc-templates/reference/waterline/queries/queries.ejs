@@ -1,0 +1,49 @@
+<h1 id="working-with-queries">Working with Queries</h1>
+<p><strong>Query objects</strong> (aka <em>query instances</em>) are the chainable deferred objects returned from model methods like <code>.find()</code> and <code>.create()</code>.  They represent a not-quite-yet-fulfilled intent to fetch or modify records from the database.</p>
+<pre><code class="javascript">var query = Zookeeper.find();
+</code></pre><!-- __LANG=%%__ -->
+<p>The purpose of query instances is to provide a convenient, chainable syntax for working with your models.  Methods like <code>.populate()</code>, <code>.where()</code>, and <code>.sort()</code> allow you to refine database calls <em>before</em> they&apos;re sent down the wire. Then, when you&apos;re ready to fire the query off to the database, you can just call <a href="/documentation/reference/waterline/queries/exec.html"><code>.exec()</code></a> (or if you are using promises, <code>.then()</code>).</p>
+<p>Most of the time, you won&apos;t think about query instances as objects <em>per se</em>, rather as just another part of the syntax for communicating with the database.  In fact, you may already be using these objects in your Sails app! If so, the following syntax should look familiar:</p>
+<pre><code class="javascript">Zookeeper.find().exec(function afterFind(err, zookeepers) {
+  if (err) {
+    // uh oh
+    // (handle error; e.g. `return res.serverError(err)`)
+    return;
+  }
+
+  // would you look at all those zookeepers?
+  // (now let&apos;s do the next thing;
+  //  e.g. `_.reduce(zookeepers, ...)` and/or `return res.json(zookeepers)`)
+});
+//
+// (don&apos;t put code out here)
+</code></pre><!-- __LANG=%%__ -->
+<p>In this example, the call to <code>Zookeeper.find()</code> returns a query instance, but <em>doesn&apos;t actually do anything yet</em>.  The query is not actually executed until its <code>.exec()</code> method is called.</p>
+<h3 id="promises" permalink="promises">Promises</h3>
+<p>As an alternative to the <code>.exec()</code> method, Sails and Waterline implement a minimalist integration with the <a href="https://github.com/petkaantonov/bluebird" target="_blank">Bluebird</a> promise library, exposing <code>.then()</code> and <code>.catch()</code> methods.</p>
+<pre><code class="javascript">Zookeeper.find()
+.then(function (zookeepers) {...})
+.catch(function (err) {...});
+//
+// (don&apos;t put code out here)
+</code></pre><!-- __LANG=%%__ -->
+<p>In this example, the callback passed in to <code>.catch()</code> is equivalent to the contents of the <code>if(err) {}</code> block from the <code>.exec()</code> example above (e.g. <code>res.serverError()</code>).  Similarly, the <code>.then()</code> callback is equivalent to the code below the <code>if(err) {}</code> and early return.</p>
+<p>If you are a fan of promises, and have a reasonable amount of experience with them, you should have no problem working with this interface.  However if you are not very familiar with promises, or don&apos;t care one way or another, you will probably have an easier time working with <code>.exec()</code>, since it uses standard Node.js callback conventions.</p>
+<blockquote>
+<p>If you decide to use promises for a particular query in your app, please make sure that you provide callbacks for both <code>.then()</code> <em>and</em> <code>.catch()</code>.  Otherwise, errors could go unhandled, and unpleasant race conditions and memory leaks could ensue. This is not just a Sails or Waterline concept-- it is something to be aware of when using promises in JavaScript in general; and particularly in Node.js, since undhandled errors in server-side code tend to be more problematic than their client-side counterparts.   Omitting <code>.catch()</code> is equivalent to ignoring the <code>err</code> argument in a conventional Node callback...and it is similarly insidious.  In fact, this is hands down one of the most common sources of bugs for Node.js developers of all skill and experience levels.</p>
+<p>It is easy to forget to do this, especially if you are new to asynchronous code.  But fortunately if you get in a habit of always handling your asynchronous errors directly after (or better yet <em>right before</em>) you write &quot;normal&quot; code to handle the sucessful case, you will quickly develop good habits that will make your apps immune to these sorts of bugs.</p>
+</blockquote>
+<h3 id="how-it-works" permalink="how-it-works">How It Works</h3>
+<p>When you <strong>execute</strong> a query (using <code>.exec()</code> or <code>.then()</code>), a lot happens:</p>
+<pre><code class="javascript">query.exec(function (err, zookeepers) {...});
+</code></pre><!-- __LANG=%%__ -->
+<p>First, it is &quot;shaken out&quot; by Waterline core into a normalized <a href="/documentation/concepts/ORM/Querylanguage.html?q=query-language-basics">criteria object</a>.  Then it passes through the relevant Waterline adapter(s) for translation to the raw query syntax of your database(s) (e.g. Redis or Mongo commands, various SQL dialects, etc.)  Next, each involved adapter uses its native Node.js database driver to send the query out over the network to the corresponding physical database.</p>
+<p>When the adapter receives a response, it is marshalled to the Waterline interface spec and passed back up to Waterine core, where it is integrated with any other raw adapter responses into a coherent result set.  At that point, it undergoes one last normalization before being passed back to the callback you provided to <code>.exec()</code> for consumption by your app.</p>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>A Node-style callback can be passed directly as an additional, final argument to model methods (e.g. <code>.find()</code>).  In this case, the query will be executed immediately, and model methods <em>will not</em> return a query instance (instead, the Node-style callback you provided will be triggered when the query is complete).  But unless you are doing something very advanced, you are generally better off sticking to standard usage; i.e. calling <code>.exec()</code> or calling <code>.then()</code> and <code>.catch()</code>.</li>
+</ul>
+</blockquote>
+<docmeta name="displayName" value="Queries">
+</docmeta>

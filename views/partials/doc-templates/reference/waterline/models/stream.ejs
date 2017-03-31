@@ -1,0 +1,95 @@
+<h1 id="-stream-criteria-">.stream( <code>criteria</code> )</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This method uses a <a href="http://nodejs.org/api/stream.html" target="_blank">node write stream</a> to pipe model data as it is retrieved without first having to buffer all of the results to memory.</p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<h4 id="parameters" permalink="parameters">Parameters</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Accepted Data Types</th>
+<th>Required ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Find Criteria</td>
+<td><code>{}</code>,<code>[{}]</code>, <code>string</code>, <code>int</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Custom Write/End Methods</td>
+<td><code>{}</code></td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h4 id="returned" permalink="returned">Returned</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Description</th>
+<th>Possible Data Types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Error</td>
+<td><code>Error</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Stream of Records</td>
+<td><code>stream</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-usage" permalink="example-usage">Example Usage</h3>
+<p>UsersController.js</p>
+<pre><code class="javascript">module.exports = {
+
+  testStream: function(req, res){
+
+    if (req.param(&apos;startStream&apos;) &amp;&amp; req.isSocket){
+
+        var getSocket = req.socket;
+
+        // Start the stream.  Pipe it to sockets.
+        User.stream({name:&apos;Walter&apos;}).pipe(getSocket.emit);
+
+    } else {
+
+      res.view();
+
+    }
+
+
+  }
+}
+`
+</code></pre><!-- __LANG=%%__ -->
+<p>views/users/testSocket.ejs</p>
+<pre><code class="javascript">&lt;script type=&quot;text/javascript&quot;&gt;
+window.onload = function startListening(){
+    socket.on(&apos;gotUser&apos;,function(data){
+      console.log(data.name + &apos; number &apos; + data.id + &apos; has joined the party&apos;);
+    });
+};
+
+&lt;/script&gt;
+&lt;div class=&quot;addButton&quot; onClick=&quot;socket.get(&apos;/users/testStream/&apos;, {startStream:true})&quot;&gt;Stream all the Users!&lt;/div&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>This method is useful for piping data from VERY large models straight to res.  You can also pipe it other places.  See the node stream docs for more info.
+Only the mongo, mysql, and posgresql adapters support this method.  This won&apos;t work with the disk adapter.
+Any string arguments passed must be the ID of the record.</p>
+</blockquote>
+<p><docmeta name="displayName" value=".stream()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

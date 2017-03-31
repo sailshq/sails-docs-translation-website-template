@@ -1,0 +1,45 @@
+<h1 id="the-io-sails-object">The <code>io.sails</code> object</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>The <code>io.sails</code> object is the home of global configuration options for the <code>sails.io.js</code> library, as well as any sockets it creates.  Most of the properties on <code>io.sails</code> are used as settings when connecting a client socket to the server, or as top-level configuration for the client library itself.  <code>io.sails</code> also provides a <code>.connect()</code> method used for creating new socket connections manually.</p>
+<p>See <a href="/documentation/reference/web-sockets/socket-client">Socket Client</a> for information about your different options for configuring <code>io.sails</code>.</p>
+<h3 id="the-connect-method" permalink="the-connect()-method">The <code>.connect()</code> method</h3>
+<p>If <a href="/documentation/reference/web-sockets/socket-client/io-sails#?autoconnect"><code>io.sails.autoConnect</code></a> is <code>false</code>, or if you need to create more than one socket connection with the <code>sails.io.js</code> library, you do so via <code>io.sails.connect([url], [options])</code>.  Both arguments are optional, and the value of the <code>io.sails</code> properties (like <code>url</code>, <code>transports</code>, etc.) are used as defaults.  See the <a href="/documentation/reference/web-sockets/socket-client/sails-socket/properties">SailsSocket properties reference</a> for options.</p>
+<h3 id="-io-sails-autoconnect-" permalink="iosailsautoconnect"><code>io.sails.autoConnect</code></h3>
+<p>When the <code>io.sails.autoConnect</code> is set to <code>true</code> (the default), the library will wait one cycle of the event loop after loading and then attempt to create a new <a href="/documentation/reference/web-sockets/socket-client/sails-socket"><code>SailsSocket</code></a> and connect it to the URL specified by <code>io.sails.url</code>.  When used in the browser, the new socket will be exposed as <code>io.socket</code>.  When used in a Node.js script, the new socket will be attached as the <code>socket</code> property of the variable used to initialize the <code>sails.io.js</code> library.</p>
+<h3 id="-io-sails-environment-" permalink="iosailsenvironment"><code>io.sails.environment</code></h3>
+<p>Use <code>io.sails.environment</code> to set an environment for <code>sails.io.js</code>, which affects how much information is logged to the console.  Valid values are <code>development</code> (full logs) and <code>production</code> (minimal logs).</p>
+<h3 id="other-properties-and-defaults" permalink="other-properties-and-defaults">Other properties and defaults</h3>
+<p>The other properties of <code>io.sails</code> are used as defaults when creating new sockets (either the eager socket or via <a href="/documentation/reference/web-sockets/socket-client/io-sails#?the-connect-method"><code>io.sails.connect()</code></a>).  See the <a href="/documentation/reference/web-sockets/socket-client/sails-socket/properties">SailsSocket properties reference</a> for a full list of available options, as well as a table of the default <code>io.sails</code> values.  Here are the most commonly used properties:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th style="text-align:center">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> <code>url</code></td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Value of <a href="/documentation/reference/web-sockets/socket-client/sails-socket/properties#?iosails-defaults"><code>io.sails.url</code></a></td>
+<td style="text-align:center">The URL that the socket is connected to, or will attempt to connect to.</td>
+</tr>
+<tr>
+<td> <code>transports</code></td>
+<td><bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Value of <a href="/documentation/reference/web-sockets/socket-client/sails-socket/properties#?iosails-defaults"><code>io.sails.transports</code></a></td>
+<td style="text-align:center">The transports that the socket will attempt to connect using.  Transports will be tried in order, with upgrades allowed: that is, if you list both &quot;polling&quot; and &quot;websocket&quot;, then after establishing a long-polling connection the server will attempt to upgrade it to a websocket connection.  This setting should match the value of <code>sails.config.sockets.transports</code> in your Sails app.</td>
+</tr>
+<tr>
+<td><code>headers</code></td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>Value of <a href="/documentation/reference/web-sockets/socket-client/sails-socket/properties#?iosails-defaults"><code>io.sails.headers</code></a></td>
+<td style="text-align:center">Dictionary of headers to be sent by default with every request from this socket.  Can be overridden via the <code>headers</code> option in <a href="/documentation/reference/web-sockets/socket-client/io-socket-request"><code>.request()</code></a>.</td>
+</tr>
+</tbody>
+</table>
+<p><docmeta name="displayName" value="io.sails"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

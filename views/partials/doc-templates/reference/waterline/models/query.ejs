@@ -1,0 +1,107 @@
+<h1 id="-query-">.query()</h1>
+<p>Execute a raw SQL query using the specified model&apos;s datastore.</p>
+<pre><code class="javascript">SomeModel.query(sql, valuesToEscape, function(err, rawResult) {
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>WARNING:</strong> Unlike other Waterine model methods, <code>.query()</code> supports neither promise-based usage nor the use of <code>.exec()</code>.  In other words, it does not utilize Waterline&apos;s normal deferred object mechanism.  Instead, it provides raw access directly to the underlying database driver.</p>
+</blockquote>
+<h3 id="usage" permalink="usage">Usage</h3>
+<p><code>.query()</code> is only available on Sails/Waterline models that are configured to use a SQL database (e.g. PostgreSQL or mySQL).  Its purpose is to perform raw SQL queries.  Note that exact usage and result format varies between adapters, so you&apos;ll need to refer to the documentation for the underlying database driver.  (See below for a couple of simple examples to help get you started.)</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">sql</td>
+<td><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">A SQL string written in the appropriate dialect for this model&apos;s database.  Allows template syntax, (e.g. <code>?</code>, <code>$1</code>) the exact style of which depends on the underlying database adapter. <em>(See examples below.)</em></td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left">valuesToEscape</td>
+<td><bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">An array of dynamic, untrusted strings to SQL-escape and inject within the SQL string using the appropriate template syntax for this model&apos;s database.  <em>(If you have no dynamic values to inject, then just use an empty array here.)</em></td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:left">done</td>
+<td><bubble type="function" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">A callback function that will be triggered when the query completes successfully, or if the adapter encounters an error.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">err</td>
+<td><bubble type="Error?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The error that occurred, or a falsy value if there were no errors.  <em>(The exact format of this error varies depending on the SQL query you passed in and the database adapter you&apos;re using.  See examples below for links to relevant documentation.)</em></td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left">rawResult</td>
+<td><bubble type="Ref?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The raw result from the adapter.  <em>(The exact format of this raw result data varies depending on the SQL query you passed in and the database adapter you&apos;re using.  See examples below for links to relevant documentation.)</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>Remember: Usage and result data vary depending on the SQL query you send, as well as the adapter you&apos;re using.  Below, you&apos;ll find two examples: one for PostgreSQL and one for MySQL.</p>
+<h5 id="postgresql-example" permalink="postgresql-example">PostgreSQL example</h5>
+<p>Communicate directly with <a href="http://npmjs.com/package/pg" target="_blank"><code>pg</code></a>, an NPM package used for communicating with PostgreSQL databases:</p>
+<pre><code class="javascript">Pet.query(&apos;SELECT pet.name FROM pet WHERE pet.name = $1&apos;, [ &apos;dog&apos; ] ,function(err, rawResult) {
+  if (err) { return res.serverError(err); }
+
+  sails.log(rawResult);
+  // (result format depends on the SQL query that was passed in, and the adapter you&apos;re using)
+
+  // Then parse the raw result and do whatever you like with it.
+
+  return res.ok();
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="mysql-example" permalink="mysql-example">MySQL example</h5>
+<p>Assuming the <code>Pet</code> model is configured to use the <code>sails-mysql</code> adapter, the following code will communicate directly with <a href="http://npmjs.com/package/mysql" target="_blank"><code>mysql</code></a>, an NPM package used for communicating with MySQL databases:</p>
+<pre><code class="javascript">Pet.query(&apos;SELECT pet.name FROM pet WHERE pet.name = ?&apos;, [ &apos;dog&apos; ] ,function(err, rawResult) {
+  if (err) { return res.serverError(err); }
+
+  sails.log(rawResult);
+  // ...grab appropriate data...
+  // (result format depends on the SQL query that was passed in, and the adapter you&apos;re using)
+
+  // Then parse the raw result and do whatever you like with it.
+
+  return res.ok();
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method only works with SQL databases.  To get access to the raw MongoDB collection, use <a href="/documentation/reference/waterline-orm/models/native"><code>.native()</code></a>.</li>
+<li>This method <strong>does not</strong> support <code>.exec()</code> or <code>.then()</code>, and it <strong>does not</strong> return a promise.  If you want to &quot;promisify&quot; <code>.query()</code>, have a look at <a href="http://stackoverflow.com/questions/21886630/how-to-use-model-query-with-promises-in-sailsjs-waterline" target="_blank">this</a>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".query()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

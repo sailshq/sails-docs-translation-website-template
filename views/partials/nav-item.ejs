@@ -1,0 +1,54 @@
+<%
+// This partial has access to:
+//  • `navItems`      (an array of nav item dictionaries)
+//  • `navItem        (a nav item dictionary)
+//  • `expandedItems` (an array of nav item dictionaries)
+%>
+<span>
+  <% // Only have the 'folder' arrow in the template if this is the anatomy page
+     // and if the `navItem` has `children`.
+    if(section === 'anatomy' && navItem.children.length > 0) { %>
+
+  <i class="expand-arrow sails-icon icon-caret-right" is="expand-button" <% if(navItem.isInitiallyExpanded) {%> data-expanded="expanded" <% } %>></i>
+  <% } %>
+
+  <% // Only have the 'current' arrow in the template if this not an anatomy page
+  if(section !== 'anatomy') { %>
+  <i class="current-arrow sails-icon icon-angle-right"></i>
+  <% } %>
+
+  <a href="/documentation/<%= navItem.slug %>">
+    <%= navItem.displayName %>
+  </a>
+</span>
+
+
+<% if(_.isArray(navItem.children) && navItem.children.length > 0) { %>
+<ul>
+  <%
+    _.each(navItem.children, function (childPath){
+    // Here we assume that childSlug always references another menu item in `navItems` that actually exists.
+    // (this is a _fine_ assumption)
+    var childNavItem = _.find(navItems, function(navItem) {
+      return navItem.path.toLowerCase() === childPath.toLowerCase();
+    });
+
+    if(childNavItem) {
+      if(_.contains(expandedItems, childNavItem.path)) {
+        childNavItem.isInitiallyExpanded = true;
+      }
+      else {
+        childNavItem.isInitiallyExpanded = false
+      };%>
+
+      <li is="menu-item"
+          data-path="<%= childNavItem.path %>"
+          class="<%= childNavItem.isInitiallyExpanded ? 'expanded' : ''%> <%= childNavItem.isInitiallyExpanded && childNavItem.isParent ? 'current-parent' : '' %> <%= childNavItem.isParent ? 'folder' : '' %> <%= childNavItem.isDeprecated ? 'deprecated' : '' %> <%= childNavItem.isExperimental ? 'experimental' : '' %>">
+      <% /* Take the recursive step, rendering this partial again. */ %>
+      <%- partial('../partials/nav-item', {navItem: childNavItem, navItems: navItems, expandedItems: expandedItems}) %>
+      </li>
+
+    <% }
+    }); %>
+</ul>
+<% } %>

@@ -1,0 +1,22 @@
+<h1 id="routing-to-controllers">Routing to Controllers</h1>
+<p>By default, Sails will create a <a href="/documentation/reference/blueprint-api">blueprint action route</a> for each action in a controller, so that a <code>GET</code> request to <code>/:controllerIdentity/:nameOfAction</code> will trigger the action.  If the example controller in the previous section was saved as <code>api/controllers/SayController.js</code>, then the <code>/say/hi</code> and <code>/say/bye</code> routes would be made available by default whenever the app was lifted.  If the controller was saved under the subfolder <code>/we</code>, then the routes would be <code>/we/say/hi</code> and <code>/we/say/bye</code>.  See the <a href="/documentation/reference/blueprint-api">blueprints documentation</a> for more information about Sails&#x2019; automatic route binding.</p>
+<p>Besides the default routing, Sails allows you to manually bind routes to controller actions using the <a href="/documentation/concepts/Routes"><code>config/routes.js</code></a> file.  Some examples of when you might want to use explicit routes are:</p>
+<ul>
+<li>When you want to use separate actions to handle the same route path, based on the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html" target="_blank">HTTP method</a> (aka verb).  The aforementioned <strong>action blueprint</strong> routes bind <em>all</em> request methods for a path to a given action, including <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, etc.</li>
+<li>When you want an action to be available at a custom URL (e.g. <code>PUT /login</code>, <code>POST /signup</code>, or a &quot;vanity URL&quot; like <code>GET /:username</code>)</li>
+<li>When you want to set up additional options for how the route should be handled (e.g. special CORS configuration)</li>
+</ul>
+<p>To manually bind a route to a controller action in the <code>config/routes.js</code> file, you can use the HTTP verb and path (i.e. the <strong>route address</strong>) as the key, and the controller name + <code>.</code> + action name as the value (i.e. the <strong>route target</strong>).</p>
+<p>For example, the following manual route will cause your app to trigger the <code>makeIt()</code> action in <code>api/controllers/SandwichController.js</code> whenever it receives a POST request to <code>/make/a/sandwich</code>:</p>
+<pre><code class="javascript">&apos;POST /make/a/sandwich&apos;: &apos;SandwichController.makeIt&apos;
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>Note:</strong></p>
+<p>For controller files saved in subfolders, the subfolder is part of the controller identity:</p>
+<pre><code class="javascript">&apos;/do/homework&apos;: &apos;stuff/things/HomeworkController.do&apos;
+</code></pre><!-- __LANG=%%__ -->
+<p>This will cause the <code>do()</code> action in <code>api/controllers/stuff/things/HomeworkController.js</code> to be triggered whenever <code>/do/homework</code> is requested.</p>
+</blockquote>
+<p>A full discussion of manual routing is out of the scope of this doc--please see the <a href="/documentation/concepts/Routes">routes documentation</a> for a full overview of the available options.</p>
+<docmeta name="displayName" value="Routing to Controllers">
+</docmeta>

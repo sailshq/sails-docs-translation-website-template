@@ -1,0 +1,29 @@
+<h1 id="clickjacking">Clickjacking</h1>
+<p><a href="https://www.owasp.org/index.php/Clickjacking" target="_blank">Clickjacking</a> (aka &quot;UI redress attacks&quot;) are where an attacker manages to trick your users into triggering &quot;unintended&quot; UI events (e.g. DOM events.)</p>
+<h3 id="x-frame-options" permalink="xframeoptions">X-FRAME-OPTIONS</h3>
+<p>One simple way to help prevent clickjacking attacks is to enable the X-FRAME-OPTIONS header.</p>
+<h5 id="using-lusca-https-github-com-krakenjs-lusca-luscaxframevalue-" permalink="using-lusca">Using <a href="https://github.com/krakenjs/lusca#luscaxframevalue" target="_blank">lusca</a></h5>
+<blockquote>
+<p><code>lusca</code> is open-source under the <a href="https://github.com/krakenjs/lusca/blob/master/LICENSE.txt" target="_blank">Apache license</a></p>
+</blockquote>
+<pre><code class="bash"># In your sails app
+npm install lusca --save
+</code></pre><!-- __LANG=%%__ -->
+<p>Then in the <code>middleware</code> config object in <code>config/http.js</code>:</p>
+<pre><code class="javascript">// ...
+  // maxAge ==&gt; Number of seconds strict transport security will stay in effect.
+  xframe: require(&apos;lusca&apos;).xframe(&apos;SAMEORIGIN&apos;),
+  // ...
+  order: [
+    // ...
+    &apos;xframe&apos;
+    // ...
+  ]
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="additional-resources" permalink="additional-resources">Additional Resources</h3>
+<ul>
+<li><a href="https://www.owasp.org/index.php/Clickjacking" target="_blank">Clickjacking (OWasp)</a></li>
+</ul>
+<p><docmeta name="displayName" value="Clickjacking"></docmeta></p>
+<docmeta name="tags" value="clickjacking,ui redress attack">
+</docmeta>

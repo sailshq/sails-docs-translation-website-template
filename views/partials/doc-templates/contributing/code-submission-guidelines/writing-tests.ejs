@@ -1,0 +1,29 @@
+<h1 id="writing-tests">Writing Tests</h1>
+<h3 id="what-to-test" permalink="what-to-test">What To Test</h3>
+<p>In an ideal world, any possible action you could perform with Sails as a user, whether programatically or via the command-line tool, would have a test. However the combinatoric scale of configuration variations in Sails, along with the fact that userland code can override just about any key piece of core, means we&apos;ll never <em>quite</em> get to this point.  And that&apos;s ok.</p>
+<p>Instead, the Sails project&apos;s goal is for any <em>feature of Sails</em> you would use as a user, either programatically or via the command-line tool, to have a test.  In many cases, where these features are implemented within a dependency, the only tests for that feature exist within that dependency (e.g. <a href="https://github.com/balderdashy/waterline/tree/master/test" target="_blank">Waterline</a>, <a href="https://github.com/balderdashy/skipper/tree/master/test" target="_blank">Skipper</a>, and <a href="https://github.com/balderdashy/captains-log/tree/master/test" target="_blank">Captains Log</a>).  But even in these cases, tests in Sails inevitably end up retesting certain features that are already verified by Sails&apos; dependencies-- and there is nothing wrong with that.</p>
+<h3 id="what-_not_-to-test" permalink="what-not-to-test">What <em>Not</em> To Test</h3>
+<p>We should strive to avoid tests which verify exclusivity-- it cripples our ability to develop quickly.  In other words, tests should not fail with the introduction of additive features.</p>
+<p>For instance, if you&apos;re writing a test to check that the appropriate files have been created with <code>sails new</code>, it would make sense to check for those files, but it would <em>not</em> make sense to ensure that ONLY those files were created. (i.e. adding a new file should not break the tests)</p>
+<p>Another example is a test which verifies the correctness of blueprint configuration, e.g. <code>sails.config.blueprints.rest</code>.  The test should check that blueprints behave properly with the <code>rest</code> config enabled and disabled.  We could change the configuration, add more controller-specific options, etc., and we&apos;d only need to write new tests.</p>
+<p>If, on the other hand, our strategy for testing the behavior of the blueprints involved evaluating the behavior AND THEN making a judgement on what the config &quot;<em>should</em>&quot; look like, we&apos;d have to modify the tests when we add new options.  This may not sound like a big deal, but it can grow out of proportion quickly!</p>
+<h3 id="structural-conventions" permalink="structural-conventions">Structural Conventions</h3>
+<p>Sails&apos;s tests are broken up into three distinct types- <code>unit</code>, <code>integration</code>, and <code>benchmark</code> tests.  See the README.md file in each directory for more information about the distinction and purpose of each type of test, as well as a shortlist of ways you can get involved.</p>
+<p>The following conventions are true for all three types of tests:</p>
+<ul>
+<li>Instead of partitioning tests for various components into subdirectories, the test files are located in the top level of the directory for their test type (i.e. <code>/test/TEST_TYPE/*.test.js</code>).</li>
+<li>All test filenames have the <code>*.test.js</code> suffix.</li>
+<li>Each test file for a particular component is namespaced with a prefix describing the relevant component (e.g. <code>router.specifiedRoutes.test.js</code>, <code>router.APIScaffold.test.js</code>, etc.).</li>
+<li>Tests for core hooks are namespaced according to the hook that they test, e.g. <code>hook.policies.test.js</code>.</li>
+<li>If tests for a core hook need to span multiple files, maintain the namespacing, e.g. <code>hook.policies.load.test.js</code> and <code>hook.policies.teardown.test.js</code>.</li>
+</ul>
+<blockquote>
+<p><strong>Reasoning</strong></p>
+<p>Filenames like these make it easy to differentiate tests from core files when performing a flat search on the repository (i.e. CMD/CTRL+T in Sublime).  Likewise, this makes the process easier to automate-- you can quickly grab all the test files with a simple recursive find on the command-line, for instance.</p>
+</blockquote>
+<h4 id="-fixtures-directory" permalink="fixtures-directory"><code>fixtures</code> directory</h4>
+<p>Contains sample data/files/templates used for testing (e.g. a dummy Sails app or simple middleware functions)</p>
+<h4 id="-helpers-directory" permalink="helpers-directory"><code>helpers</code> directory</h4>
+<p>Logic to help setup or teardown Sails, read fixtures, and otherwise simplify the logic in our tests.</p>
+<docmeta name="displayName" value="Writing Tests">
+</docmeta>

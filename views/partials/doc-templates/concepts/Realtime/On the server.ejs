@@ -1,0 +1,38 @@
+<h1 id="sending-realtime-messages-from-the-server-to-one-or-more-clients">Sending realtime messages from the server to one or more clients</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Sails exposes two APIs for communicating with connected socket clients: the higher-level <a href="/documentation/reference/web-sockets/resourceful-pub-sub">resourceful pubsub API</a>, and the lower-level <a href="/documentation/reference/web-sockets/sails-sockets">sails.sockets API</a>.</p>
+<h3 id="resourceful-pubsub" permalink="resourceful-pubsub">Resourceful PubSub</h3>
+<p>The Resourceful PubSub (Published/Subscribe) API provides a high-level way to subscribe sockets to Sails model classes and instances.  It is entirely possible to create a rich realtime experience (for example, a chat app) using just this API.  Sails blueprints use Resourceful PubSub to automatically send out notifications about new model instances and changes to existing instances, but you can use them in your custom controller actions as well.</p>
+<h5 id="example" permalink="example">Example</h5>
+<p>Create a new User model instance and notify all interested clients</p>
+<pre><code class="javascript">// Create the new user
+User.create({
+  name: &apos;johnny five&apos;
+}).exec(function(err, newUser) {
+  if (err) {
+    // Handle errors here!
+    return;
+  }
+  // Tell any socket watching the User model class
+  // that a new User has been created!
+  User.publishCreate(newUser);
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="-sails-sockets-" permalink="sailssockets"><code>sails.sockets</code></h3>
+<p>The <code>sails.sockets</code> API allows for lower-level communication directly with sockets, using methods like <a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-join"><code>sails.sockets.join()</code></a> (subscribe a socket to all messages sent to a particular &quot;room&quot;), <a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-leave"><code>sails.sockets.leave()</code></a> (unsubscribe a socket from a room), and <a href="/documentation/reference/web-sockets/sails-sockets/sails-sockets-broadcast"><code>sails.sockets.broadcast()</code></a> (broadcast a message to all subscribers in one or more rooms).</p>
+<h5 id="example" permalink="example">Example</h5>
+<p>Add a socket to the room &quot;funSockets&quot;</p>
+<pre><code class="javascript">sails.sockets.join(someSocket, &quot;funSockets&quot;);
+</code></pre><!-- __LANG=%%__ -->
+<p>Broadcast a &quot;hello&quot; message to the &quot;funSockets&quot; room.  This message will be received by all client sockets that have (1) been added to the &quot;funSockets&quot; room on the server with <code>sails.sockets.join()</code> and (2) added a listener for the &quot;hello&quot; event on the client with <a href="/documentation/reference/web-sockets/socket-client/io-socket-on"><code>socket.on(&apos;hello&apos;, ...)</code></a>.</p>
+<pre><code class="javascript">sails.sockets.broadcast(&quot;funSockets&quot;, &quot;hello&quot;, &quot;Hello to all my fun sockets!&quot;);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="reference" permalink="reference">Reference</h3>
+<ul>
+<li>View the full <a href="/documentation/reference/web-sockets/sails-sockets">sails.sockets</a> API reference</li>
+<li>See the reference for the <a href="/documentation/reference/web-sockets/socket-client">sails.io.js library</a> to learn how to use sockets on the client side to communicate with your Sails app.</li>
+<li>See the <a href="/documentation/reference/web-sockets/resourceful-pub-sub">resourceful pub-sub</a> reference to learn how to use Sails blueprints to automatically send realtime messages about changes to your <a href="/documentation/concepts/models-and-orm/models">models</a>.</li>
+<li>Visit the <a href="http://socket.io" target="_blank">Socket.io</a> website to learn more about the underlying library Sails uses for realtime communication</li>
+</ul>
+<docmeta name="displayName" value="On the server">
+</docmeta>

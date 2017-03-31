@@ -1,0 +1,15 @@
+<h1 id="req-ips">req.ips</h1>
+<p>If &quot;trust proxy&quot; is enabled, this variable contains the IP addresses in this request&apos;s &quot;X-Forwarded-For&quot; header as an array of the IP address strings. Otherwise an empty array is returned.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.ips;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>If a request contains a header: &quot;X-Forwarded-For: client, proxy1, proxy2&quot;:</p>
+<pre><code class="javascript">req.ips;
+// -&gt; [&quot;client&quot;, &quot;proxy1&quot;, &quot;proxy2&quot;]`
+
+// (&quot;proxy2&quot; is the furthest &quot;down-stream&quot; IP address)
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="req.ips"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

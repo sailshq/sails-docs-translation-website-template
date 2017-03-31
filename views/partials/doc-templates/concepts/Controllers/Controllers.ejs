@@ -1,0 +1,38 @@
+<h1 id="controllers">Controllers</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Controllers (the <strong>C</strong> in <strong>MVC</strong>) are the principal objects in your Sails application that are responsible for responding to <em>requests</em> from a web browser, mobile application or any other system capable of communicating with a server.  They often act as a middleman between your <a href="/documentation/concepts/ORM/Models.html">models</a> and <a href="/documentation/concepts/Views">views</a>. For many applications, the controllers will contain the bulk of your project&#x2019;s <a href="http://en.wikipedia.org/wiki/Business_logic" target="_blank">business logic</a>.</p>
+<h3 id="actions" permalink="actions">Actions</h3>
+<p>Controllers are comprised of a set of methods called <strong>actions</strong> (or sometimes &quot;controller actions&quot;).  Actions are bound to <a href="/documentation/concepts/Routes">routes</a> in your application, so that when a client requests the route, the action is executed to perform some business logic and send a response.  For example, the <code>GET /hello</code> route in your application could be bound to an action like:</p>
+<pre><code class="javascript">function (req, res) {
+  return res.send(&apos;Hi there!&apos;);
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Any time a web browser is pointed to the <code>/hello</code> URL on your app&apos;s server, the page will display the message: &#x201C;Hi there&#x201D;.</p>
+<h3 id="where-are-controllers-defined-" permalink="where-are-controllers-defined">Where are controllers defined?</h3>
+<p>Controllers are defined in the <code>api/controllers/</code> folder. You can put any files you like in that folder, but in order for them to be loaded by Sails as controllers, a file must <em>end</em> in <code>Controller.js</code>.  By convention, Sails controllers are usually <a href="http://c2.com/cgi/wiki?PascalCase" target="_blank"><em>Pascal-cased</em></a>, so that every word in the filename (including the first word) is capitalized: for example, <code>UserController.js</code>, <code>MyController.js</code> and <code>SomeGreatBigController.js</code> are all valid, Pascal-cased names.</p>
+<blockquote>
+<p>You may organize your controllers into groups by saving them in subfolders of <code>api/controllers</code>, however note that the subfolder name <em>will become part of the Controller&#x2019;s identity</em> when used for routing (more on that in the &quot;Routing&quot; section below).</p>
+</blockquote>
+<h3 id="what-does-a-controller-file-look-like-" permalink="what-does-a-controller-file-look-like">What does a controller file look like?</h3>
+<p>A controller file defines a Javascript dictionary (aka &quot;plain object&quot;) whose keys are action names, and whose values are the corresponding action methods.  Here&#x2019;s a simple example of a full controller file:</p>
+<pre><code class="javascript">module.exports = {
+  hi: function (req, res) {
+    return res.send(&apos;Hi there!&apos;);
+  },
+  bye: function (req, res) {
+    return res.redirect(&apos;http://www.sayonara.com&apos;);
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>This controller defines two actions: <code>hi</code> and <code>bye</code>.  The <code>hi</code> action responds to a request with a string message, while the <code>bye</code> action responds by redirecting to another web site.  The <code>req</code> and <code>res</code> objects will be familiar to anyone who has used <a href="https://github.com/expressjs" target="_blank">Express.js</a> to write a web application.  This is by design, as Sails uses Express under the hood to handle routing.  Take special note, however, of the lack of a <code>next</code> argument for the actions.  Unlike Express  middleware methods, Sails controller actions should always be the last stop in the request chain--that is, they should always result in either a response or an error.  While it is technically possible to use <code>next</code> in an action method, you are strongly encouraged to use <a href="/documentation/concepts/Policies">policies</a> instead wherever possible.</p>
+<h3 id="-thin-controllers" permalink="thin-controllers">&quot;Thin&quot; Controllers</h3>
+<p>Most MVC frameworks recommend writing &quot;thin&quot; controllers, and while Sails is no exception (it is a good idea to keep your Sails controllers as simple as possible) it is also helpful to understand &quot;why?&quot;</p>
+<p>Controller code is inherently dependent on some sort of trigger or event.  In a backend framework like Sails, this event is always an incoming request.  So if you write a bunch of code in one of your controller actions, it is not uncommon for that code&apos;s scope to be dependent on the &quot;request habitat&quot; (the <code>req</code> and <code>res</code> objects).  Which is fine...until you want to use that code from a slightly different action, or from the command line.</p>
+<p>So the goal of the &quot;thin controller&quot; philosophy is to encourage decoupling of reusable code from any related scope entanglements.  In Sails, you can achieve this in a number of different ways, but the most common strategies for extrapolating code from controllers are:</p>
+<ul>
+<li>Write a helper function or machine and expose it as a <a href="/documentation/concepts/services">service</a>.  This is a good go-to strategy for encapsulating code that performs any particular application-specific task.</li>
+<li>Write a custom model method to encapsulate some code that performs a particular task relating to one particular model</li>
+<li>If you find some code which is useful across multiple different applications (and you have time to do this), you should extract it into a node module.  Then you can share it across your organization, use it in future projects, or better yet, <a href="https://docs.npmjs.com/getting-started/publishing-npm-packages" target="_blank">publish it on npm</a> under a permissive open-source license for other developers to use and help maintain.</li>
+</ul>
+<docmeta name="displayName" value="Controllers">
+</docmeta>

@@ -1,0 +1,74 @@
+<h1 id="working-with-models">Working with Models</h1>
+<p>This section of the documentation focuses on the model methods provided by Waterline out of the box.  In addition to these, additional methods can come from hooks (i.e. the <a href="/documentation/reference/web-sockets/resourceful-pub-sub">resourceful pubsub methods</a>), be exposed by the underlying adapters to provide custom functionality, or be hand-written in your app to wrap reusable custom code.</p>
+<blockquote>
+<p>For an in-depth introduction to models in Sails/Waterline, see <a href="/documentation/concepts/ORM/Models.html">http://sailsjs.com/documentation/concepts/ORM/Models.html</a>.</p>
+</blockquote>
+<p><img src="http://i.imgur.com/8uRlFi8.png" alt="screenshot of a Waterline/Sails model in Sublime Text 2"></p>
+<h3 id="built-in-model-methods" permalink="builtin-model-methods">Built-In Model Methods</h3>
+<p>In general, model methods are <em>asynchronous</em>, meaning you cannot just call them and use the return value.  Instead, you must use callbacks, or promises.
+Most built-in model methods accept a callback as an optional final argument. If the callback is not supplied, a chainable Query object is returned, which has methods like <code>.where()</code> and <code>.exec()</code>. See <a href="/documentation/reference/waterline-orm/queries">Working with Queries</a> for more on that.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> <code>.create()</code></td>
+<td>Create record consisting of object passed in</td>
+</tr>
+<tr>
+<td> <code>.find()</code></td>
+<td>Lookup an array of records which match the specified criteria</td>
+</tr>
+<tr>
+<td> <code>.findOne()</code></td>
+<td>Lookup a single record which matches the specified criteria, or send back <code>null</code> if it doesn&apos;t.</td>
+</tr>
+<tr>
+<td> <code>.update()</code></td>
+<td>Update records matching the specified criteria, setting the specified object of <code>attrName:value</code> pairs.</td>
+</tr>
+<tr>
+<td> <code>.destroy()</code></td>
+<td>Destroy records matching the specified criteria.</td>
+</tr>
+<tr>
+<td> <code>.findOrCreate()</code></td>
+<td>Lookup a single record which matches the specified criteria, or create it if it doesn&apos;t.</td>
+</tr>
+<tr>
+<td> <code>.count()</code></td>
+<td>Get the total count of records which match the specified criteria.</td>
+</tr>
+<tr>
+<td> <code>.native()</code>/<code>query()</code></td>
+<td>Make a direct call to the underlying database driver.</td>
+</tr>
+<tr>
+<td> <code>.stream()</code></td>
+<td>Return a readable (object-mode) stream of records which match the specified criteria</td>
+</tr>
+</tbody>
+</table>
+<!-- ![screenshot of the api/models/ folder in a text editor](http://i.imgur.com/xdTZpKT.png) -->
+<h3 id="-sails-models-" permalink="sailsmodels"><code>sails.models</code></h3>
+<p>If you need to disable global variables in Sails, you can still use <code>sails.models.&lt;model_identity&gt;</code> to access your models.</p>
+<p>A model&apos;s <code>identity</code> is different than its <code>globalId</code>.  The <code>globalId</code> is determined automatically from the name of the model, whereas the <code>identity</code> is the all-lowercased version.  For instance, you the model defined in <code>api/models/Kitten.js</code> has a globalId of <code>Kitten</code>, but its identity is <code>kitten</code>. For example:</p>
+<pre><code class="javascript">// Kitten === sails.models.kitten
+sails.models.kitten.find().exec(function (err, allTheKittens) {
+  // We also could have just used `Kitten.find().exec(...)`
+  // if we&apos;d left the global variable exposed.
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="using-promises" permalink="using-promises">Using Promises</h3>
+<pre><code class="javascript">sails.models.kitten.find().then(function(alltheKittens) {
+  //.... 
+}).catch(function(err){
+  //....
+});
+</code></pre><!-- __LANG=%%__ -->
+<docmeta name="displayName" value="Models">
+</docmeta>

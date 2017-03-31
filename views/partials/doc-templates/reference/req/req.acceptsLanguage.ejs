@@ -1,0 +1,25 @@
+<h1 id="req-acceptslanguage-">req.acceptsLanguage()</h1>
+<p>Returns whether this request (<code>req</code>) considers a certain <code>language</code> &quot;acceptable&quot;.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.acceptsLanguage(language);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="details" permalink="details">Details</h3>
+<p><code>req.acceptsLanguage()</code> returns true if a request has specified the given <code>language</code> as &quot;acceptable&quot; its <code>Accept-Language</code> header (see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4" target="_blank">RFC-2616</a>.)</p>
+<p>This method is used by Sails internally for its implementation of internationalization and localization.  The <a href="/documentation/concepts/Internationalization">i18n</a> hook automatically serves different content to different locales, based on the request.</p>
+<h3 id="example" permalink="example">Example</h3>
+<p>If a request is sent with a <code>&quot;Accept-Language: da, en-gb;&quot;</code> header:</p>
+<pre><code class="javascript">req.acceptsLanguage(&apos;en-gb&apos;);
+// -&gt; true
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>See the <a href="https://github.com/expressjs/accepts" target="_blank"><code>accepts</code> module</a> for the finer details of the header parsing algorithm used in Sails/Express/Koa/Connect.</li>
+<li>Browsers send the &quot;Accept-Language&quot; header automatically based on the user&apos;s language settings.</li>
+<li>You can expect the &quot;Accept-Language&quot; header to exist in most requests which originate from web browsers.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.acceptsLanguage()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

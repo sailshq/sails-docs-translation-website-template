@@ -1,0 +1,25 @@
+<h1 id="blueprint-actions">Blueprint Actions</h1>
+<p>Blueprint actions (not to be confused with blueprint action <em>routes</em>) are generic actions designed to work with any of your controllers that have a model of the same name (e.g. <code>ParrotController</code> would need a <code>Parrot</code> model).  Think of them as the default behavior for your application.  For instance, if you have a <code>User.js</code> model and an empty <code>UserController.js</code> controller, <code>find</code>, <code>create</code>, <code>update</code>, <code>destroy</code>, <code>populate</code>, <code>add</code> and <code>remove</code> actions exist implicitly, without you having to write them.</p>
+<p>By default, the blueprint RESTful routes and shortcut routes are bound to their corresponding blueprint actions.  However, any blueprint action can be overridden for a particular controller by creating a custom action in that controller file (e.g. <code>ParrotController.find</code>).  Alternatively, you can override the blueprint action <em>everywhere in your app</em> by creating your own custom blueprint action. (e.g. <code>api/blueprints/create.js</code>).</p>
+<p>The current version of Sails ships with the following blueprint actions:</p>
+<ul>
+<li><a href="/documentation/reference/blueprint-api/Find">find</a></li>
+<li><a href="/documentation/reference/blueprint-api/FindOne">findOne</a></li>
+<li><a href="/documentation/reference/blueprint-api/create">create</a></li>
+<li><a href="/documentation/reference/blueprint-api/Update">update</a></li>
+<li><a href="/documentation/reference/blueprint-api/Destroy">destroy</a></li>
+<li><a href="/documentation/reference/blueprint-api/Populate">populate</a></li>
+<li><a href="/documentation/reference/blueprint-api/Add">add</a></li>
+<li><a href="/documentation/reference/blueprint-api/Remove">remove</a></li>
+</ul>
+<h5 id="overriding-blueprint-actions" permalink="overriding-blueprint-actions">Overriding blueprint actions</h5>
+<p>You may also override any of the actions for a model by naming your function method the same name as the blueprint action.</p>
+<pre><code class="javascript">module.exports = {
+  findOne: function (req, res) {
+    return res.json(403, &apos;Single model lookup is denied.&apos;);
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>For more information about blueprints, including how to disable and override them, see the <a href="/documentation/reference/blueprint-api">Blueprint API reference</a></p>
+<docmeta name="displayName" value="Blueprint Actions">
+</docmeta>

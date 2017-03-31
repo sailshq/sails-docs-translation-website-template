@@ -1,0 +1,9 @@
+<h1 id="records">Records</h1>
+<p>A record is a uniquely identifiable object that corresponds 1-to-1 with a database entry; e.g. a row in Oracle/MSSQL/PostgreSQL/MySQL, a document in MongoDB, or a hash in Redis.</p>
+<pre><code class="javascript">Order.findOne().exec(function (err, order){
+  var record = order;
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>For the most part, records are just plain old JavaScript objects (aka POJOs).  However they do have a few protected (non-enumerable) methods for formatting their wrapped data, as well as a special method (<a href="/documentation/reference/waterline/records/save.html"><code>.save()</code></a>) for persisting <a href="http://en.wikipedia.org/wiki/Active_record_pattern" target="_blank">programmatic changes</a> to the database.</p>
+<docmeta name="displayName" value="Records">
+</docmeta>

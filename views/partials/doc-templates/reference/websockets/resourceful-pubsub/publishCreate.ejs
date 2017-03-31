@@ -1,0 +1,114 @@
+<h1 id="-publishcreate-">.publishCreate()</h1>
+<p>Broadcast a conventional message indicating that a new record has been created in this model.</p>
+<pre><code class="javascript">Something.publishCreate( data )
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>Something.publishCreate(data, req);</code></li>
+</ul>
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left"><code>data</code></td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">A dictionary of the new record&apos;s attributes and their values to announce.  This may consist of any JSON-serializable data you like, but must <em>at-minimum</em> contain the primary key of the record (usually <code>id</code>).</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left"><em><code>req</code></em></td>
+<td><bubble type="req?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">If provided, then the requesting socket <em>will be excluded</em> from the broadcast.</td>
+</tr>
+</tbody>
+</table>
+<p><code>publishCreate()</code> broadcasts to all sockets &quot;watching&quot; this model-- that is, those client sockets which have joined the model&apos;s &quot;class room&quot; via <a href="/documentation/reference/web-sockets/resourceful-pub-sub/watch"><code>.watch()</code></a>)-- and uses the model&apos;s <a href="/documentation/concepts/models-and-orm/model-settings#?identity">identity</a> as the event name.  <code>publishCreate()</code> also subscribes these &quot;watching&quot; client sockets to the new record using <code>.subscribe()</code> in order to be notified of future broadcasts from <code>publishUpdate()</code>, <code>publishDestroy()</code>, etc.</p>
+<p>The broadcasted event data received on the client is a dictionary with the following properties:</p>
+<ul>
+<li><strong>verb</strong>  - a <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble> constant: <code>&apos;created&apos;</code></li>
+<li><strong>id</strong> - the new record&apos;s <code>id</code> which is a <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble> or <bubble type="number" class="colors"><span is="bubble-heart"></span></bubble></li>
+<li><strong>data</strong> - a <bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble> containing the values provided as <code>data</code> when <code>publishCreate()</code> was called from your Sails backend.</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<p>In a controller action which processes signups:</p>
+<pre><code class="javascript">var Passwords = require(&apos;machinepack-passwords&apos;);
+
+// Encrypt a string using the BCrypt algorithm.
+Passwords.encryptPassword({
+  password: req.param(&apos;password&apos;),
+}).exec({
+  error: function (err){ return res.serverError(err); },
+  success: function (encryptedPassword){
+    User.create({
+      username: req.param(&apos;username&apos;),
+      passsword: encryptedPassword,
+      securityQuestion: {
+        whichQuestion: req.param(&apos;securityQuestionId&apos;),
+        answer: req.param(&apos;securityAnswer&apos;)
+      }
+    }).exec(function (err, newUser){
+      if (err) return res.negotiate(err);
+
+      // Inform logged-in administrators (if there are any) that a new user has signed up.
+      // (note that we deliberately exclude the security question and encrypted password,
+      //  but send everything else through.  We know this will only be received by client
+      //  sockets which were allowed to `.watch()`.)
+      User.publishCreate(_.omit(newUser, &apos;password&apos;), req );
+
+      // Log in.
+      req.session.me = newUser.id;
+
+      // Signup completed successfully!
+      return res.ok();
+    });//&lt;/User.create()&gt;
+  }
+});//&lt;/Passwords.encryptPassword()&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p>The endpoint will respond with a simple 200 (because of <code>res.ok()</code>), but all &quot;watching&quot; client sockets (in this scenario, open browser tabs of admin users) will receive a <code>user</code> event:</p>
+<pre><code class="javascript">// e.g. in the browser...
+io.socket.on(&apos;user&apos;, function (event){
+  switch (event.verb) {
+    &apos;created&apos;:
+      // This is where code that handles this socket event should go.
+      // (e.g. to update the user interface)
+      console.log(event);
+      // =&gt; see below for the contents of `event`
+      break;
+    default:
+      console.warn(&apos;Unrecognized socket event (`%s`) from server:&apos;,event.verb, event);
+  }
+});
+</code></pre><!-- __LANG=%%__ -->
+<p>In this case, the logged message would look something like this:</p>
+<pre><code class="javascript">{
+  verb: &apos;created&apos;,
+  id: 4,
+  data: {
+    username: &apos;lizzy&apos;,
+    createdAt: &apos;1808-01-19T13:00:00.000Z&apos;,
+    updatedAt: &apos;1808-01-19T13:00:00.000Z&apos;
+  }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method works much in the same way as <a href="/documentation/reference/web-sockets/resourceful-pub-sub/message"><code>.message()</code></a>-- it just represents a more specific use case and has a few special features as described above.  For more conceptual background, see the overview on <a href="/documentation/reference/web-sockets/resourceful-pub-sub">resourceful pubsub</a>.</li>
+<li>It is important to understand that this method <strong>does not actually do anything to your database</strong>-- it is purely a conventional way of <em>announcing</em> that changes have occurred.  Underneath the covers, the resourceful pubsub methods are just using combinations of <code>sails.sockets</code> methods.</li>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code> to refer to the requesting socket.  If used, the provided <code>req</code> must be from a socket request, not just any old HTTP request.</li>
+<li>See also <a href="/documentation/reference/web-sockets/resourceful-pub-sub/watch"><code>.watch()</code></a> for some important security considerations.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".publishCreate()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

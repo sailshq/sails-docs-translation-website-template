@@ -1,0 +1,55 @@
+<h1 id="sails-config-connections">sails.config.connections</h1>
+<h3 id="what-is-this-" permalink="what-is-this">What is this?</h3>
+<p>Adapters are the middle man between your Sails app and some kind of storage (typically a database)</p>
+<p>Global connections are configured in the <code>connections.js</code> file located in your project&apos;s <code>config</code> directory.  You can also specify connections in your <code>config/local.js</code> or <a href="/documentation/concepts/Configuration?q=environment-specific-files-configenv">environment-specific</a> config files.</p>
+<p>Sails adapters have been written for a variety of popular databases such as MySQL, Postgres and Mongo.  You can find a list of supported adapters <a href="https://github.com/balderdashy/sails-wiki/blob/0.9/Database-Support.md" target="_blank">here</a>.</p>
+<h3 id="example" permalink="example">Example</h3>
+<p>To use the <code>sails-memory</code> adapter (useful for DEVELOPMENT ONLY), first install the module with <code>npm install sails-memory</code>, then define it in <code>connections.js</code>:</p>
+<p>Here is an example adapter configuration file</p>
+<p><code>myApp/config/connections.js</code></p>
+<pre><code class="javascript">module.exports.connections = {
+  // sails-disk is installed by default.
+  localDiskDb: {
+    adapter: &apos;sails-disk&apos;
+  },
+  memory: {
+    adapter: &apos;sails-memory&apos;
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>If you wanted to set <code>memory</code> as the default adapter for your models, you would do this.
+<code>myApp/config/models.js</code></p>
+<pre><code class="javascript">module.exports.models = {
+
+  connection: &apos;memory&apos;
+};
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>Keep in mind that options you define directly in your model definitions will override these settings.
+Prior to v0.10, adapters were defined in <code>myApp/config/Adapters.js</code>.  See v0.9 docs for more info.</p>
+</blockquote>
+<h3 id="multiple-connections-for-an-adapter" permalink="multiple-connections-for-an-adapter">Multiple connections for an adapter</h3>
+<p>You can set up more than one connection using the same adapter.  For example, if you
+had two mysql databases, you could configure them as:</p>
+<pre><code class="javascript">module.exports.connections = {
+  localMysql: {
+    adapter: &apos;sails-mysql&apos;,
+    user: &apos;root&apos;,
+    host: &apos;localhost&apos;,
+    database: &apos;someDbase&apos;
+  },
+  remoteMysql: {
+    adapter: &apos;sails-mysql&apos;,
+    user: &apos;remoteUser&apos;,
+    password: &apos;remotePassword&apos;,
+    host: &apos;http://remote-mysql-host.com&apos;,
+    database: &apos;remoteDbase&apos;
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p><strong>Note</strong> If <em>any</em> connection to an adapter is used by a model, then <em>all</em> connections to that adapter will be loaded on <code>sails.lift</code>, whether or not models are actually using them.  In the example above, if a model was configured to use the <code>localMysql</code> connection, then both <code>localMysql</code> and <code>remoteMysql</code> would attempt to connect at run time.  It is therefore good practice to split your connection configurations up by environment and save them to the appropriate <a href="/documentation/concepts/Configuration?q=environment-specific-files-configenv">environment-specific config files</a>, or else comment out any connections that you don&apos;t want active.</p>
+</blockquote>
+<p><docmeta name="displayName" value="sails.config.connections"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

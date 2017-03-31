@@ -1,0 +1,91 @@
+<h1 id="one-to-many">One-to-Many</h1>
+<p><strong>AKA &quot;Has Many&quot;</strong></p>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>A one-to-many association states that a model can be associated with many other models. To build this
+association a virtual attribute is added to a model using the <code>collection</code> property. In a one-to-many
+association one side must have a <code>collection</code> attribute and the other side must contain a <code>model</code>
+attribute. This allows the many side to know which records it needs to get when a <code>populate</code> is used.</p>
+<p>Because you may want a model to have multiple one-to-many associations on another model a <code>via</code> key
+is needed on the <code>collection</code> attribute. This states which <code>model</code> attribute on the one side of the
+association is used to populate the records.</p>
+<pre><code class="javascript">// myApp/api/models/User.js
+// A user may have many pets
+module.exports = {
+  attributes: {
+    firstName: {
+      type: &apos;string&apos;
+    },
+    lastName: {
+      type: &apos;string&apos;
+    },
+
+    // Add a reference to Pets
+    pets: {
+      collection: &apos;pet&apos;,
+      via: &apos;owner&apos;
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<pre><code class="javascript">// myApp/api/models/Pet.js
+// A pet may only belong to a single user
+module.exports = {
+  attributes: {
+    breed: {
+      type: &apos;string&apos;
+    },
+    type: {
+      type: &apos;string&apos;
+    },
+    name: {
+      type: &apos;string&apos;
+    },
+
+    // Add a reference to User
+    owner: {
+      model: &apos;user&apos;
+    }
+  }
+};
+</code></pre><!-- __LANG=%%__ -->
+<p>Now that the pets and users know about each other, they can be associated. To do this we can create
+or update a pet with the user&apos;s primary key for the <code>owner</code> value.</p>
+<pre><code class="javascript">Pet.create({
+  breed: &apos;labrador&apos;,
+  type: &apos;dog&apos;,
+  name: &apos;fido&apos;,
+
+  // Set the User&apos;s Primary Key to associate the Pet with the User.
+  owner: 123
+})
+.exec(function(err, pet) {});
+</code></pre><!-- __LANG=%%__ -->
+<p>Now that the <code>Pet</code> is associated with the <code>User</code>, all the pets belonging to a specific user can
+be populated by using the <code>populate</code> method.</p>
+<pre><code class="javascript">User.find()
+.populate(&apos;pets&apos;)
+.exec(function(err, users) {
+  if(err) // handle error
+
+  // The users object would look something like the following
+  // [{
+  //   id: 123,
+  //   firstName: &apos;Foo&apos;,
+  //   lastName: &apos;Bar&apos;,
+  //   pets: [{
+  //     id: 1,
+  //     breed: &apos;labrador&apos;,
+  //     type: &apos;dog&apos;,
+  //     name: &apos;fido&apos;,
+  //     user: 123
+  //   }]
+  // }]
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<p>For a more detailed description of this type of association, see the <a href="https://github.com/balderdashy/waterline-docs/blob/master/models/associations/associations.md" target="_blank">Waterline Docs</a></p>
+</blockquote>
+<docmeta name="displayName" value="One-to-Many">
+
+</docmeta>

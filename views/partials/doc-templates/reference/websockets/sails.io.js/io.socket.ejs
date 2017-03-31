@@ -1,0 +1,19 @@
+<h1 id="-io-socket-"><code>io.socket</code></h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>When used in the browser, <code>sails.io.js</code> will create a global instance of the <a href="/documentation/reference/web-sockets/socket-client/sails-socket">SailsSocket</a> class as soon as it loads, and attempt to connect it to the server after waiting one event loop cycle (to allow for configuration options to be changed).  As with any <a href="/documentation/reference/web-sockets/socket-client/sails-socket">SailsSocket</a>, you can start using its properties and methods even before it connects to the server--any requests or event bindings will be queued up and replayed once the connection is established.</p>
+<h3 id="configuration-options" permalink="configuration-options">Configuration Options</h3>
+<p>Like any <a href="/documentation/reference/web-sockets/socket-client/sails-socket">SailsSocket</a> instance, <code>io.socket</code> is affected by the global <a href="/documentation/reference/web-sockets/socket-client/io-sails"><code>io.sails</code></a> settings.  The <code>sails.io.js</code> library waits for one event loop cycle before attempting to connect <code>io.socket</code> to the server, giving you a chance to change any settings first.</p>
+<h5 id="example" permalink="example">Example</h5>
+<p>Changing the server that <code>io.socket</code> connects to</p>
+<pre><code class="html">&lt;script type=&quot;text/javascript&quot; src=&quot;/js/dependencies/sails.io.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+io.sails.url = &quot;http://somesailsapp.com&quot;;
+&lt;/script&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="properties" permalink="properties">Properties</h3>
+<p>See the <a href="/documentation/reference/web-sockets/socket-client/sails-socket/properties">SailsSocket properties reference</a> for a full list of properties available on <code>io.socket</code>.</p>
+<h3 id="methods" permalink="methods">Methods</h3>
+<p>For basic server communication and event listening methods, see the other <code>io.socket.*</code> pages in this section.  For advanced methods involving server connection, see the <a href="/documentation/reference/web-sockets/socket-client/sails-socket/methods">SailsSocket advanced methods reference</a>.</p>
+<p><docmeta name="displayName" value="io.socket"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

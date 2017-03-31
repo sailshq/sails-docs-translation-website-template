@@ -1,0 +1,114 @@
+<h1 id="using-sails-programmatically">Using Sails Programmatically</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>The majority of the time, you will interact with Sails through its <a href="/documentation/reference/command-line-interface">command-line interface</a>, starting servers with <a href="/documentation/reference/command-line-interface/sails-lift"><code>sails lift</code></a>.  However, Sails apps can also be started and manipulated from within other Node apps, using the <a href="/documentation/reference/application">programmatic interface</a>.  One of the main uses for this interface is to run Sails apps inside of automated test suites.</p>
+<h3 id="creating-a-sails-app-programmatically" permalink="creating-a-sails-app-programmatically">Creating a Sails app programmatically</h3>
+<p>To create a new Sails app from within a Node.js script, use the Sails <em>constructor</em>.  You can use the same constructor to create as many distinct Sails apps as you like:</p>
+<pre><code class="javascript">var Sails = require(&apos;sails&apos;).constructor;
+var mySailsApp = new Sails();
+var myOtherSailsApp = new Sails();
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="configuring-starting-and-stopping-sails-apps-programmatically" permalink="configuring,-starting-and-stopping-sails-apps-programmatically">Configuring, starting and stopping Sails apps programmatically</h3>
+<p>Once you have a reference to a new Sails app, you can use <a href="/documentation/reference/application/sails-load"><code>.load()</code></a> or <a href="/documentation/reference/application/sails-lift"><code>.lift()</code></a> to start it.  Both methods take two arguments: a dictionary of configuration options, and a callback function that will be run after the Sails app starts.</p>
+<blockquote>
+<p>When Sails is started programmatically, it will still use the <code>api</code>, <code>config</code> and other folders underneath the current working directory to load controllers, models, and configuration options.  One notable exception is that <code>.sailsrc</code> files will <em>not</em> be loaded when starting apps this way.</p>
+<p>Any configuration options sent as arguments to <code>.load()</code> or <code>.lift()</code> will take precedence over options loaded from anywhere else.</p>
+</blockquote>
+<p>The difference between <code>.load()</code> and <code>.lift()</code> is that <code>.lift()</code> takes the additional steps of (1) running the app&apos;s <a href="/documentation/reference/configuration/sails-config-bootstrap">bootstrap</a>, if any, and (2) starting an HTTP server on the port configured via <code>sails.config.port</code> (1337 by default).  This allows you to make HTTP requests to the lifted app.  To make requests to an app started with <code>.load()</code>, you can use the <a href="/documentation/reference/application/sails-request"><code>.request()</code></a> method of the loaded app.</p>
+<h4 id="-lift-" permalink="lift()">.lift()</h4>
+<p>Starting an app with .lift() on port 1338 and sending a POST request via HTTP:</p>
+<pre><code class="javascript">var request = require(&apos;request&apos;);
+var Sails = require(&apos;sails&apos;).constructor;
+
+var mySailsApp = new Sails();
+mySailsApp.lift({
+  port: 1338
+  // Optionally pass in any other programmatic config overrides you like here.
+}, function(err) {
+  if (err) {
+    console.error(&apos;Failed to lift app.  Details:&apos;, err);
+    return;
+  }
+
+  // --&#x2022;
+  // Make a request using the &quot;request&quot; library and display the response.
+  // Note that you still must have an `api/controllers/FooController.js` file
+  // under the current working directory, or a `/foo` or `POST /foo` route
+  // set up in `config/routes.js`.
+  request.post(&apos;/foo&apos;, function (err, response) {
+    if (err) {
+      console.log(&apos;Could not send HTTP request.  Details:&apos;, err);
+    }
+    else {
+      console.log(&apos;Got response:&apos;, response);
+    }
+
+    // &gt;--
+    // In any case, whether the request worked or not, now we need to call `.lower()`.
+    mySailsApp.lower(function (err) {
+      if (err) {
+        console.log(&apos;Could not lower Sails app.  Details:&apos;,err);
+        return;
+      }
+
+      // --&#x2022;
+      console.log(&apos;Successfully lowered Sails app.&apos;);
+
+    });//&lt;/lower sails app&gt;
+  });//&lt;/request.post() :: send http request&gt;
+});//&lt;/lift sails app&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-load-" permalink="load()">.load()</h4>
+<p>Here&apos;s an alternative to the previous example:  Starting a Sails app with <code>.load()</code> and sending what is <em>semantically</em> the same POST request-- but this time, under the covers we&apos;ll use a virtual request instead of HTTP:</p>
+<pre><code class="javascript">mySailsApp.load({
+  // Optionally pass in any programmatic config overrides you like here.
+}, function(err) {
+  if (err) {
+    console.error(&apos;Failed to load app.  Details:&apos;, err);
+    return;
+  }
+
+  // --&#x2022;
+  // Make a request using the &quot;request&quot; method and display the response.
+  // Note that you still must have an `api/controllers/FooController.js` file
+  // under the current working directory, or a `/foo` or `POST /foo` route
+  // set up in `config/routes.js`.
+  mySailsApp.request({url:&apos;/foo&apos;, method: &apos;post&apos;}, function (err, response) {
+    if (err) {
+      console.log(&apos;Could not send virtual request.  Details:&apos;, err);
+    }
+    else {
+      console.log(&apos;Got response:&apos;, response);
+    }
+
+    // &gt;--
+    // In any case, whether the request worked or not, now we need to call `.lower()`.
+    mySailsApp.lower(function (err) {
+      if (err) {
+        console.log(&apos;Could not lower Sails app.  Details:&apos;,err);
+        return;
+      }
+
+      // --&#x2022;
+      console.log(&apos;Successfully lowered Sails app.&apos;);
+
+    });//&lt;/lower sails app&gt;
+  });//&lt;/send virtual request to sails app&gt;
+});//&lt;/load sails app (but not lift!)&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="-lower-" permalink="lower()">.lower()</h4>
+<p>To stop an app programmatically, use <code>.lower()</code>:</p>
+<pre><code class="javascript">mySailsApp.lower(function(err) {
+  if (err) {
+     console.log(&apos;An error occured when attempting to stop app:&apos;, err);
+     return;
+  }
+
+  // --&#x2022;
+  console.log(&apos;Lowered app successfully.&apos;);
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="reference" permalink="reference">Reference</h3>
+<p>The full reference for Sails&apos; programmatic interface is available in <a href="/documentation/reference/application"><strong>Reference &gt; Application</strong></a>.</p>
+<docmeta name="displayName" value="Programmatic Usage">
+</docmeta>

@@ -1,0 +1,23 @@
+<h1 id="tasks-config-jst-js">tasks/config/jst.js</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This file configures a Grunt task called &quot;jst&quot;.</p>
+<p>It precompiles HTML templates using Underscore/Lodash notation into functions, creating a <code>.jst</code> file.  This can be brought into your HTML via a <code>&lt;script&gt;</code> tag in order to expose your templates as <code>window.JST</code> for use in your client-side JavaScript.</p>
+<p>In other words, this takes HTML files in <code>assets/templates/</code> and turns them into tiny little javascript functions that return HTML strings when you pass a data dictionary into them.  This approach is called &quot;precompiling&quot;, and it can considerably speed up template rendering on the client, and even reduce bandwidth usage and related expenses.)</p>
+<blockquote>
+<p>Note that, by default, Underscore/Lodash/JST notation is <em>opposite</em> from EJS (<code>&lt;%=</code> is <code>&lt;%-</code>, and vice versa).
+If this bothers you, it can be easily configured in this file. (See inline comments for details.)</p>
+</blockquote>
+<h3 id="but-i-m-not-using-lodash-underscore-jst-templates-" permalink="but-im-not-using-lodash/underscore/jst-templates">But I&apos;m not using Lodash/Underscore/JST templates...</h3>
+<p>No problem!</p>
+<p>If you aren&apos;t using any kind of precompiled client-side templates, then just ignore this file.</p>
+<p>If you want to use a <em>different</em> pre-processor like <a href="http://handlebarsjs.com/" target="_blank">Handlebars</a> or <a href="http://www.dustjs.com/" target="_blank">Dust</a>, and you want Sails to process your client-side templates automatically as you work, then you&apos;re in luck.  In most cases, this is as easy as installing the appropriate Grunt plugin as a dependency of your Sails app, and then configuring it to output the precompiled templates (condensed into a single JavaScript file) to the same path as in this default task.</p>
+<p>Here are a couple of popular examples:</p>
+<ul>
+<li><a href="https://www.npmjs.com/package/grunt-contrib-handlebars" target="_blank">grunt-contrib-handlebars</a></li>
+<li><a href="https://www.npmjs.com/package/grunt-dust" target="_blank">grunt-dust</a></li>
+</ul>
+<h3 id="usage" permalink="usage">Usage</h3>
+<p>For additional usage documentation, see <a href="https://www.npmjs.com/package/grunt-contrib-jst" target="_blank"><code>grunt-contrib-jst</code></a>.</p>
+<docmeta name="displayName" value="jst.js">
+
+</docmeta>

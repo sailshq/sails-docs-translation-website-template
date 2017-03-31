@@ -1,0 +1,77 @@
+<h1 id="-findone-">.findOne()</h1>
+<p>Attempt to find a particular record in your database that matches the given criteria.</p>
+<pre><code class="javascript">Something.findOne(criteria).exec(function (err, record) {
+
+});
+</code></pre><!-- __LANG=%%__ -->
+<h4 id="usage" permalink="usage">Usage</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">criteria</td>
+<td><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>The first record which matches this <a href="https://github.com/balderdashy/waterline-docs/blob/master/queries/query-language.md" target="_blank">Waterline criteria</a> will be returned.</td>
+</tr>
+</tbody>
+</table>
+<h5 id="callback" permalink="callback">Callback</h5>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">err</td>
+<td><bubble type="Error?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>The error that occurred, or <code>null</code> if there were no errors.</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left">record</td>
+<td><bubble type="dictionary?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td>The record that was found, or <code>undefined</code> if no such record could be located.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>To locate the user whose username is &quot;finn&quot; in your database:</p>
+<pre><code class="javascript">User.findOne({
+  username:&apos;finn&apos;
+}).exec(function (err, finn){
+  if (err) {
+    return res.serverError(err);
+  }
+  if (!finn) {
+    return res.notFound(&apos;Could not find Finn, sorry.&apos;);
+  }
+
+  sails.log(&apos;Found &quot;%s&quot;&apos;, finn.fullName);
+  return res.json(finn);
+});
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Being unable to find a record with the given criteria does <strong>not</strong> constitute an error for <code>findOne()</code>.  If no matching record is found, the value of the 2nd argument to the callback (e.g. <code>finn</code>) will be <code>undefined</code>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="importance" value="10"></docmeta></p>
+<p><docmeta name="displayName" value=".findOne()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

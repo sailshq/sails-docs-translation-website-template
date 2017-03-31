@@ -1,0 +1,32 @@
+<h1 id="res-cookie-">res.cookie()</h1>
+<p>Sets a cookie with name (<code>name</code>) and value (<code>value</code>) to be sent along with the response.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">res.cookie(name, value [,options]);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="details" permalink="details">Details</h3>
+<p>The &quot;path&quot; option defaults to &quot;/&quot;.</p>
+<p>The &quot;maxAge&quot; option is a convenience option for setting &quot;expires&quot; relative to the current time in milliseconds. The following is equivalent to the previous example.</p>
+<pre><code class="javascript">res.cookie(&apos;rememberme&apos;, &apos;1&apos;, { maxAge: 900000, httpOnly: true })
+</code></pre><!-- __LANG=%%__ -->
+<p>An object may be passed which is then serialized as JSON, which is automatically parsed by the bodyParser() middleware.</p>
+<pre><code class="javascript">res.cookie(&apos;cart&apos;, { items: [1,2,3] });
+res.cookie(&apos;cart&apos;, { items: [1,2,3] }, { maxAge: 900000 });
+</code></pre><!-- __LANG=%%__ -->
+<p>Signed cookies are also supported through this method. Simply pass the signed option. When given res.cookie() will use the secret passed to express.cookieParser(secret) to sign the value.</p>
+<pre><code class="javascript">res.cookie(&apos;name&apos;, &apos;tobi&apos;, { signed: true });
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">res.cookie(&apos;name&apos;, &apos;tobi&apos;, {
+  domain: &apos;.example.com&apos;,
+  path: &apos;/admin&apos;,
+  secure: true
+});
+
+res.cookie(&apos;rememberme&apos;, &apos;1&apos;, {
+  expires: new Date(Date.now() + 900000),
+  httpOnly: true
+});
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="res.cookie()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

@@ -1,0 +1,16 @@
+<h1 id="tasks-register-buildprod-js">tasks/register/buildProd.js</h1>
+<docmeta name="displayName" value="buildProd.js">
+
+<pre><code class="nohighlight">module.exports = function (grunt) {
+  grunt.registerTask(&apos;buildProd&apos;, [
+    &apos;compileAssets&apos;,
+    &apos;concat&apos;,
+    &apos;uglify&apos;,
+    &apos;cssmin&apos;,
+    &apos;linkAssetsBuildProd&apos;,
+    &apos;clean:build&apos;,
+    &apos;copy:build&apos;
+  ]);
+};
+</code></pre><!-- __LANG=%%__ -->
+</docmeta>

@@ -1,0 +1,65 @@
+<h1 id="sails-console">sails console</h1>
+<p>Quietly lift your sails app (i.e. with logging silenced), and enter the <a href="http://nodejs.org/api/repl.html" target="_blank">node REPL</a>.  This means you can access and use all of your models, services, configuration, and much more.  Useful for trying out Waterline queries, quickly managing your data, and checking out your project&apos;s runtime configuration.</p>
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="bash">$ sails console
+
+info: Starting app in interactive mode...
+
+info: Welcome to the Sails console.
+info: ( to exit, type &lt;CTRL&gt;+&lt;C&gt; )
+
+sails&gt;
+</code></pre><!-- __LANG=%%__ -->
+<blockquote>
+<p>Note that <code>sails console</code> still lifts the server, so your routes will be accessible via HTTP and sockets (e.g. in a browser.)</p>
+</blockquote>
+<h3 id="global-variables-in-sails-console-" permalink="global-variables-in-sails-console">Global variables in <code>sails console</code></h3>
+<p>Sails exposes <a href="/documentation/reference/Globals">the same global variables</a> in the REPL as it does in your app code. This is particularly useful in the REPL.  By default, you have access to the <code>sails</code> app instance, your models, and your services; as well as lodash (<code>sails.util._</code>) and async (<code>async</code>).</p>
+<blockquote>
+<p><strong>Warning</strong></p>
+<p>Avoid using <code>_</code> as a variable name in the Node REPL.
+(It <a href="https://github.com/balderdashy/sails/issues/3795" target="_blank">doesn&apos;t work quite like you might expect</a>-- although that is <a href="http://stackoverflow.com/questions/17073290/in-the-node-js-repl-why-does-this-happen/17073313#comment61417858_17073313" target="_blank">improving in Node v6</a>.)</p>
+<p>Instead, use Sails&apos; version of lodash as <code>sails.util._</code>.  For example:</p>
+<pre><code class="bash">sails&gt; sails.util._.keys(sails.config)
+</code></pre><!-- __LANG=%%__ -->
+<p>Or alternatively, build yourself a local variable to use for familiarity:</p>
+<pre><code class="bash">sails&gt; var lodash = sails.util._;
+sails&gt; lodash.keys(sails.config);
+</code></pre><!-- __LANG=%%__ -->
+<p>Finally, note that this warning isn&apos;t limited to the <code>_</code> exposed by Sails as a global variable.  When in the REPL, it&apos;s best to avoid using <code>var _ = ...</code> for any reason (again, unless you&apos;re running Node v6.0 or later.)</p>
+</blockquote>
+<h3 id="more-examples" permalink="more-examples">More Examples</h3>
+<h4 id="waterline" permalink="waterline">Waterline</h4>
+<p>The format <code>Model.action(query).exec(console.log)</code> console.log is good for seeing the results.</p>
+<pre><code class="bash">sails&gt; User.create({name: &apos;Brian&apos;, password: &apos;sailsRules&apos;}).exec(console.log)
+undefined
+sails&gt; null { name: &apos;Brian&apos;,
+  password: &apos;sailsRules&apos;,
+  createdAt: &quot;2014-08-07T04:29:21.447Z&quot;,
+  updatedAt: &quot;2014-08-07T04:29:21.447Z&quot;,
+  id: 1 }
+</code></pre><!-- __LANG=%%__ -->
+<p>Pretty cool, it inserts it into the database. However, you might be noticing the undefined and null. Don&apos;t worry about those. Remember that the .exec() returns error and data for values. So doing <code>.exec(console.log)</code> is the same as doing .exec(console.log(err, data))` The second method will remove the undefined message, but add null on a new line. It&apos;s up to you if you want to type more.</p>
+<h4 id="exposing-sails" permalink="exposing-sails">Exposing Sails</h4>
+<p>In sails console, type in <code>sails</code> to view a list of sails properties. You can use this to learn more about sails, override properties, or check to see if you disabled globals.</p>
+<pre><code class="bash">sails&gt; sails
+  |&gt;   [a lifted Sails app on port 1337]
+\___/  For help, see: http://sailsjs.com/documentation/concepts/
+
+Tip: Use `sails.config` to access your app&apos;s runtime configuration.
+
+1 Models:
+User
+
+1 Controllers:
+UserController
+
+20 Hooks:
+moduleloader,logger,request,orm,views,blueprints,responses,controllers,sockets,p
+ubsub,policies,services,csrf,cors,i18n,userconfig,session,grunt,http,projecthooks
+
+sails&gt;
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="sails console"></docmeta></p>
+<docmeta name="pageType" value="command">
+</docmeta>

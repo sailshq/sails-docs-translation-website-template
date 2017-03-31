@@ -1,0 +1,27 @@
+<h1 id="req-options-values">req.options.values</h1>
+<p>Default values for blueprint <a href="/documentation/reference/blueprint-api/Create.html"><code>create</code></a> and <a href="/documentation/reference/blueprint-api/Update.html"><code>update</code></a> actions.</p>
+<blockquote>
+<p>Note: Before using <code>req.options.value</code>, confirm that it exists and create it if necessary.</p>
+</blockquote>
+<h3 id="example" permalink="example">Example</h3>
+<p>To default to using the logged-in user&#x2019;s name when creating a new record:</p>
+<pre><code class="javascript">// In config/policies/createWithUserName.js
+module.exports = function createWithUserName (req, res, next) {
+
+  if (req.session.user) {
+
+    // Use existing req.options.values, or initialize it to an empty object
+    req.options.values = req.options.values || {};
+
+    // Set the default `name` for &quot;create&quot; and &quot;updates&quot; blueprints
+    req.options.values.name = req.session.user.name;
+
+  }
+
+  return next();
+
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>Then <a href="/documentation/concepts/Policies?q=to-apply-a-policy-to-a-specific-controller-action">apply this policy</a> to the desired blueprint actions.</p>
+<docmeta name="displayName" value="req.options.values">
+</docmeta>

@@ -1,0 +1,20 @@
+<h1 id="ddos">DDOS</h1>
+<p>The prevention of <a href="https://www.owasp.org/index.php/Application_Denial_of_Service" target="_blank">denial of service attacks</a> is a <a href="http://en.wikipedia.org/wiki/Denial-of-service_attack#Handling" target="_blank">complex problem</a> which involves multiple layers of protection, up and down the networking stack.
+This type of attack has achieved <a href="http://www.darkreading.com/vulnerabilities-and-threats/10-strategies-to-fight-anonymous-ddos-attacks/d/d-id/1102699" target="_blank">notoriety</a> in recent years due to widespread media coverage of groups like Anonymous.</p>
+<p>At the API layer, there isn&apos;t much that can be done in the way of prevention.  However, Sails offers a few settings to mitigate certain types of DDOS attacks:</p>
+<ul>
+<li>The session in Sails can be <a href="/documentation/reference/sails.config/sails.config.session.html">configured</a> to use a separate session store (e.g. <a href="http://redis.io/" target="_blank">Redis</a>), allowing your application to run without relying on the memory state of any one API server.  This means that multiple copies of your Sails app may be deployed to as many servers as is necessary to handle traffic.  This is achieved by using a <a href="http://en.wikipedia.org/wiki/Load_balancing_(computing" target="_blank">load balancer</a>), which directs each incoming request to a free server with the resources to handle it, eliminating any one app server as a single point of failure.</li>
+<li>Socket.io connections may be <a href="/docs/reference/configuration/sails-config-sockets">configured</a> to use a separate <a href="sailsjs.com/docs/concepts/deployment/scaling">socket store</a> (e.g. Redis) for managing pub/sub state and message queueing. This eliminates the need for sticky sessions at the load balancer, preventing would-be attackers from directing their attacks against the same server again and again.</li>
+</ul>
+<blockquote>
+<p>Note that, if you have the long-polling transport enabled in <a href="/docs/reference/configuration/sails-config-sockets">sails.config.sockets</a>, you&apos;ll still want to make sure TCP sticky sessions are enabled at your load balancer.  For more on that, check out this writeup about <a href="https://deis.com/blog/2016/socket.io-applications-kubernetes/" target="_blank">sockets on Deis and Kubernetes</a>.</p>
+</blockquote>
+<h3 id="additional-resources" permalink="additional-resources">Additional Resources</h3>
+<ul>
+<li><a href="http://engineering.voxer.com/2013/09/16/backpressure-in-nodejs/" target="_blank">Backpressure and Unbounded Concurrency in Node.js</a> (<a href="http://voxer.com/" target="_blank">Voxer</a>)</li>
+<li><a href="https://hacks.mozilla.org/2013/01/building-a-node-js-server-that-wont-melt-a-node-js-holiday-season-part-5/" target="_blank">Building a Node.js Server That Won&apos;t Melt</a> (<a href="https://hacks.mozilla.org/" target="_blank">Mozilla</a>)</li>
+<li><a href="https://www.harrytorry.co.uk/node-js/security-flaws-in-node-js/" target="_blank">Security in Node.js</a> - see the &quot;Denial of Service&quot; section (<a href="https://www.harrytorry.co.uk" target="_blank">Harry Torry</a>)</li>
+<li><a href="http://www.ddosattacks.biz/attacks/slowloris-ddos-attack-aka-slow-and-low/" target="_blank">Slowloris DDoSAttacks</a></li>
+</ul>
+<docmeta name="displayName" value="DDOS">
+</docmeta>

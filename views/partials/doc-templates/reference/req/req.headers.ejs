@@ -1,0 +1,30 @@
+<h1 id="req-headers">req.headers</h1>
+<p>An object containing pre-defined/custom header given in the current request.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.headers;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="details" permalink="details">Details</h3>
+<p>Often we want to check the headers of the current request, so this can be done easily in the sails.</p>
+<h3 id="example" permalink="example">Example</h3>
+<p>Sample output of the <code>req.headers</code> object:</p>
+<pre><code class="javascript">console.log(req.headers);
+
+{ host: &apos;localhost:1337&apos;,
+  connection: &apos;keep-alive&apos;,
+  &apos;cache-control&apos;: &apos;no-cache&apos;,
+  &apos;user-agent&apos;: &apos;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36&apos;,
+  accept: &apos;*/*&apos;,
+  &apos;accept-encoding&apos;: &apos;gzip, deflate, sdch&apos;,
+  &apos;accept-language&apos;: &apos;en-US,en;q=0.8,hi;q=0.6&apos;,
+  cookie: &apos;sdfkslddklfk; sails.sid=s%3skdlfjkj1231lsdfnsc,m&apos; }
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>And if you want to access any specific, custom or pre-defined header, it can be done with bracket notation:</p>
+<pre><code class="javascript">req.headers[&apos;custom-header&apos;];
+</code></pre><!-- __LANG=%%__ -->
+<p>or dot notation:</p>
+<pre><code class="javascript">req.headers.host;
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value="req.headers"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

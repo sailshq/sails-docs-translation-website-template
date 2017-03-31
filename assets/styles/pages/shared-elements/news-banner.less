@@ -1,0 +1,53 @@
+// Dependencies:
+@import '../../utilities/index.less';
+@import '../../styleguide/index.less';
+
+/**
+ * News/social media banner
+ */
+.news-banner() {
+  font-family: @main-font;
+  background-color: @white;
+  height: 50px;
+  border-bottom: 1px solid @border-lt-gray;
+  .banner-container {
+    .container();
+    padding: 15px 0;
+    p {
+      font-size: 16px;
+      display: block;
+      float: left;
+      color: @dker-gray;
+      font-family: @header-font;
+      a {
+        color: @bright-blue;
+        font-weight: @bold;
+      }
+    }
+    .sharing {
+      .clearfix();
+      float: right;
+      div, div.star {
+        display: inline-block;
+        float: left;
+      }
+    }
+  }
+  @media screen and (max-width: 900px) {
+    .banner-container {
+      p {
+        width: 100%;
+        text-align: center;
+        a {
+          padding-left: 5px;
+        }
+      }
+      .sharing {
+        display: none;
+      }
+    }
+  }
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
+} // white banner

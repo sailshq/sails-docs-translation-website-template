@@ -1,0 +1,20 @@
+<h1 id="req-get-">req.get()</h1>
+<p>Returns the value of the specified <code>header</code> field in this request (<code>req</code>).  Note that header names are case-<em>insensitive</em>.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.get(header);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<p>Assuming <code>req</code> contains a header named &apos;myField&apos; with value &apos;cat&apos;:</p>
+<pre><code class="javascript">req.get(&apos;myField&apos;);
+// -&gt; cat
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>The <code>header</code> argument is case-insensitive.</li>
+<li>The <code>header</code> argument treats both &quot;referrer&quot; and &quot;referer&quot; as synonyms, because sp3ll1n6.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.get()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

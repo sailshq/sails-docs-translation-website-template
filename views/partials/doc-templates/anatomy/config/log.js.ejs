@@ -1,0 +1,37 @@
+<h1 id="config-log-js">config/log.js</h1>
+<h3 id="purpose" permalink="purpose">Purpose</h3>
+<p>This file contains the logger configuration for your Sails app.</p>
+<p>Configure the log level for your app, as well as the transport.</p>
+<p>Underneath the covers, Sails uses Winston for logging, which allows for some pretty neat custom transports/adapters for log messages.</p>
+<docmeta name="displayName" value="log.js">
+
+<pre><code class="nohighlight">/**
+ * Built-in Log Configuration
+ * (sails.config.log)
+ *
+ * Configure the log level for your app, as well as the transport
+ * (Underneath the covers, Sails uses Winston for logging, which
+ * allows for some pretty neat custom transports/adapters for log messages)
+ *
+ * For more information on the Sails logger, check out:
+ * http://sailsjs.com/documentation/reference/configuration/sails-config-log
+ */
+
+module.exports = {
+
+  // Valid `level` configs:
+  // i.e. the minimum log level to capture with sails.log.*()
+  //
+  // &apos;error&apos;  : Display calls to `.error()`
+  // &apos;warn&apos;  : Display calls from `.error()` to `.warn()`
+  // &apos;debug&apos;  : Display calls from `.error()`, `.warn()` to `.debug()`
+  // &apos;info&apos;  : Display calls from `.error()`, `.warn()`, `.debug()` to `.info()`
+  // &apos;verbose&apos;: Display calls from `.error()`, `.warn()`, `.debug()`, `.info()` to `.verbose()`
+  //
+  log: {
+    level: &apos;info&apos;
+  }
+
+};
+</code></pre><!-- __LANG=%%__ -->
+</docmeta>

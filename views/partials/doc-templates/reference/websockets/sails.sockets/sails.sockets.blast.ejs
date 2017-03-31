@@ -1,0 +1,60 @@
+<h1 id="-blast-">.blast()</h1>
+<p>Broadcast a message to all sockets connected to the server (or any server in the cluster, if you have a multi-server deployment using Redis).</p>
+<pre><code class="javascript">sails.sockets.blast(data);
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>sails.sockets.blast(eventName, data);</code></li>
+<li><code>sails.sockets.blast(data, socketToOmit);</code></li>
+<li><code>sails.sockets.blast(eventName, data, socketToOmit);</code></li>
+</ul>
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left"><em>eventName</em></td>
+<td><bubble type="string?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Optional. Defaults to <code>&apos;message&apos;</code>.</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:left">data</td>
+<td><bubble type="json" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The data to send in the message.</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:left"><em>socketToOmit</em></td>
+<td><bubble type="req?" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">Optional. If provided, the socket associated with this socket request will <strong>not</strong> receive the message blasted out to everyone else.  Useful when the broadcast-worthy event is triggered by a requesting user who doesn&apos;t need to hear about it again.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>In a controller action...</p>
+<pre><code class="javascript">sails.sockets.blast(&apos;user_logged_in&apos;, {
+  msg: &apos;User #&apos; + req.session.userId + &apos; just logged in.&apos;,
+  user: {
+    id: req.session.userId,
+    username: req.session.username
+  }
+}, req);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Be sure and check <code>req.isSocket === true</code> before passing in <code>req</code> to this method. For the socket to be omitted, the current <code>req</code>  must be from a socket request, not just any HTTP request.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".blast()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

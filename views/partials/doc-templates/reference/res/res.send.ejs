@@ -1,0 +1,43 @@
+<h1 id="res-send-">res.send()</h1>
+<p>Send a simple response.  <code>statusCode</code> defaults to 200 (&quot;OK&quot;).</p>
+<p>This method is used in the underlying implementation of most of the other terminal response methods.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">return res.send([statusCode,] body);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="details" permalink="details">Details</h3>
+<p>This method performs a myriad of useful tasks for simple non-streaming responses such as automatically assigning the Content-Length unless previously defined and providing automatic HEAD and HTTP cache freshness support.</p>
+<p>When a Buffer is given the Content-Type is set to &quot;application/octet-stream&quot; unless previously defined as shown below:</p>
+<pre><code class="javascript">res.set(&apos;Content-Type&apos;, &apos;text/html&apos;);
+res.send(new Buffer(&apos;some html&apos;));
+</code></pre><!-- __LANG=%%__ -->
+<p>When a String is given the Content-Type is set to &quot;text/html&quot;:</p>
+<pre><code class="javascript">res.send(&apos;some html&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<p>When an Array or Object is given Express will respond with the JSON representation:</p>
+<pre><code class="javascript">res.send({ user: &apos;tobi&apos; })
+res.send([1,2,3])
+</code></pre><!-- __LANG=%%__ -->
+<p>Finally when a Number is given without any of the previously mentioned bodies, then a response body string is assigned for you. For example 200 will respond will the text &quot;OK&quot;, and 404 &quot;Not Found&quot; and so on.</p>
+<pre><code class="javascript">res.send(200)
+res.send(404)
+res.send(500)
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="example" permalink="example">Example</h3>
+<pre><code class="javascript">res.send(new Buffer(&apos;whoop&apos;));
+res.send({ some: &apos;json&apos; });
+res.send(&apos;some html&apos;);
+res.send(404, &apos;Sorry, we cannot find that!&apos;);
+res.send(500, { error: &apos;something blew up&apos; });
+res.send(200);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method is <strong>terminal</strong>, meaning it is generally the last line of code your app should run for a given request (hence the advisory usage of <code>return</code> throughout these docs).</li>
+</ul>
+</blockquote>
+<docmeta name="displayName" value="res.send()">
+
+<docmeta name="pageType" value="method">
+
+</docmeta></docmeta>

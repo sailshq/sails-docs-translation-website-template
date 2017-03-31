@@ -1,0 +1,150 @@
+<h1 id="introduction-to-custom-adapters-for-sails-waterline">Introduction to Custom Adapters for Sails / Waterline</h1>
+<blockquote>
+<h5 id="stability-varies" permalink="stability-varies">Stability: Varies</h5>
+</blockquote>
+<h2 id="reference" permalink="reference">Reference</h2>
+<p>Please see the <a href="https://github.com/balderdashy/sails-docs/blob/0.9/adapter-specification.md" target="_blank">adapter interface specification</a>.</p>
+<h3 id="what-is-an-adapter-" permalink="what-is-an-adapter">What is an adapter?</h3>
+<p> Adapters expose <strong>interfaces</strong>, which imply a conract to implemnt certain functionality.  This allows us to guarantee conventional usage patterns across multiple models, developers, apps, and even companies, making app code more maintainable, efficient, and reliable.  Adapters are useful for integrating with databases, open APIs, internal/proprietary web services, or even hardware.</p>
+<h3 id="what-kind-of-things-can-i-do-in-an-adapter-" permalink="what-kind-of-things-can-i-do-in-an-adapter">What kind of things can I do in an adapter?</h3>
+<p>Adapters are mainly focused on providing model-contextualized CRUD methods.  CRUD stands for create, read, update, and delete.  In Sails/Waterline, we call these methods <code>create()</code>, <code>find()</code>, <code>update()</code>, and <code>destroy()</code>.</p>
+<p>For example, a <code>MySQLAdapter</code> implements a <code>create()</code> method which, internally, calls out to a MySQL database using the specified table name and connection information and runs an <code>INSERT ...</code> SQL query.</p>
+<p>In practice, your adapter can really do anything it likes-- any method you write will be exposed on the raw connection objects and any models which use them.</p>
+<h2 id="why-would-i-need-a-custom-adapter-" permalink="why-would-i-need-a-custom-adapter">Why would I need a custom adapter?</h2>
+<p>When building a Sails app, the sending or receiving of any asynchronous communication with another piece of hardware can be normalized into an adapter.  (viz. API integrations)</p>
+<blockquote>
+<p><strong>From Wikipedia:</strong>
+<em><a href="http://en.wikipedia.org/wiki/Create,_read,_update_and_delete" target="_blank">http://en.wikipedia.org/wiki/Create,_read,_update_and_delete</a></em></p>
+<p>Although a relational database provides a common persistence layer in software applications, numerous other persistence layers exist. CRUD functionality can be implemented with an object database, an XML database, flat text files, custom file formats, tape, or card, for example.</p>
+</blockquote>
+<p>In other words, Waterline is not just an ORM for your database.  It is a purpose-agnostic, open standard and toolset for integrating with all kinds of RESTful services, datasources, and devices, whether it&apos;s LDAP, Neo4J, or <a href="https://www.youtube.com/watch?v=OmcQZD_LIAE" target="_blank">a lamp</a>.
+I know, I know... Not everything fits perfectly into a RESTful/CRUD mold!  Sometimes the service you&apos;re integrating with has more of an RPC-style interface, with one-off method names.  That&apos;s ok-- you can define any adapter methods you like! You still get all of the trickle-down config and connection-management goodness of Waterline core.</p>
+<h2 id="why-should-i-build-a-custom-adapter-" permalink="why-should-i-build-a-custom-adapter">Why should I build a custom adapter?</h2>
+<p>To recap, writing your API integrations as adapters is <strong>easier</strong>, takes <strong>less time</strong>, and <strong>absorbs a considerable amount of risk</strong>, since you get the advantage of a <strong>standardized set of conventions</strong>, a <strong>documented API</strong>, and a <strong>built-in community</strong> of other developers who have gone through the same process.  Best of all, you (and your team) can <strong>reuse the adapter</strong> in other projects, <strong>speeding up development</strong> and <strong>saving time and money</strong>.</p>
+<p>Finally, if you choose to release your adapter as open-source, you provide a tremendous boon to our little framework and our budding Sails.js ecosystem.  Even if it&apos;s not via Sails, I encourage you to give back to the OSS community, even if you&apos;ve never forked a repo before-- don&apos;t be intimidated, it&apos;s not that bad!</p>
+<p>The more high-quality adapters we collectively release as open-source, the less repetitive work we all have to do when we integrate with various databases and services.  My vision is to make building server-side apps more fun and less repetitive for everyone, and that happens one community adapter at a time.</p>
+<p>I tip my hat to you in advance :)</p>
+<h2 id="what-is-an-adapter-interface-" permalink="what-is-an-adapter-interface">What is an Adapter Interface?</h2>
+<p>The functionality of adapters is as varied as the services they connect.  That said, there is a standard library of methods, and a support matrix you should be aware of.  Adapters may implement some, all, or none of the interfaces below, but rest assured that <strong>if an adapter implements one method in an interface, it should implement <em>all</em> of them</strong>.  This is not always the case due to limitations and/or incomplete implementations, but at the very least, a descriptive error message should be used to keep developers informed of what&apos;s supported and what&apos;s not.</p>
+<h5 id="class-methods" permalink="class-methods">Class methods</h5>
+<p>Below, <code>class methods</code> refer to the static, or collection-oriented, functions available on the model itself, e.g. <code>User.create()</code> or <code>Menu.update()</code>.  To add custom class methods to your model (beyond what is provided in the adapters it implements), define them as top-level key/function pairs in the model object.</p>
+<h5 id="instance-methods" permalink="instance-methods">Instance methods</h5>
+<p><code>instance methods</code> on the other hand, (also known as object, or model, methods) refer to methods available on the individual result models themselves, e.g. <code>User.findOne(7).done(function (err, user) { user.someInstanceMethod(); });</code>.  To add custom instance methods to your model (beyond what is provided in the adapters it implements), define them as key/function pairs in the <code>attributes</code> object of the model&apos;s definition.</p>
+<h5 id="ddl-and-auto-migrations" permalink="ddl-and-automigrations">DDL and auto-migrations</h5>
+<p><code>DDL</code> stands for data-definition language, and is a common fixture of schema-oriented databases.  In Sails, auto-migrations are supported out of the box.  Since adapters for the most common SQL databases support <code>alter()</code>, they also support automatic schema migration!  In your own adapter, if you write the <code>alter()</code> method, the same behavior will take effect.  The feature is configurable using the <code>migrate</code> property, which can be set to <code>safe</code> (don&apos;t touch the schema, period), <code>drop</code> (recreate the tables every time the app starts), or <code>alter</code> (the default-- merge the schema in the apps&apos; models with what is currently in the database).</p>
+<h2 id="offcially-supported-adapters" permalink="offcially-supported-adapters">Offcially supported adapters</h2>
+<p>Cody, Mike, and the team behind Sails.js at Balderdash support a handful of commonly used adapters.</p>
+<h3 id="disk" permalink="disk">Disk</h3>
+<p>Write to your computer&apos;s hard disk, or a mounted network drive.  Not suitable for at-scale production deployments, but great for a small project, and essential for developing in environments where you may not always have a database set up. This adapter is bundled with Sails and works out of the box with zero configuration.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+</ul>
+<h3 id="memory" permalink="memory">Memory</h3>
+<p>Pretty much like Disk, but doesn&apos;t actually write to disk, so it&apos;s not persistent.  Not suitable for at-scale production deployments, but useful when developing on systems with little or no disk space.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+</ul>
+<h3 id="mysql" permalink="mysql">MySQL</h3>
+<p>MySQL is the world&apos;s most popular relational database.
+<a href="http://en.wikipedia.org/wiki/MySQL" target="_blank">http://en.wikipedia.org/wiki/MySQL</a></p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+<li>Migratable</li>
+</ul>
+<h3 id="postgresql" permalink="postgresql">PostgreSQL</h3>
+<p><a href="http://en.wikipedia.org/wiki/PostgreSQL" target="_blank">PostgreSQL</a> is another popular relational database.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+<li>Migratable</li>
+</ul>
+<h3 id="mongodb" permalink="mongodb">MongoDB</h3>
+<p><a href="http://en.wikipedia.org/wiki/MongoDB" target="_blank">MongoDB</a> is the leading NoSQL database.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Streaming</li>
+</ul>
+<h3 id="redis" permalink="redis">Redis</h3>
+<p><a href="http://redis.io/" target="_blank">Redis</a> is an open source, BSD licensed, advanced key-value store.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+</ul>
+<blockquote>
+<p>Under active development:</p>
+<ul>
+<li>sails-s3</li>
+<li>sails-local-fs</li>
+</ul>
+</blockquote>
+<h2 id="notable-community-adapters" permalink="notable-community-adapters">Notable Community Adapters</h2>
+<blockquote>
+<h5 id="stability-varies" permalink="stability-varies">Stability: Varies</h5>
+<p>in various states of completion</p>
+</blockquote>
+<p>Community adapters are crucial to the success and central to the philosophy of an open ecosystem for API integrations.  The more high-quality adapters you release as open-source, the less repetitive work we all have to do when we integrate with various databases and services.  My vision is to make building server-side apps more fun and less repetitive for everyone, and that happens one community adapter at a time.  We welcome your support!</p>
+<h3 id="-mandrill-email-sending-service-by-mailchimp-https-github-com-mikermcneil-sails-mandrill-" permalink="mandrill-(emailsending-service-by-mailchimp)"><a href="https://github.com/mikermcneil/sails-mandrill" target="_blank">Mandrill (email-sending service by MailChimp)</a></h3>
+<ul>
+<li>One-Way</li>
+</ul>
+<h3 id="heroku" permalink="heroku">Heroku</h3>
+<blockquote>
+<p>Not currently available as open-source.</p>
+</blockquote>
+<h3 id="git" permalink="git">Git</h3>
+<blockquote>
+<p>Not currently available.</p>
+</blockquote>
+<h3 id="-couchdb-https-github-com-craveprogramminginc-sails-couchdb-" permalink="couchdb"><a href="https://github.com/craveprogramminginc/sails-couchdb" target="_blank">CouchDB</a></h3>
+<ul>
+<li>Semantic</li>
+</ul>
+<h3 id="-riak-https-npmjs-org-package-sails-riak-" permalink="riak"><a href="https://npmjs.org/package/sails-riak" target="_blank">Riak</a></h3>
+<ul>
+<li>Semantic</li>
+</ul>
+<h3 id="-rest-https-github-com-zohararad-sails-rest-" permalink="rest"><a href="https://github.com/zohararad/sails-rest" target="_blank">REST</a></h3>
+<ul>
+<li>Semantic</li>
+</ul>
+<h3 id="-irc-https-github-com-balderdashy-sails-irc-" permalink="irc"><a href="https://github.com/balderdashy/sails-irc" target="_blank">IRC</a></h3>
+<ul>
+<li>Pubsub</li>
+</ul>
+<h3 id="-twitter-https-github-com-balderdashy-sails-twitter-" permalink="twitter"><a href="https://github.com/balderdashy/sails-twitter" target="_blank">Twitter</a></h3>
+<h3 id="-elasticsearch-https-github-com-usabilitydynamics-waterline-elasticsearch-" permalink="elasticsearch"><a href="https://github.com/UsabilityDynamics/waterline-elasticsearch" target="_blank">ElasticSearch</a></h3>
+<ul>
+<li>Semantic</li>
+</ul>
+<h3 id="-jsdom-https-github-com-mikermcneil-sails-jsdom-" permalink="jsdom"><a href="https://github.com/mikermcneil/sails-jsdom" target="_blank">JSDom</a></h3>
+<h3 id="-yelp-https-github-com-balderdashy-sails-adapter-boilerplate-pull-2-" permalink="yelp"><a href="https://github.com/balderdashy/sails-adapter-boilerplate/pull/2" target="_blank">Yelp</a></h3>
+<h3 id="-orientdb-https-github-com-appscot-sails-orientdb-" permalink="orientdb"><a href="https://github.com/appscot/sails-orientdb" target="_blank">OrientDB</a></h3>
+<p><a href="http://en.wikipedia.org/wiki/OrientDB" target="_blank">OrientDB</a> is an Open Source NoSQL DBMS with the features of both Document and Graph DBMSs.</p>
+<h6 id="interfaces-implemented-">Interfaces implemented:</h6>
+<ul>
+<li>Semantic</li>
+<li>Queryable</li>
+<li>Associations</li>
+<li>Migratable</li>
+</ul>
+<blockquote>
+<p>Search google and NPM for more-- there are new adapters being written all the time.</p>
+<p>Check out the docs to learn how to write your own custom adapter (whether it&apos;s a private, internal project for a proprietary API or something you can share as open-source)</p>
+<p>Want to see your adapter listed here?  Send a pull request with a link and we&apos;ll merge it!</p>
+</blockquote>
+<docmeta name="notShownOnWebsite" value="true">
+</docmeta>

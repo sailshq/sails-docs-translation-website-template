@@ -1,0 +1,53 @@
+<div id="header">
+
+
+  <!--Navigation list-->
+  <div class="nav-container">
+    <div class="branding">
+      <a href="/">
+        <img class="logo" src="/images/logo_sails.png" alt="Sails logo" />
+      </a>
+      <div class="version" is="topbar-version-info" data-current-site-version="<% if(typeof branchToEdit !== 'undefined' && branchToEdit === '1.0') {%>1.0<%} else {%>0.12<%}%>"></div>
+    </div>
+
+    <div id="nav-menu-overlay">
+      <div class="veil"></div>
+    </div>
+
+    <ul is="nav-menu" class="nav right-nav">
+
+      <li class="mobile-only">
+        <a class="sails-site <%= currentSection === 'home' ? 'current' : '' %>"
+          href="/">Home</a>
+      </li>
+
+      <li>
+        <a class="sails-site <%= currentSection === 'getStarted' ? 'current' : '' %>"
+          href="/get-started">Get started</a>
+      </li>
+      <li>
+        <a class="sails-site <%= currentSection === 'support' ? 'current' : '' %>"
+          href="/support">FAQ</a>
+      </li>
+      <li class="mobile-only">
+        <a class="sails-site <%= currentSection === 'documentation' ? 'current' : '' %>"
+          href="/documentation">Documentation</a>
+      </li>
+      <li class="docs-nav no-mobile">
+        <a is="temporary" class="docs-menu-header docs-menu-wrapper  <%= currentSection === 'documentation' ? 'current' : '' %>" href="/documentation">Documentation <i class="dropdown-arrow-icon sails-icon icon-angle-down"></i></a>
+        <a is="documentation-dropdown-wrapper" class="docs-menu-wrapper" <%if(currentSection === 'documentation'){%>data-is-current="true"<%}%>></a>
+      </li>
+      <li>
+        <a class="sails-site <%= currentSection === 'hire-us' ? 'current' : '' %>"
+          href="/studio">Studio</a>
+      </li>
+    </ul>
+  </div>
+
+  <!--Mobile menu button-->
+  <div class="menu" is="mobile-menu-button">
+   <span class="menu-icon"><i class="sails-icon icon-ellipsis-vertical"></i></span>
+  </div>
+
+  <div id="unsupported-browser-banner"><p><img src="/images/icon_warning.png"/>For a better experience on sailsjs.com, <a target="_blank" href="https://support.microsoft.com/en-us/help/17621/internet-explorer-downloads">update your browser</a>.</p></div>
+</div>

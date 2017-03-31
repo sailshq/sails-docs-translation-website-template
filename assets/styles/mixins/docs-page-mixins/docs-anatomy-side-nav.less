@@ -1,0 +1,58 @@
+// Dependencies:
+@import '../../utilities/index.less';
+@import '../../styleguide/index.less';
+
+/**
+ * Anatomy documentation nav
+ */
+.docs-anatomy-side-nav() {
+  >ul {
+    // Styles for all <li>s
+    li {
+      span {
+        .border-box();
+        display: block;
+        position: relative;
+        padding-left: 15px;
+        color: @text-dark;
+        .expand-arrow {
+          .transition(color 250ms);
+          color: @text-normal;
+          font-size: 9px;
+          position: absolute;
+          line-height: 24px;
+          vertical-align: middle;
+          padding-left: 4px;
+          padding-right: 4px;
+          display: inline-block;
+          left: -4px;
+          top: 0px;
+          &:hover {
+            color: @text-dark;
+          }
+        }
+      }
+      &.expanded {
+        >span {
+          >.expand-arrow {
+            .rotate(90deg);
+          }
+        }
+      }
+      // <ul>s inside of <ul>s
+      ul {
+        padding-left: 20px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+      }
+    }
+    >li {
+      >span {
+        >.expand-arrow {
+          line-height: 30px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}

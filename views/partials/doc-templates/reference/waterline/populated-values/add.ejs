@@ -1,0 +1,53 @@
+<h1 id="-add-">.add()</h1>
+<p>Add one or more records to a collection in your database.</p>
+<p>This adds record(s) to the join table that is automatically generated for a collection association (i.e. Many-to-Many).  It accepts either the primary key of the record (string or number) or the data for a new record (dictionary/object).  If a dictionary is specified, it will be used to create a new record and automatically associate it as a member of this collection association.</p>
+<pre><code class="javascript">.add(recordsToAdd);
+// Don&apos;t forget to call `.save()` afterwards!
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="usage" permalink="usage">Usage</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:left">Argument</th>
+<th>Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:left">recordsToAdd</td>
+<td><bubble type="number" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="string" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble>, <bubble type="array" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left">The primary key of the record to add, an array of primary keys of records to add, or a dictionary of data representing a new record to create and then add.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example" permalink="example">Example</h3>
+<p>To help a user named Finn in the database adopt a pet named Jake:</p>
+<pre><code class="javascript">User.findOne({name:&apos;Finn&apos;}).populate(&apos;adoptedPets&apos;).exec(function (err, finn){
+  if (err) { return res.serverError(err); }
+  if (!finn) { return res.notFound(&apos;Could not find a user named Finn.&apos;); }
+
+  Pet.findOne({name:&apos;Jake&apos;}).exec(function (err, jake){
+    if (err) { return res.serverError(err); }
+    if (!jake) { return res.notFound(&apos;Could not find a pet named Jake.&apos;); }
+
+    finn.adoptedPets.add(jake.id);
+    finn.save(function(err){
+      if (err) { return res.serverError(err); }
+      return res.ok();
+    });//&lt;/save()&gt;
+  });//&lt;/Pet.findOne()&gt;
+});//&lt;/User.findOne()&gt;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li><code>.add()</code> alone won&apos;t actually persist the change in associations to the database.  You should always call <code>.save()</code> after you finish using <code>.add()</code> and/or <code>.remove()</code>.</li>
+<li>Attempting to add an association that already exists will throw an error. <a href="https://github.com/balderdashy/waterline/issues/352" target="_blank">See here for an example.</a></li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value=".add()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

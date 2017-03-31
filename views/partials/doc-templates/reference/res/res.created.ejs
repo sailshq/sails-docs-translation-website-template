@@ -1,0 +1,43 @@
+<h1 id="res-created-">res.created()</h1>
+<p>This method is used to send a <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success" target="_blank">201</a> (&quot;Created&quot;) response back down to the client indicating that one or more resources have been successfully created.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">return res.created();
+</code></pre><!-- __LANG=%%__ -->
+<p><em>Or:</em></p>
+<ul>
+<li><code>return res.created(data);</code></li>
+<li><code>return res.created(data, pathToView);</code></li>
+</ul>
+<h3 id="details" permalink="details">Details</h3>
+<p>Like the other built-in custom response modules, the behavior of this method is customizable.</p>
+<p>By default, it works as follows:</p>
+<ul>
+<li>If the request &quot;<a href="/documentation/reference/req/req.wantsJSON.html">wants JSON</a>&quot; (e.g. the request originated from AJAX, WebSockets, or a REST client like cURL), Sails will send the provided response <code>data</code> as JSON.  If no <code>data</code> is provided a default response body will be sent (the string <code>&quot;Created&quot;</code>).</li>
+<li>If the request <em>does not</em> &quot;want JSON&quot; (e.g. a URL typed into a web browser), Sails will attempt to serve one of your views.<ul>
+<li>If a specific <code>pathToView</code> was provided, Sails will attempt to use that view.</li>
+<li>Alternatively if <code>pathToView</code> was <em>not</em> provided, Sails will attempt to guess the appropriate response view. If that view does not exist, Sails will just send JSON.</li>
+<li>If Sails serves a view, the <code>data</code> argument will be accessible as a <a href="/documentation/concepts/Views/Locals.html">view local</a>: <code>data</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<p>Using the default view:</p>
+<pre><code class="javascript">return res.created(&apos;New widget created.&apos;);
+</code></pre><!-- __LANG=%%__ -->
+<p>With a custom view:</p>
+<pre><code class="javascript">return res.created(
+    &apos;New widget created.&apos;,
+    &apos;widgets/created&apos;
+  );
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>This method is <strong>terminal</strong>, meaning it is generally the last line of code your app should run for a given request (hence the advisory usage of <code>return</code> throughout these docs).</li>
+<li><code>res.created()</code> (like other userland response methods) can be overridden or modified.  It runs the response method defined in <code>/responses/created.js</code>, which is bundled automatically in newly generated Sails apps.  If a <code>created.js</code> response method does not exist in your app, Sails will implicitly use the default behavior.</li>
+<li>If <code>pathToView</code> refers to a missing view, this method will respond as if the request &quot;wants JSON&quot;.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="res.created()"></docmeta></p>
+<docmeta name="pageType" value="method">
+</docmeta>

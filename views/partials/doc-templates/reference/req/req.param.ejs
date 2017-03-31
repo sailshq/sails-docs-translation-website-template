@@ -1,0 +1,45 @@
+<h1 id="req-param-">req.param()</h1>
+<p>Returns the value of the parameter with the specified name.</p>
+<h3 id="usage" permalink="usage">Usage</h3>
+<pre><code class="javascript">req.param(name[, defaultValue]);
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="details" permalink="details">Details</h3>
+<p><code>req.param()</code> searches the url path, query string, and body of the request for the specified parameter.  If no parameter value exists anywhere in the request with the given <code>name</code>, it returns <code>undefined</code>, or the optional <code>defaultValue</code> if specified.</p>
+<ul>
+<li>url path parameters (<a href="/documentation/reference/req/req.params.html"><code>req.params</code></a>)<ul>
+<li>e.g. a request &quot;/foo/4&quot; to route <code>/foo/:id</code> has url path params <code>{ id: 4 }</code></li>
+</ul>
+</li>
+<li>query string parameters (<a href="/documentation/reference/req/req.query.html"><code>req.query</code></a>)<ul>
+<li>e.g. a request &quot;/foo?email=5&quot; has query params <code>{ email: 5 }</code></li>
+</ul>
+</li>
+<li>body parameters (<a href="/documentation/reference/req/req.body.html"><code>req.body</code></a>)<ul>
+<li>e.g. a request with a parseable body (e.g. JSON, url-encoded, or XML) has body parameters equal to its parsed value</li>
+</ul>
+</li>
+</ul>
+<h3 id="example" permalink="example">Example</h3>
+<p>Consider a route (<code>POST /product/:sku</code>) which points to a blueprint, controller, or policy with the following code:</p>
+<pre><code class="javascript">req.param(&apos;sku&apos;);
+// -&gt; 123
+</code></pre><!-- __LANG=%%__ -->
+<p>We can get the expected result by sending the <code>sku</code> parameter any of the following ways:</p>
+<ul>
+<li><code>POST /product/123</code></li>
+<li><code>POST /product?sku=123</code></li>
+<li><code>POST /product</code><ul>
+<li>with a JSON request body: <code>{ &quot;sku&quot;: 123 }</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>If you&apos;d like to get ALL parameters from ALL sources (including the URL path, query string, and parsed request body) you can use <a href="/documentation/reference/req/req.allParams.html"><code>req.allParams()</code></a>.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="req.param()"></docmeta></p>
+<docmeta name="pageType" value="method">
+
+</docmeta>

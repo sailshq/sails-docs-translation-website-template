@@ -1,0 +1,64 @@
+<h1 id="-initialize-cb-"><code>.initialize(cb)</code></h1>
+<p>The <code>initialize</code> feature allows a hook to perform startup tasks that may be asynchronous or rely on other hooks.  All Sails configuration is guaranteed to be completed before a hook&#x2019;s <code>initialize</code> function runs.  Examples of tasks that you may want to put in <code>initialize</code> are:</p>
+<ul>
+<li>Logging in to a remote API</li>
+<li>Reading from a database that will be used by hook methods</li>
+<li>Loading support files from a user-configured directory</li>
+<li>Waiting for another hook to load first</li>
+</ul>
+<p>Like all hook features, <code>initialize</code> is optional and can be left out of your hook definition.  If implemented, <code>initialize</code> takes one argument: a callback function which must be called in order for Sails to finish loading:</p>
+<pre><code class="javascript">initialize: function(cb) {
+
+   // Do some stuff here to initialize hook
+   // And then call `cb` to continue
+   return cb();
+
+}
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="hook-timeout-settings" permalink="hook-timeout-settings">Hook timeout settings</h5>
+<p>By default, hooks have ten seconds to complete their <code>initialize</code> function and call <code>cb</code> before Sails throws an error.  That timeout can be configured by setting the <code>_hookTimeout</code> key to the number of milliseconds that Sails should wait.  This can be done in the hook&#x2019;s <a href="/documentation/concepts/extending-sails/Hooks/hookspec/defaults.html"><code>defaults</code></a>:</p>
+<pre><code class="nohighlight">defaults: {
+   __configKey__: {
+      _hookTimeout: 20000 // wait 20 seconds before timing out
+   }
+}
+</code></pre><!-- __LANG=%%__ -->
+<h5 id="hook-events-and-dependencies" permalink="hook-events-and-dependencies">Hook events and dependencies</h5>
+<p>When a hook successfully initializes, it emits an event with the following name:</p>
+<p><code>hook:&lt;hook name&gt;:loaded</code></p>
+<p>For example:</p>
+<ul>
+<li>The core <code>orm</code> hook emits <code>hook:orm:loaded</code> after its initialization is complete.</li>
+<li>A hook installed into <code>node_modules/sails-hook-foo</code> emits <code>hook:foo:loaded</code> by default</li>
+<li>The same <code>sails-hook-foo</code> hook, with <code>sails.config.installedHooks[&apos;sails-hook-foo&apos;].name</code> set to <code>bar</code> would emit <code>hook:bar:loaded</code></li>
+<li>A hook installed into <code>node_modules/mygreathook</code> would emit <code>hook:mygreathook:loaded</code></li>
+<li>A hook installed into <code>api/hooks/mygreathook</code> would also emit <code>hook:mygreathook:loaded</code></li>
+</ul>
+<p>You can use the &quot;hook loaded&quot; events to make one hook dependent on another.  To do so, simply wrap your hook&#x2019;s <code>initialize</code> logic in a call to <code>sails.on()</code>.  For example, to make your hook wait for the <code>orm</code> hook to load, you could make your <code>initialize</code> similar to the following:</p>
+<pre><code class="javascript">initialize: function(cb) {
+
+   sails.on(&apos;hook:orm:loaded&apos;, function() {
+
+      // Finish initializing custom hook
+      // Then call cb()
+      return cb();
+
+   });
+}
+</code></pre><!-- __LANG=%%__ -->
+<p>To make a hook dependent on several others, gather the event names to wait for into an array and call <code>sails.after</code>:</p>
+<pre><code class="javascript">initialize: function(cb) {
+
+   var eventsToWaitFor = [&apos;hook:orm:loaded&apos;, &apos;hook:mygreathook:loaded&apos;];
+   sails.after(eventsToWaitFor, function() {
+
+      // Finish initializing custom hook
+      // Then call cb()
+      return cb();
+
+   });
+}
+</code></pre><!-- __LANG=%%__ -->
+<p><docmeta name="displayName" value=".initialize()"></docmeta></p>
+<docmeta name="stabilityIndex" value="3">
+</docmeta>

@@ -1,0 +1,127 @@
+<h1 id="response-res-">Response (<code>res</code>)</h1>
+<h3 id="overview" permalink="overview">Overview</h3>
+<p>Sails is built on <a href="https://github.com/expressjs/" target="_blank">Express</a>, and uses <a href="http://nodejs.org/api/http.html#http_http_createserver_requestlistener" target="_blank">Node&apos;s HTTP server</a> conventions.  Because of this, you can access all of the Node and Express methods and properties on the <code>res</code> object whereever it is accessible (i.e. in your controllers, policies, and custom responses.)</p>
+<p>A nice side effect of this compatibility is that, in many cases, you can paste existing Node.js code into a Sails app and it will work.  And since Sails implements a transport-agnostic request interpreter, the code in your Sails app is WebSocket-compatible as well.</p>
+<p>Sails adds a few methods of its own to the <code>res</code> object, like <a href="/documentation/reference/res/res.view.html"><code>res.view()</code></a>.  These features are syntactic sugar on top of the underlying implementation, and also support both HTTP and WebSockets.</p>
+<h3 id="protocol-support" permalink="protocol-support">Protocol Support</h3>
+<p>The chart below describes support for the methods and properties on the Sails Response object (<code>res</code>) across multiple transports:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>HTTP</th>
+<th>WebSockets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>res.status()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>res.set()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.get()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.cookie()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.clearCookie()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.redirect()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>res.location()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.charset</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>res.send()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>res.json()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>res.jsonp()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>res.type()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.format()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.attachment()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.sendfile()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.download()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.links()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.locals</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-plus"></i></td>
+</tr>
+<tr>
+<td>res.render()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+<tr>
+<td>res.view()</td>
+<td><i class="sails-icon icon-plus"></i></td>
+<td><i class="sails-icon icon-minus"></i></td>
+</tr>
+</tbody>
+</table>
+<h3 id="legend" permalink="legend">Legend</h3>
+<ul>
+<li><i class="sails-icon icon-plus"></i> - fully supported</li>
+<li><i class="sails-icon icon-minus"></i> - feature not yet implemented</li>
+<li><i class="sails-icon icon-times"></i> - unsupported due to protocol restrictions</li>
+</ul>
+<p><docmeta name="displayName" value="Response (`res`)"></docmeta></p>
+<docmeta name="stabilityIndex" value="3">
+</docmeta>

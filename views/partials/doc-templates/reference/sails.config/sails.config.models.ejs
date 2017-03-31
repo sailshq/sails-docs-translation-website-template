@@ -1,0 +1,68 @@
+<h1 id="sails-config-models">sails.config.models</h1>
+<p>Your default project-wide <strong>model settings</strong>. Can also be overridden on a per-model basis by providing a top-level property with the same name in that model definition.  For more details, see the conceptual docs on <a href="/documentation/concepts/ORM/model-settings.html">Model Settings</a>.  These options are conventionally specified in the <a href="/documentation/anatomy/myApp/config/models.js.html">config/models.js</a> configuration file.</p>
+<pre><code class="javascript">sails.config.models;
+</code></pre><!-- __LANG=%%__ -->
+<h3 id="properties" permalink="properties">Properties</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Property</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"> <code>attributes</code></td>
+<td style="text-align:center"><bubble type="dictionary" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>{}</code></td>
+<td style="text-align:left">The basic pieces of information to store about a model. See <a href="/documentation/concepts/models-and-orm/attributes">Attributes</a>.</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>migrate</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><em>see <a href="/documentation/concepts/ORM/model-settings.html">Model Settings</a></em></td>
+<td style="text-align:left">How &amp; whether Sails will attempt to automatically rebuild the tables/collections/etc. in your schema</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>connection</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>&quot;localDiskDb&quot;</code></td>
+<td style="text-align:left">The default database <a href="/documentation/reference/sails.config/sails.config.connections.html">connection</a> any given model will use without a configured override</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>autoPK</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">Toggle the automatic definition of a primary key in your model</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>autoCreatedAt</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">Toggle the automatic definition of a property createdAt in your model</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>autoUpdatedAt</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">Toggle the automatic definition of a property updatedAt in your model</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>tableName</code></td>
+<td style="text-align:center"><bubble type="string" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><em>identity</em></td>
+<td style="text-align:left">Used to specify database table name for the model</td>
+</tr>
+<tr>
+<td style="text-align:left"> <code>dynamicFinders</code></td>
+<td style="text-align:center"><bubble type="boolean" class="colors"><span is="bubble-heart"></span></bubble></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">Toggle the automatic creation of Dynamic Finders</td>
+</tr>
+</tbody>
+</table>
+<p><docmeta name="displayName" value="sails.config.models"></docmeta></p>
+<docmeta name="pageType" value="property">
+</docmeta>

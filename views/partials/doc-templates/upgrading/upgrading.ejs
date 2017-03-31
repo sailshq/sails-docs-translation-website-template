@@ -1,0 +1,19 @@
+<h1 id="upgrading">Upgrading</h1>
+<p>Like most Node packages, Sails respects <a href="http://semver.org/" target="_blank">semantic versioning</a>.  For example if you are using Sails v0.11.3, and then upgrade to Sails v0.11.4, you shouldn&apos;t need to change your application code.  This is called a <strong>patch release</strong>.  On the other hand, if you upgrade from Sails v0.11.3 to v0.12.0, you can expect some <em>breaking changes</em>-- meaning that you will need to change your Sails app&apos;s code in order to use the new version.  With any framework or tool, <em>some</em> breaking changes are inevitable over time; but as the APIs in Node and Sails continue to stabilize, expect to see these sorts of breaking changes less and less often.  In the mean time, the core maintainers strive to keep these sorts of changes to a minimum and maintain backwards compatibility where possible.</p>
+<h3 id="version-notes" permalink="version-notes">Version Notes</h3>
+<p>For details about changes between versions, as well as a migration guide to assist you in making an necessary changes to your app, please refer to the appropriate page:</p>
+<ul>
+<li><a href="/documentation/upgrading/to-v-0-12">v0.12.x</a></li>
+<li><a href="/documentation/upgrading/to-v-0-11">v0.11.x</a></li>
+<li><a href="/documentation/upgrading/to-v-0-10">v0.10.x</a></li>
+</ul>
+<h3 id="notes" permalink="notes">Notes</h3>
+<blockquote>
+<ul>
+<li>Once Sails v1.0 is released, minor version bumps will aim to not cause breaking changes either-- e.g. upgrading from v1.1.0 to v1.2.0 should not force you to make changes to your code; whereas upgrading to v2.0.0 might.</li>
+<li>If you are more than one minor version behind the latest and run into difficulties, consider updating your app one step at a time. The migration guides are written with a particular version diff in mind and as you probably are well aware, when in doubt, it&apos;s best to isolate as many variables as possible.  For instance, if you are running Sails v0.9 and trying to upgrade to Sails v0.12 but having trouble, first upgrade to Sails v0.10, then v0.11, <em>then</em> v0.12.</li>
+</ul>
+</blockquote>
+<p><docmeta name="displayName" value="Upgrading"></docmeta></p>
+<docmeta name="isOverviewPage" value="true">
+</docmeta>
