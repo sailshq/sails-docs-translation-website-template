@@ -14,7 +14,7 @@ The two pages _not_ compiled from markdown that are still included in this app a
 
 ### Compiling the documentation from a translation repo
 
-##### Compiling docs locally
+#### Compiling docs locally
 
 First, in `package.json`, edit the `"1.0"` and `"0.12"` scripts so that `sails_remote` is set up to point to your translation repo.
 
@@ -43,7 +43,7 @@ Compiling `version-notes` docs from the `0.12` branch of `git://github.com/marro
 Compiling `security` docs from the `0.12` branch of `git://github.com/marrouchi/sails-docs-fr`...
 ```
 
-##### Compiling docs automatically
+#### Compiling docs automatically
 
 Once your site is online, if you want to automatically compile the docs when there are changes to the translation repo,
 you can set up a webhook in GitHub. In your translation repo, go to **Settings > Webhooks > Add Webhook**, and configure the following settings:
